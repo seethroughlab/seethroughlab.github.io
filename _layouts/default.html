@@ -16,12 +16,19 @@
         <link href="css/cubeportfolio.css" rel="stylesheet" type="text/css"/>
         <link href="css/owl.carousel.css" rel="stylesheet" type="text/css"/>
         <link href="style.css" rel="stylesheet" type="text/css"/>
+        <link href="stl.css" rel="stylesheet" type="text/css"/>
         <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">
         <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
         
         <!-- Document Title -->      
         <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
-        
+        <script src="js/three.js"></script>
+        <script src="js/postprocessing/EffectComposer.js"></script>
+        <script src="js/postprocessing/RenderPass.js"></script>
+        <script src="js/postprocessing/ShaderPass.js"></script>
+        <script src="js/postprocessing/MaskPass.js"></script>
+        <script src="js/shaders/CopyShader.js"></script>
+        <script src="js/shaders/RGBShiftShader.js"></script>
     </head>
     <body>
         <!-- Page Wrapper -->
@@ -32,9 +39,12 @@
                 <div class="header-wrapper">
                     <div class="container">
                         <div id="logo">
+                            <!--
                             <a href="index.html">
                                 <img src="images/logo.png" alt="Logo"> 
                             </a>
+                            -->
+                            <script src="js/logo.js"></script>
                         </div>
                         <span id="menu-trigger"><span></span></span>
                         <nav id="main-menu">

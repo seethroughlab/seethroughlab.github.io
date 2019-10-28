@@ -1,9 +1,7 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
 layout: default
 ---
+
 
 <!-- Main Wrapper -->
 <div id="main-wrapper">
@@ -11,7 +9,7 @@ layout: default
         <div class="row">
             <div class="col-sm-12">
                 <div class="page-title">
-                    <h1 class="heading">I provide <b>Design Solutions.</b><br>My work is presented here, check them below.</h1>
+                    <h1 class="heading">{{ site.description }}</h1>
                 </div>
                 <!-- Portfolio Wrap -->
                 <div class="portfolio-wrap">
@@ -20,35 +18,51 @@ layout: default
                         <div data-filter="*" class="cbp-filter-item-active cbp-filter-item">
                             All 
                         </div>
-                        <div data-filter=".web-design" class="cbp-filter-item">
-                            Web Design
+                        <div data-filter=".2015" class="cbp-filter-item">
+                            2015
                         </div>
-                        <div data-filter=".branding" class="cbp-filter-item">
-                            Branding
+                        <div data-filter=".2016" class="cbp-filter-item">
+                            2016
                         </div>
-                        <div data-filter=".graphic" class="cbp-filter-item">
-                            Graphic
+                        <div data-filter=".2017" class="cbp-filter-item">
+                            2017
+                        </div>
+                        <div data-filter=".2018" class="cbp-filter-item">
+                            2018
+                        </div>
+                        <div data-filter=".2019" class="cbp-filter-item">
+                            2019
                         </div>
                     </div>
                     <!-- Portfolio Filter -->
                     
                     <!-- Portfolio Items -->
-                    <div id="portfolio-container" class="cbp" data-layoutmode="grid" data-gaphorizontal="30" data-gapvertical="30" data-captionanimation="zoom" data-animationtype="quicksand" data-large-desktop="2" data-medium-desktop="2" data-tablet="2">
-                        <div class="cbp-item web-design">
-                            <a href="details-left-slider.html" class="cbp-caption">
+                    <div id="portfolio-container" class="cbp" data-layoutmode="grid" data-gaphorizontal="30" data-gapvertical="30" data-captionanimation="zoom" data-animationtype="quicksand" data-large-desktop="3" data-medium-desktop="3" data-tablet="2">
+                        
+
+                    {% for post in site.categories.projects %}
+                    <!--
+                    {{ root_url }}{{ post.url }}
+                    -->
+                        <div class="cbp-item {{ post.date | date: "%Y" }}">
+                            <a href="{{ root_url }}{{ post.url }}" class="cbp-caption">
                                 <div class="cbp-caption-defaultWrap">
-                                    <img src="images/portfolio/thumbnails-masonry/2/img_11.png" alt="">
+                                    <img src="{{post.thumbnail}}" alt="">
                                 </div>
                                 <div class="cbp-caption-activeWrap">
                                     <div class="cbp-l-caption-alignLeft">
                                         <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">Label Tag</div>
-                                            <div class="cbp-l-caption-desc">Branding</div>
+                                            <div class="cbp-l-caption-title">{{ post.title | upcase }}</div>
+                                            <div class="cbp-l-caption-desc">{{ post.date | date: "%b %Y" }}</div>
                                         </div>
                                     </div>
                                 </div>
                             </a>
                         </div>
+                    {% endfor %}
+                    
+
+          <!--          
                         <div class="cbp-item">
                             <a href="details-left-video.html" class="cbp-caption">
                                 <div class="cbp-caption-defaultWrap">
@@ -139,6 +153,7 @@ layout: default
                                 </div>
                             </a>
                         </div>
+                        -->    
                     </div>
                     <!-- Portfolio Items -->
                     

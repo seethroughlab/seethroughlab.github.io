@@ -134,10 +134,10 @@
             form_process.fadeIn();
             
             name_error.removeClass( 'validation-error' );
- 	    email_error.removeClass( 'validation-error' );
-	    message_error.removeClass( 'validation-error' );
+ 	        email_error.removeClass( 'validation-error' );
+	        message_error.removeClass( 'validation-error' );
             
-  	    contact_failed.removeClass( 'validation-error' );            
+  	         contact_failed.removeClass( 'validation-error' );            
             contact_success.removeClass( 'validated' );
           
             // get the form data            
@@ -150,50 +150,20 @@
             // process the form
             $.ajax({
                 type: 'POST',
-                url: '/include/contact.php',
+                url: 'https://formspree.io/moqarbzd',
                 data: formData,
                 dataType: 'json',
                 encode: true
             })
-              
+            
             // using the done promise callback
             .done( function( data ) {
-		                 
-                // here we will handle errors and validation messages
-                if ( !data.success ) {
-		
-                   // handle errors for name
-                    if ( data.errors.name ) {
-                        name_error.toggleClass( 'validation-error' );
-                    }
-                    
-                    // handle errors for email
-                    if ( data.errors.email ) {
-                        email_error.toggleClass( 'validation-error' );
-                    }
-                  
-                    // handle errors for message
-                    if ( data.errors.message ) {
-                        message_error.toggleClass( 'validation-error' );
-                    }
-                    
-                    // mail
-                    if ( data.errors.mail_error ) {
-                        contact_failed.toggleClass( 'validation-error' );
-                    }                  
-                }
-                else {
-                    contact_success.toggleClass( 'validated' );
-                }
-                
+                contact_success.toggleClass( 'validated' );
                 form_process.fadeOut();
-                
             })            
             .fail( function( data ) {
-                
                 form_process.fadeOut();
-                contact_failed.toggleClass( 'validation-error' );
-                
+                email_error.toggleClass( 'validation-error' );
             });
             
             event.preventDefault();

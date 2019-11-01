@@ -1,0 +1,16 @@
+{
+  "name": "make_bts",
+  "version": "1.0.0",
+  "description": "Fetch all of the BTS videos from Vimeo and make a page",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jeff Crouse",
+  "license": "MIT",
+  "dependencies": {
+    "moment": "^2.24.0",
+    "slug": "^1.1.0",
+    "vimeo": "^2.1.1"
+  }
+}

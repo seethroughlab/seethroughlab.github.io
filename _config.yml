@@ -56,3 +56,4 @@ exclude:
   - vendor/gems/
   - vendor/ruby/
   - Rakefile
+  - _scripts

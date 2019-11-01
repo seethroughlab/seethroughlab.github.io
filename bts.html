@@ -1,0 +1,52 @@
+---
+layout: default
+---
+
+<ul class="responsive-filtration-toggle">
+    <li><a data-filter="*" class="active mouseover-simple">All</a></li>
+
+    {% assign sorted_tags = site.tags | sort %}
+    {% for tag in sorted_tags %}
+    {% assign zz = tag[1] | where: "category", "bts" | sort %}
+    {% if zz != empty %}
+        <li><a data-filter=".filter-{{ tag | first }}" class="mouseover-simple">{{ tag | first }}</a></li>
+    {% endif %}
+    {% endfor %}
+</ul>
+
+
+{% for post in site.categories.bts %}
+
+    <div class="sorting-item {% for tag in post.tags %}filter-{{ tag }} {% endfor %}">
+        <div class="blog-landing-entry-1">
+
+            <a class="mouseover open-overlay open-video" style="background-image: url({{ post.thumbnail }});" data-rel="2" data-src="{{ post.video }}">
+                <span class="mouseover-helper-icon"></span>
+            </a>
+
+            <div class="blog-icons">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="simple-article small light transparent">5 <i class="fa fa-heart-o"></i> 8 <i class="fa fa-comments-o"></i></div>
+                    </div>
+                    
+
+                    <div class="col-xs-6 col-xs-text-right">
+                        {% for tag in post.tags %}
+                        <div class="blog-category">{{ tag }}</div>  
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="description">
+                <div class="title">
+                    <a href="#" class="h4 small blog-mouseover-2"><b>{{ post.title | upcase }}</b></a>
+                </div>
+                <div class="empty-space col-xs-b15"></div>
+                <div class="simple-article grey small blog-light-color">{{ post.date | date: '%B %d, %Y' }}</div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

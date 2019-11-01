@@ -3,78 +3,75 @@ var Vimeo = require('vimeo').Vimeo;
 var moment = require('moment');
 var util = require('util');
 var slug = require('slug');
+var Handlebars = require('handlebars');
 
 var CLIENT_ID="b26ea60915fb663983cab75ae8fbaf56c47ecff3";
 var CLIENT_SECRET = "3fcJ4nTQ6kv67ee20+gkChAqR7WLy2UQ0MhyB1nQITV6RuWtlqwPMEOPZrqdLiXQZ2xqOSJRyNMa+xQKZtSUf3dduLuEwZyKOc8mO2XmRi9JA823eWe8uxGWjLSIiCDn";
 var ACCESS_TOKEN = "fc6bd1f6c25471212050854e88b2d644";
 var vimeo = new Vimeo(CLIENT_ID, CLIENT_SECRET, ACCESS_TOKEN);
-var re = /src=\"([^"]*)\"/
+var re = /src=\"([^\?]+)/
+var template = null;
 
-const processVid = function(data) {
-	var matches = re.exec(data.embed.html);
+
+var sample = true;
+
+const processVid = function(video) {
+	if(sample) {
+		console.log(video);
+		sample = false;
+	}
+
+	var date = moment(video.created_time);
+	var _data = {
+		title: video.name,
+		date: date.format("YYYY-MM-DD"),
+		slug: slug(video.name)
+	};
+
+	var matches = re.exec(video.embed.html);
 	if(!matches) {
-		console.error("no player URL found for ", data.name)
+		console.error("no player URL found for ", video.name)
 		return;
 	}
-	var player_url = matches[1];
+	_data.player_url = matches[1];
 	
+	
+	if(video.description) {
+		_data.description = video.description;
+	}
+
 	// Get TAGS
 	var tags = [];
 	var bts = false;
-	data.tags.forEach(function(tag){
+	video.tags.forEach(function(tag){
 		if(tag.name.toLowerCase() == "bts") 
 			bts = true;
 		else 
-			tags.push( tag.name );
+			tags.push( tag.name.trim() );
 	});
 
 	if(!bts) return;
 
-	// Get POSTER IMAGE
-	var poster = null;
-	var thumbnail = null;
-	if(data.pictures) {
-		for(n in data.pictures.sizes) {
-			if(data.pictures.sizes[n].width==960) 
-				poster = data.pictures.sizes[n].link;
+	_data.tags = JSON.stringify(tags);
 
-			if(data.pictures.sizes[n].width==295) 
-				thumbnail = data.pictures.sizes[n].link;
+	// Get POSTER IMAGE
+	if(video.pictures) {
+		for(n in video.pictures.sizes) {
+			if(video.pictures.sizes[n].width==960) 
+				_data.poster = video.pictures.sizes[n].link;
+
+			if(video.pictures.sizes[n].width==295) 
+			_data.thumbnail = video.pictures.sizes[n].link;
 		}
 	}
 
-	// Assemble FRONT MATTER
-	var front_matter = [
-		"---",
-		"layout: default",
-		"category: bts",
-		util.format('tags: %s', JSON.stringify(tags)),
-		util.format('video: "%s"', player_url),
-		util.format('title: "%s"', data.name),
-		util.format('thumbnail: "%s"', thumbnail),
-	];
-
-	if(data.description) {
-		front_matter.push("description: | ");
-		data.description.split("\n").forEach(function(line){
-			front_matter.push("  "+line);
-		});
-	}
-
-	front_matter.push("---")
-	front_matter = front_matter.join("\n");
-
-
 	// Generate FILENAME
-	var date = moment(data.created_time);
-	var filename = "../../_posts/bts/" + date.format("YYYY-MM-DD-") + slug(data.name) + ".md";
+	var filename = `../../_posts/bts/${_data.date}-${_data.slug}.html`;
+	console.log( filename, _data );
 
-	console.log( filename );
-	//console.log( front_matter );
-	//console.log("================================== ")
-
+	var result = template(_data);
 	return new Promise((resolve, reject) => {
-		fs.writeFile(filename, front_matter, {flags: 'w'}, err => {
+		fs.writeFile(filename, result, {flags: 'w'}, err => {
 			if (err) reject(err);
             resolve();
 		});
@@ -88,7 +85,6 @@ const parsePage = function(page) {
 		vimeo.request({'method': 'GET', "path": path}, function(error, body, status_code, headers){
 			if(error) return reject(error);
 			else {
-				//console.log("found "+body.data.length+" results");
 				var promises = body.data.map(async data => {
 					return processVid(data);
 				});
@@ -96,12 +92,22 @@ const parsePage = function(page) {
 				Promise.all(promises).then(resolve);
 			}
 		});
+	});
+}
 
+const loadTemplate = function() {
+	return new Promise((resolve, reject) => {
+		fs.readFile('bts_template.html', 'utf8', function(err, data) {
+			if (err) reject(err);
+			template = Handlebars.compile(data);
+			resolve();
+		});
 	});
 }
 
 const makeBTS = async _ => {
 	console.log("start");
+	await loadTemplate();
 	for(let page=1; page < 6; page++) {
 		console.log("getting page "+page);
 		await parsePage(page)

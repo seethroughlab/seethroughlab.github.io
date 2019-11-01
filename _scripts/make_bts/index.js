@@ -25,7 +25,8 @@ const processVid = function(video) {
 	var _data = {
 		title: video.name,
 		date: date.format("YYYY-MM-DD"),
-		slug: slug(video.name)
+		slug: slug(video.name),
+		link: video.link
 	};
 
 	var matches = re.exec(video.embed.html);

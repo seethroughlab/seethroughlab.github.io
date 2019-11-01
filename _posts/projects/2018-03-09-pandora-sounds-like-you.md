@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: project
 category: projects
 title: Pandora Sounds Like You
 thumbnail: /images/thumbnails/pandora.png

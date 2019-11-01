@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: project
 title: Driven By Emotion
 thumbnail: /images/thumbnails/driven-by-emotion.jpg
 tags : [nodejs, RFID, openFrameworks, Myo]

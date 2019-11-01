@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: project
 category: projects
 title: FILA Explorer Canyon
 thumbnail: /images/thumbnails/fila-canyon.jpg

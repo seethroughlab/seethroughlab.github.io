@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: project
 title: Delta Ascend
 thumbnail: /images/thumbnails/delta-ascend.jpg
 tags : [ArtNet, openFrameworks, Enttec, Arduino]

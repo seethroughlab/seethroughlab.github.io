@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: project
 title: Edge of the Universe
 thumbnail: /images/thumbnails/edge-of-the-universel.gif
 tags : [music, phones, LEDs, fabrication]

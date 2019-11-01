@@ -24,11 +24,7 @@ description: > # this means to ignore newlines until "baseurl:"
   See-through Lab is an experimental art and technology lab founded by Jeff Crouse in 2014.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: jeffcrouse
-github_username:  jeffcrouse
-facebook_userame: jefftimesten
-instagram_username: seethroughlab
-vimeo_username: jeffcrouse
+
 
 permalink: /:categories/:title.html
 

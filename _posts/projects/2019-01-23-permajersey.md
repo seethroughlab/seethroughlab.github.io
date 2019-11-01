@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: project
 category: projects
 title: Permajersey
 thumbnail: /images/thumbnails/permajersey.jpg
@@ -24,7 +24,7 @@ tech:
  - ofxCv
  - ofxRay
 links:
-image_root: /img/projects/permajersey/
+image_root: /images/projects/permajersey/
 images: 
 - untitled-76.jpg
 - untitled-15.jpg

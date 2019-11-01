@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: project
 title: Photoland Hermès
 thumbnail: /images/thumbnails/photoland.gif
 tags : [openFrameworks, nodeJS, Arduino, Canon]

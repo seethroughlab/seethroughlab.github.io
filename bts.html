@@ -9,7 +9,9 @@ permalink: /bts/
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-    
+                <div class="page-title">
+                    <h1 class="heading"></h1>
+                </div>
                 <!-- Portfolio Wrap -->
                 <div class="portfolio-wrap">
                     <!-- Portfolio Filter -->
@@ -18,7 +20,6 @@ permalink: /bts/
                             All 
                         </div>
                         {% assign tags_bts = site.categories.bts | map: 'tags' | join: ',' | join: ',' | downcase | split: ',' | uniq | sort %}
-     
                         {% for tag in tags_bts %}
                             <div data-filter=".filter-{{ tag }}" class="cbp-filter-item">
                                 {{ tag }}
@@ -34,7 +35,7 @@ permalink: /bts/
            
 
                         <div class="cbp-item {% for tag in post.tags %}filter-{{ tag | downcase }} {% endfor %}">
-                            <a href="{{ post.url }}" class="cbp-caption">
+                            <a href="{{ post.link }}" class="cbp-caption" target="_blank">
                                 <div class="cbp-caption-defaultWrap">
                                     <img src="{{ post.thumbnail }}" alt="">
                                 </div>
@@ -59,116 +60,8 @@ permalink: /bts/
                         {% endfor %}
                         
 
-                        <!--
-                        <div class="cbp-item">
-                            <a href="details-right-video.html" class="cbp-caption">
-                                <div class="cbp-caption-defaultWrap">
-                                    <img src="images/portfolio/thumbnails-grid/img_2.png" alt="">
-                                </div>
-                                <div class="cbp-caption-activeWrap">
-                                    <div class="cbp-l-caption-alignLeft">
-                                        <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">Shopping Bag</div>
-                                            <div class="cbp-l-caption-desc">Design</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="cbp-item branding">
-                            <a href="details-bottom-image.html" class="cbp-caption">
-                                <div class="cbp-caption-defaultWrap">
-                                    <img src="images/portfolio/thumbnails-grid/img_3.png" alt="">
-                                </div>
-                                <div class="cbp-caption-activeWrap">
-                                    <div class="cbp-l-caption-alignLeft">
-                                        <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">Magazine</div>
-                                            <div class="cbp-l-caption-desc">Identity</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="cbp-item web-design">
-                            <a href="details-bottom-gallery.html" class="cbp-caption">
-                                <div class="cbp-caption-defaultWrap">
-                                    <img src="images/portfolio/thumbnails-grid/img_4.png" alt="">
-                                </div>
-                                <div class="cbp-caption-activeWrap">
-                                    <div class="cbp-l-caption-alignLeft">
-                                        <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">Cardboard</div>
-                                            <div class="cbp-l-caption-desc">Design</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="cbp-item graphic">
-                            <a href="details-bottom-slider.html" class="cbp-caption">
-                                <div class="cbp-caption-defaultWrap">
-                                    <img src="images/portfolio/thumbnails-grid/img_5.png" alt="">
-                                </div>
-                                <div class="cbp-caption-activeWrap">
-                                    <div class="cbp-l-caption-alignLeft">
-                                        <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">Stationary</div>
-                                            <div class="cbp-l-caption-desc">Identity</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="cbp-item">
-                            <a href="details-bottom-video.html" class="cbp-caption">
-                                <div class="cbp-caption-defaultWrap">
-                                    <img src="images/portfolio/thumbnails-grid/img_6.png" alt="">
-                                </div>
-                                <div class="cbp-caption-activeWrap">
-                                    <div class="cbp-l-caption-alignLeft">
-                                        <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">Book Cover</div>
-                                            <div class="cbp-l-caption-desc">Branding</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="cbp-item web-design">
-                            <a href="details-left-image.html" class="cbp-caption">
-                                <div class="cbp-caption-defaultWrap">
-                                    <img src="images/portfolio/thumbnails-grid/img_7.png" alt="">
-                                </div>
-                                <div class="cbp-caption-activeWrap">
-                                    <div class="cbp-l-caption-alignLeft">
-                                        <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">Paper Pouch</div>
-                                            <div class="cbp-l-caption-desc">Design</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="cbp-item branding">
-                            <a href="details-left-gallery.html" class="cbp-caption">
-                                <div class="cbp-caption-defaultWrap">
-                                    <img src="images/portfolio/thumbnails-grid/img_8.png" alt="">
-                                </div>
-                                <div class="cbp-caption-activeWrap">
-                                    <div class="cbp-l-caption-alignLeft">
-                                        <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">Ceramic Bottles</div>
-                                            <div class="cbp-l-caption-desc">Branding</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        -->
                     </div>
                     <!-- Portfolio Items -->
-                    
                 </div>
                 <!-- Portfolio Wrap Ends -->
             </div>

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: project
 title: Light Echoes Barbican
 thumbnail: /images/thumbnails/light_echoes.jpg
 tags : [openFrameworks, Canon, DMX, lasers]

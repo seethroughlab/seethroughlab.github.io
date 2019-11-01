@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: project
 category: projects
 title: One Time in New Orleans
 thumbnail: /images/thumbnails/otino.png

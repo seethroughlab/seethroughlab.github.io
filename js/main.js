@@ -150,7 +150,7 @@
             // process the form
             $.ajax({
                 type: 'POST',
-                url: 'include/contact.php',
+                url: '/include/contact.php',
                 data: formData,
                 dataType: 'json',
                 encode: true

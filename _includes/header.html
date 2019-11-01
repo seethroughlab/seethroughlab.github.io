@@ -9,7 +9,7 @@
         <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
 
         <!-- Links -->      
-        <link rel="icon" type="image/png" href="images/favicon.png" />
+        <link rel="icon" type="image/png" href="/images/favicon.png" />
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
         <link href="/css/bootstrap.css" rel="stylesheet" type="text/css"/>
         <link href="/css/ionicons.css" rel="stylesheet" type="text/css"/>
@@ -32,13 +32,9 @@
             <header id="header" class="standard">
                 <div class="header-wrapper">
                     <div class="container">
-                        <div id="logo">
-                            <!--
-                            <a href="index.html">
-                                <img src="images/logo.png" alt="Logo"> 
-                            </a>
-                            -->
-                        </div>
+                        <a href="/">
+                            <div id="logo"></div>
+                        </a>
                         <span id="menu-trigger"><span></span></span>
                         <nav id="main-menu">
                             <ul>

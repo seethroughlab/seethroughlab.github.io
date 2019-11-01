@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: project
 title: Acer Predator
 thumbnail: /images/thumbnails/ferrofluid.jpg
 tags : [ferrofluid, magnets, servos, software]
@@ -11,7 +11,7 @@ client:
 role: Technical Director
 video_player: https://player.vimeo.com/video/130166758
 video_poster: https://i.vimeocdn.com/video/521920177_1280x720.jpg?r=pad
-image_root: /img/projects/predator
+image_root: /images/projects/predator
 images: 
  - designboom-predator.gif
  - img_1_1431966815_2b1a5a7305ddd08d7d8706560cfeca79.jpg

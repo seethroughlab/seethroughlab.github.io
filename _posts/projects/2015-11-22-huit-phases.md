@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: project
 title: Huit Phases de L'Illumination
 thumbnail: /images/thumbnails/huit_phases.gif
 tags : [Android, VR, Unity, Kinect]

@@ -1,0 +1,563 @@
+<!doctype html>
+<html> 
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <link rel="icon" type="image/jpeg" href="images/favicon.jpg" />
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap.vertical-tabs.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <title>Kraft | Documentation</title>
+        
+    </head>
+    <body>
+        <div class="doc-wrap">
+        <header id="header" class="standard sticky">
+            <div class="header-wrapper">
+                <div class="container-fluid">
+                    <div id="logo">
+                        <a href="index.html">
+                            <img src="images/logo.png" alt="Logo"> 
+                        </a>
+                    </div>
+                    <span id="menu-trigger"><span></span></span>
+                    <nav id="main-menu">
+                        <ul>
+                            <li><a href="https://themeforest.net/user/caliberthemes"><div>CONTACT</div></a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <div class="doc-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="sidebar">
+                            <ul class="nav nav-tabs tabs-left">
+                                <li class="active"><a href="#tab1" data-toggle="tab">Start</a></li>
+                                <li><a href="#tab11" data-toggle="tab">Updates</a></li>
+                                <li><a href="#tab2" data-toggle="tab">Menu</a></li>
+                                <li><a href="#tab10" data-toggle="tab">Helper Classes</a></li>
+                                <li><a href="#tab3" data-toggle="tab">Image Slider</a></li>
+                                <li><a href="#tab6" data-toggle="tab">Icons</a></li>
+                                <li><a href="#tab4" data-toggle="tab">Portfolio</a></li>
+                                <li><a href="#tab5" data-toggle="tab">Blog</a></li>
+                                <li><a href="#tab9" data-toggle="tab">Footer</a></li>
+                                <li><a href="#tab7" data-toggle="tab">Contact Form</a></li>
+                                <li><a href="#tab8" data-toggle="tab">Change Log</a></li>
+                            </ul>
+                            
+                        </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <!-- Tab Content -->
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab1">
+                                <h1>Installation</h1>
+                                <p>Below are the steps to get started with your Site Template.</p>
+                                <ol>
+                                    <li>Open the <code>Kraft</code> Folder to find all the Templates Files.</li>
+                                    <li>You will need to Upload all the file from HTML folder to your Web Server using FTP.</li>
+                                    <li>Below are the required files/folders to be upload on the Web Server:
+                                        <ul>
+                                            <li><code>HTML/ajax-projects</code></li>
+                                            <li><code>HTML/css</code></li>
+                                            <li><code>HTML/images</code></li>
+                                            <li><code>HTML/include</code></li>
+                                            <li><code>HTML/js</code></li>
+                                            <li><code>HTML/required HTML files</code></li>
+                                            <li><code>HTML/style.css </code></li>
+                                        </ul>
+                                        You can add new file/folder according to your preferences.
+                                    </li>
+                                </ol>
+                                <hr/>
+                                <h1>HTML Structure</h1>
+                                <p>Below is the HTML structure of the page.</p>
+                                <pre class="bottommargin">&lt;!DOCTYPE html&gt;
+&lt;html dir="ltr" lang="en-US"&gt;
+&lt;head&gt;
+
+	<span>&lt;!-- Stylesheets, Metas  &amp; Title goes here --&gt;</span>
+	
+
+&lt;/head&gt;
+&lt;body&gt;
+
+	<span>&lt;!-- Page Wrapper --&gt;</span>
+	&lt;div id="page-wrapper"&gt;
+
+		<span>&lt;!-- Header --&gt;</span>
+		&lt;header id="header" class="standard" &gt;
+
+			...
+
+		&lt;/header&gt;
+
+		<span>&lt;!-- Content Wrapper --&gt;</span>
+		&lt;div id="content-wrapper"&gt;
+
+                    <span>&lt;!-- Main Wrapper --&gt;</span>
+                    &lt;div id="main-wrapper"&gt;
+
+                        &lt;div class="container"&gt;
+					...
+                        &lt;/div&gt;
+
+                    &lt;/div&gt;
+
+                    <span>&lt;!-- Footer --&gt;</span>
+                    &lt;footer id="footer" class="standard"&gt;
+
+
+                    &lt;/footer&gt;
+
+		&lt;/div&gt;
+
+	&lt;/div&gt;
+
+        <span>&lt;!-- Scripts --&gt;</span>
+        &lt;script&gt;
+
+
+        &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                                <hr/>
+                                <h1>Favicons</h1>
+                                <p>Set the Favicon of your Website in <code>head</code> section as given below:</p>
+<pre>&lt;link rel="icon" type="image/png" href="images/favicon.png"&gt;</pre>
+                                <hr/>
+                                <h1>Logo Settings</h1>
+                                <p>Set the logo inside <code>id="logo"</code> container as shown below :</p>
+
+<pre>&lt;div id="logo"&gt;
+    &lt;a href="index.html"&gt;&lt;img src="images/logo.png" alt="Logo"&gt;&lt;/a&gt;
+&lt;/div&gt;</pre>
+                                <p><span class="label label-info">Note</span> The maximum Logo Image's height can be <strong>70px</strong>.</p>
+                                <hr/>
+                                <h1>Changing Fonts</h1>
+                                <p>Change the font in the <code>head</code> section, if you want to use a Google Font.</p>
+                                <pre>&lt;link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet"/&gt;</pre>
+                                <p><small>After the font is changed in <code>link</code> tag, change the font name in <code>style.css</code></small></p>
+                            </div>
+                            <div class="tab-pane" id="tab2">
+                                <h1>Menu Structure</h1>
+                                <p>Below is the HTML code for the menu. Add/remove links as preferred for menu setup.</p>
+                                <pre>
+&lt;nav id=&quot;main-menu&quot;&gt;
+    &lt;ul&gt;
+        &lt;li&gt;
+            &lt;a href=&quot;index.html&quot; class=&quot;active&quot;&gt;&lt;div&gt;HOME&lt;/div&gt;&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;a href=&quot;about.html&quot;&gt;&lt;div&gt;ABOUT&lt;/div&gt;&lt;/a&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;
+</pre>
+                            </div>
+                            <div class="tab-pane" id="tab3">
+                                <h1>Image Slider</h1>
+                                <p>Below is the HTML code for the image slider. You can place the slider anywhere using the code given below and update the image path.</p>
+                                <pre>
+&lt;div class=&quot;kraft-carousel&quot;  data-dots=&quot;true&quot; data-autoplay=&quot;true&quot;&gt;
+    &lt;div class=&quot;carousel-slides&quot;&gt;
+            &lt;img src=&quot;path&quot; alt=&quot;&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;carousel-slides&quot;&gt;
+            &lt;img src=&quot;path&quot; alt=&quot;&quot;/&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;carousel-slides&quot;&gt;
+            &lt;img src=&quot;path&quot; alt=&quot;&quot;/&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+                                </pre>
+                                <br>
+                                <h3>Settings</h3>
+                                <ul>
+                                    <li><code>data-dots</code>- Enable/Disable slider pagination. Eg. true/false</li>
+                                    <li><code>data-dotsspeed</code>- Speed of the Slide Animation in milliseconds. Eg. 1000, when clicked on pagination.</li>
+                                    <li><code>data-autoplay</code>- Enable/Disable slider autoplay. Eg. true/false</li>
+                                    <li><code>data-autoplayspeed</code>- Speed of the Slide Animation in milliseconds. Eg. 1000, when slides are autoplayed.</li>
+                                </ul>
+                            </div>
+                            <div class="tab-pane" id="tab4">
+                                <h1>Portfolio Setup</h1>
+                                <p>Below is the HTML structure of the portfolio section.</p>
+                                <pre>
+&lt;div class=&quot;portfolio-wrap&quot;&gt;
+
+    &lt;!-- Portfolio Filter --&gt;
+
+    &lt;div id=&quot;filters-container&quot; class=&quot;cbp-l-filters-text text-left&quot;&gt;
+        ...
+    &lt;/div&gt;
+
+    &lt;!-- Portfolio Items Container --&gt;
+    &lt;div id=&quot;portfolio-container&quot; class=&quot;cbp&quot;&gt;
+        ...
+    &lt;/div&gt;	
+
+&lt;/div&gt;                                </pre>
+                                <br/>
+                                <h3>Portfolio Filter Setup</h3>
+                                <pre>
+&lt;div id=&quot;filters-container&quot; class=&quot;cbp-l-filters-text text-left&quot;&gt;
+    &lt;div data-filter=&quot;*&quot; class=&quot;cbp-filter-item-active cbp-filter-item&quot;&gt;
+            All 
+    &lt;/div&gt;
+    &lt;div data-filter=&quot;.web-design&quot; class=&quot;cbp-filter-item&quot;&gt;
+            Web Design
+    &lt;/div&gt;
+    &lt;div data-filter=&quot;.branding&quot; class=&quot;cbp-filter-item&quot;&gt;
+            Branding
+    &lt;/div&gt;
+    &lt;div data-filter=&quot;.graphic&quot; class=&quot;cbp-filter-item&quot;&gt;
+            Graphic
+    &lt;/div&gt;
+&lt;/div&gt;                                </pre>
+                                <br/>
+                                <h3>Portfolio Items Setup</h3>
+<pre>&lt;div id=&quot;portfolio-container&quot; class=&quot;cbp&quot; data-layoutmode=&quot;grid&quot; data-gaphorizontal=&quot;30&quot; data-gapvertical=&quot;30&quot; data-captionanimation=&quot;minimal&quot; data-animationtype=&quot;quicksand&quot;&gt;
+    &lt;div class=&quot;cbp-item web-design&quot;&gt;
+        &lt;a href=&quot;project-single-2.html&quot; class=&quot;cbp-caption&quot;&gt;
+            &lt;div class=&quot;cbp-caption-defaultWrap&quot;&gt;
+                &lt;img src=&quot;images/portfolio/thumbnails-masonry/label-tag.jpg&quot; alt=&quot;&quot;&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;cbp-caption-activeWrap&quot;&gt;
+                &lt;div class=&quot;cbp-l-caption-alignLeft&quot;&gt;
+                    &lt;div class=&quot;cbp-l-caption-body&quot;&gt;
+                        &lt;div class=&quot;cbp-l-caption-title&quot;&gt;Label Tag&lt;/div&gt;
+                        &lt;div class=&quot;cbp-l-caption-desc&quot;&gt;Identity&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/a&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+                                <br/>
+                                <h4>Settings</h4>
+                                <ul>
+                                    <li><code>data-layoutmode</code>- Set the layout for portfolio. Eg. grid/mosaic</li>
+                                    <li><code>data-gaphorizontal</code>- Horizontal space between each item. Eg. 30 (this will be 30px margin)</li>
+                                    <li><code>data-gapvertical</code>- Vertical space between each item. Eg. 30 (this will be 30px margin)</li>
+                                    <li><code>data-captionanimation</code>- Animation occurs when the cursor is hovered on portfolio thumbnail. Eg. zoom</li>
+                                    <li><code>data-animationtype</code>- Animation occurs when portfolio items are filtered Eg. quicksand</li>
+                                </ul>
+                                <br/>
+                                <h4>List of available hover effects for portfolio item.</h4>
+                                <ul>
+                                    <li>pushTop</li>
+                                    <li>revealBottom</li>
+                                    <li>moveRight</li>
+                                    <li>overlayRightAlong</li>
+                                    <li>minimal</li>
+                                    <li>fadeIn</li>
+                                    <li>zoom</li>
+                                </ul>
+                                <br/>
+                                <h4>List of available animation effects for portfolio filter.</h4>
+                                <ul>
+                                    <li>fadeOut</li>
+                                    <li>quicksand</li>
+                                    <li>bounceLeft</li>
+                                    <li>bounceTop</li>
+                                    <li>bounceBottom</li>
+                                    <li>moveLeft</li>
+                                    <li>slideLeft</li>
+                                    <li>fadeOutTop</li>
+                                    <li>sequentially</li>
+                                    <li>skew</li>
+                                    <li>slideDelay</li>
+                                    <li>rotateSides</li>
+                                    <li>flipOutDelay</li>
+                                    <li>flipOut</li>
+                                    <li>unfold</li>
+                                    <li>foldLeft</li>
+                                    <li>scaleDown</li>
+                                    <li>scaleSides</li>
+                                    <li>frontRow</li>
+                                    <li>flipBottom</li>
+                                    <li>rotateRoom</li>
+                                </ul>
+                                <hr/>
+                                <h1>Load More Items</h1>
+                                <p>There are 2 options to load more items in the portfolio section. </p>
+                                <ol>
+                                    <li>On button click ,<code>data-loadmoreaction="click"</code></li>
+                                    <li>On hover ,<code>data-loadmoreaction="auto"</code></li>
+                                </ol>
+                                <p><small>In both the case, the items to load will be in the different HTML file called <code>loadMore.html</code> located in <code>ajax-projects.</code></small></p>
+                                <p><span class="label label-info">Note</span> Load more feature will not work without the server. It will only run on server, be it on a local server or a web server.</p>
+                            </div>
+                            <div class="tab-pane" id="tab5">
+                                <h1>Blog</h1>
+                                <p>Below is the HTML structure of blog posts.</p>
+<pre>&lt;div class=&quot;post-list horizontal&quot;&gt;
+
+    &lt;article class=&quot;post clearfix&quot;&gt;
+
+        &lt;div class=&quot;col-sm-12 col-md-7 no-padding-left post-img-wrap&quot;&gt;
+            &lt;a href=&quot;blog-single.html&quot; class=&quot;post-img&quot;&gt;
+            &lt;img src=&quot;images/blog/img_2.jpg&quot; alt=&quot;&quot;&gt;
+        &lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;col-sm-12 col-md-5 no-padding-right post-content-wrap&quot;&gt;
+
+            &lt;div class=&quot;post-content&quot;&gt;
+                &lt;div class=&quot;post-date&quot;&gt;25 Nov 2015&lt;/div&gt;
+                &lt;h2 class=&quot;post-title&quot;&gt;&lt;a href=&quot;blog-single.html&quot;&gt;Wireframing tips for designers&lt;/a&gt;&lt;/h2&gt;
+                &lt;ul class=&quot;post-meta&quot;&gt;
+                        &lt;li class=&quot;post-author&quot;&gt;&lt;a href=&quot;&quot;&gt;Admin&lt;/a&gt;&lt;/li&gt;
+                        &lt;li class=&quot;post-category&quot;&gt;&lt;a href=&quot;&quot;&gt;Article&lt;/a&gt;&lt;/li&gt;
+                &lt;/ul&gt;
+                &lt;p class=&quot;post-excerpt&quot;&gt;It is a long established fact that a reader will be distracted by the readable content of a page when look at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using content here  making it look like readable English.&lt;/p&gt;
+                &lt;div class=&quot;post-btn button&quot;&gt;
+                        &lt;a href=&quot;blog-single.html&quot;&gt;Read More&lt;/a&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+        &lt;/div&gt;
+
+    &lt;/article&gt;
+
+&lt;/div&gt;</pre>
+                                <hr/>
+                                <h1>Post - Image slider</h1>
+                                <p>Code Snippet for Image Slider</p>
+<pre>&lt;div class=&quot;col-sm-12 col-md-7 no-padding-left post-gallery-wrap&quot;&gt;
+    &lt;div class=&quot;kraft-carousel&quot; data-navspeed=&quot;1000&quot; data-autoplayspeed=&quot;1000&quot; data-dots=&quot;true&quot; data-dotsspeed=&quot;1000&quot; data-autoplay=&quot;true&quot;&gt;
+        &lt;div class=&quot;carousel-slides&quot;&gt;
+                &lt;img src=&quot;images/portfolio/project-single-5/img_1.jpg&quot; alt=&quot;Image&quot; /&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;carousel-slides&quot;&gt;
+                &lt;img src=&quot;images/portfolio/project-single-5/img_2.jpg&quot; alt=&quot;Image&quot;/&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;carousel-slides&quot;&gt;
+                &lt;img src=&quot;images/portfolio/project-single-5/img_3.jpg&quot; alt=&quot;Image&quot;/&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+                                <hr/>
+                                <h1>Post - Video</h1>
+                                <p>Code Snippet for Video</p>
+<pre>&lt;div class=&quot;col-sm-12 col-md-7 no-padding-left post-video-wrap&quot;&gt;
+    &lt;div class=&quot;project-video embed-responsive embed-responsive-16by9&quot;&gt;
+        &lt;iframe class=&quot;embed-responsive-item&quot; src=&quot;https://player.vimeo.com/video/176234366?title=1&byline=0&portrait=0&quot;  height=&quot;500&quot; allowfullscreen&gt;&lt;/iframe&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>                               
+                            </div>
+                            <div class="tab-pane" id="tab9">
+                                <h1>Footer</h1>
+                                <p>Below is the HTML structure of footer.</p>
+<pre>&lt;footer id=&quot;footer&quot; class=&quot;standard&quot;&gt;
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;div class=&quot;row&quot;&gt;
+            &lt;div class=&quot;col-xs-12 col-sm-6&quot;&gt;
+                &lt;div class=&quot;copyrights&quot;&gt;
+                    &lt;p&gt;&COPY; 2016 Kraft&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;col-xs-12 col-sm-6&quot;&gt;
+                &lt;div class=&quot;footer-socials&quot;&gt;
+                    &lt;a href=&quot;#&quot;&gt;Facebook&lt;/a&gt;
+                    &lt;a href=&quot;#&quot;&gt;Twitter&lt;/a&gt;
+                    &lt;a href=&quot;#&quot;&gt;Linkedin&lt;/a&gt;
+                    &lt;a href=&quot;#&quot;&gt;Email&lt;/a&gt; 
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/footer&gt;</pre>
+                                <hr/>
+                                <h1>Social Icons in footer.</h1>
+                                <p>Below is the HTML code to put social icons in footer.</p>
+<pre>&lt;div class=&quot;footer-socials&quot;&gt;
+    &lt;a href=&quot;#&quot;&gt;&lt;i class=&quot;ion-social-facebook&quot;&gt;&lt;/i&gt;&lt;/a&gt;
+    &lt;a href=&quot;#&quot;&gt;&lt;i class=&quot;ion-social-twitter&quot;&gt;&lt;/i&gt;&lt;/a&gt;
+&lt;/div&gt;</pre><p><span class="label label-info">Note</span> See icons section in the documentation to know about the available icon.</p>
+                            </div>
+                            <div class="tab-pane" id="tab6">
+                                <h1>Icon Font</h1>
+                                <p>Ionicons is already embedded in the template. See the code snippet below on how to put the icon.</p>
+                                <pre>&lt;i class=&quot;ion-cube&quot;&gt;&lt;/i&gt;</pre>
+                                <p></p>
+                                <p><a href="http://ionicons.com/" class="link" target="_blank" style="color:blue">Click here to see the available icons.</a></p>
+                            </div>
+                            <div class="tab-pane " id="tab7">
+                                <h1>Contact Form Setup</h1>
+                                <p>Update your Email Address in the <code>include/contact.php</code></p>
+                                <pre>$your_email_address = "username@your-domain.com";   // Your Email Address</pre>
+                                <hr/>
+                                <h1>Google Map Setup</h1>
+                                <p>To use a google map, API is required. You will need to generate one if you don't have. You will need to replace the API in <code>script</code>tag where it says "yourapikey". Snippet is given below.</p>
+                                <p>&lt;script type=&quot;text/javascript&quot; src=&quot;//maps.googleapis.com/maps/api/js?key=yourapikey&quot;&gt;&lt;/script&gt;</p>
+                                <p><a href="https://developers.google.com/maps/documentation/javascript/get-api-key" style="color:blue;">Click here for the information on generating API key.</a></p>
+                            </div>
+                            <div class="tab-pane " id="tab8">
+								<h1>Version 1.3</h1>
+                                <p>Released on <strong>4th March, 2017</strong></p>
+                                <br>
+                                <h3>Added</h3>
+                                <ul>
+                                    <li>5 new home pages</li>
+                                    <li>9 new portfolio details pages</li>
+									<li>Updated jquery plugins</li>
+                                </ul>
+                                <br>
+                                <h3>Changed Files</h3>
+                                <ul>
+                                    <li>style.css</li>
+									<li>main.js</li>
+                                </ul>
+                                <hr/>
+                                <h1>Version 1.2</h1>
+                                <p>Released on <strong>23rd December, 2016</strong></p>
+                                <br>
+                                <h3>Added</h3>
+                                <ul>
+                                    <li>about-1.html  </li>
+                                    <li>services-1.html</li>
+                                    <li>portfolio-mosaic.html</li>
+                                    <li>portfolio-single-6.html</li>
+                                </ul>
+                                <br>
+                                <h3>Changed Files</h3>
+                                <ul>
+                                    <li>style.css</li>
+                                </ul>
+                                <hr/>
+                                <h1>Version 1.1</h1>
+                                <p>Released on <strong>17th December, 2016</strong></p>
+                                <br>
+                                <h3>Added</h3>
+                                <ul>
+                                    <li>About us page</li>
+                                    <li>Services</li>
+                                    <li>Contact page with google map</li>
+                                </ul>
+                                <br>
+                                <h3>Changed Files</h3>
+                                <ul>
+                                    <li>style.css</li>
+                                    <li>js/main.js</li>
+                                </ul>
+                                <hr/>
+                                <h1>Initial Release - Version 1.0 </h1>
+                                <p>Released on <strong>13th December, 2016</strong></p>
+                            </div>
+                            <div class="tab-pane" id="tab10">
+                                <h1>Helper Classes</h1>
+                                <p>Some of the classes used in the template.</p>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Class Name</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>.no-padding-left</td>
+                                            <td>Padding of 0px on left side.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.no-padding-right</td>
+                                            <td>Padding of 0px on right side.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.margin-top-10</td>
+                                            <td>Margin of 10px on top.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.margin-top-15</td>
+                                            <td>Margin of 15px on top.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.margin-top-20</td>
+                                            <td>Margin of 20px on top.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.margin-top-25</td>
+                                            <td>Margin of 25px on top.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.margin-top-30</td>
+                                            <td>Margin of 30px on top.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.margin-top-35</td>
+                                            <td>Margin of 35px on top.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.margin-top-40</td>
+                                            <td>Margin of 40px on top.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.margin-bottom-10</td>
+                                            <td>Margin of 10px on bottom.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.margin-bottom-15</td>
+                                            <td>Margin of 15px on bottom.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.margin-bottom-20</td>
+                                            <td>Margin of 20px on bottom.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.margin-bottom-25</td>
+                                            <td>Margin of 25px on bottom.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.margin-bottom-30</td>
+                                            <td>Margin of 30px on bottom.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.margin-bottom-35</td>
+                                            <td>Margin of 35px on bottom.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.margin-bottom-40</td>
+                                            <td>Margin of 40px on bottom.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.text-left</td>
+                                            <td>To left align the text.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.text-right</td>
+                                            <td>To right align the text.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.text-center</td>
+                                            <td>To center align the text.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="tab11">
+                                <h1>Updates</h1>
+                                <p>If you want to do any kind of customization in css or javascript, the best way would be to create new custom file. Your custom file would be the last file linked in the document. css file would go in the head section and javascript file would go at the end of the document where other scripts are linked, before the end of body tag.</p>
+                            </div>
+                        </div>
+                        <!-- Tab Content / -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <script src="js/jquery-1.12.4.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <script src="js/jqueryui.js"></script>
+        <script src="js/main.js"></script>
+
+
+    </body>
+</html>

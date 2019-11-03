@@ -2,6 +2,7 @@
 layout: project
 category: projects
 title: Permajersey
+hidden: true
 thumbnail: /images/thumbnails/permajersey.jpg
 tags: [LED, threejs, openFrameworks]
 description: MKG came to me with the idea of building an interactive canyon

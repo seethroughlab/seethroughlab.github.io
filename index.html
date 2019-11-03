@@ -41,9 +41,7 @@ layout: default
                         
 
                     {% for post in site.categories.projects %}
-                    <!--
-                    {{ root_url }}{{ post.url }}
-                    -->
+                    {%  if post.hidden != true %}
                         <div class="cbp-item {{ post.date | date: "%Y" }}">
                             <a href="{{ root_url }}{{ post.url }}" class="cbp-caption">
                                 <div class="cbp-caption-defaultWrap">
@@ -59,6 +57,7 @@ layout: default
                                 </div>
                             </a>
                         </div>
+                    {% endif %}
                     {% endfor %}
                     
 

@@ -10,7 +10,7 @@ client:
  - <a href="http://www.thisismkg.com/">MKG</a>
 role: Technical Director
 video_player: https://player.vimeo.com/video/161992857
-video_poster: /img/projects/ascend/poster.jpg
+video_poster: /images/projects/ascend/poster.jpg
 credits: 
  - Produced by: Tool of NA
  - Director: <a href="http://aramique.com/">aramique</a>
@@ -24,7 +24,6 @@ credits:
  - LED Consultant: <a href="http://blinkinlabs.com/">Matt Mets</a>
  - LED Support: <a href="http://moonmilk.com/">Ranjit Bhatnagar</a>
  - Video: MKG
-links: none
 tech:
  - 3x <a href="http://www.enttec.com/index.php?main_menu=Products&pn=70060">Enttec Pixelator</a>
  - 32x <a href="http://www.enttec.com/?main_menu=Products&pn=73544">12v PLinks</a>

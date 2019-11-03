@@ -10,7 +10,7 @@ client:
  - <a href="http://www.neworleansonline.com/">NOTMC (New Orleans Tourism Marketing Corporation)</a>
 role: Technical Director/Programmer
 video_player: https://player.vimeo.com/video/259501609
-video_poster: /img/thumbnails/otino.jpg
+video_poster: /images/thumbnails/otino.jpg
 credits:
  - Production: Tool of North America
  - Director: DJ Neff

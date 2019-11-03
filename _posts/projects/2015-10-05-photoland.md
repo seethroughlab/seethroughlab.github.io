@@ -6,13 +6,13 @@ tags : [openFrameworks, nodeJS, Arduino, Canon]
 category: projects
 video_player: https://player.vimeo.com/video/163616555
 video_credit: Mash Studio
-video_poster: /img/projects/photoland/poster.jpg
+video_poster: /images/projects/photoland/poster.jpg
 description: Starting in July of 2015, I worked on a set of impeccably styled photo booth activations for a large event in Miami on November 4 for the designer brand Hermès. There were 6 different types of photo experiences in all, plus a RFID token check-in system.
 client: 
  - Hermès
  - <a href="http://mashstudionyc.com/">Mash Studio</a>
 role: Technical Director
-image_root: /img/projects/photoland/
+image_root: /images/projects/photoland/
 images:
 - arrival-4kWMzR-rGl.jpg
 - arrival-E1WHP8gBGl.jpg
@@ -26,11 +26,11 @@ images:
 - mambo-Vy1tQmBzl.gif
 - showtime-41zVilHfx.jpg
 - showtime-VyWxI3WBze.jpg
+- winner-EyFUYgBMg.mp4
+- winner-VyRPAgHzl.mp4
 credits:
  - Agency: Mash Studio
  - Interaction design and development: <a href="http://www.luisaph.com/">Luisa Pereira</a>
-links:
- - none
 tech:
  - 4x Mac Minis
  - Mac Pro
@@ -42,6 +42,3 @@ tech:
  - custom nodejs photo station software
  - custom openFrameworks software - Canon controller
 ---
-
-<video autoplay loop src="/img/projects/photoland/winner-EyFUYgBMg.mp4"></video>
-<video autoplay loop src="/img/projects/photoland/winner-VyRPAgHzl.mp4"></video>

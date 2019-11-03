@@ -5,7 +5,7 @@ thumbnail: /images/thumbnails/edge-of-the-universel.gif
 tags : [music, phones, LEDs, fabrication]
 category: projects
 video_player: https://player.vimeo.com/video/143745092
-video_poster: /img/projects/edge-of-the-universe/985A4174.jpg
+video_poster: /images/projects/edge-of-the-universe/985A4174.jpg
 video_credit: <a href="https://www.prote.in/">Protein</a>
 description: > 
   Edge of the Universe is a modular interactive instrument exploring themes of time and space through live audio-visual performance. A collaboration between experience lab Odd Division and the band Little Dragon, the installation uses an array of Samsung Galaxy S6 Edge phones inside of a prototype flying saucer to take a journey to the Edge of the Universe and back. Sampling past audio recorded by NASA in space and present audio recorded on earth, the experience is part relic and part looking-glass. The audience is invited on an immersive and intimate journey with Little Dragon to the limits of the universe and back through this homage to space travel and the future of mobile synthesizers.
@@ -13,7 +13,7 @@ client:
  - Samsung
  - <a href="https://www.prote.in/">Protein</a>
 role: Technical Lead/Co-Director
-image_root: /img/projects/edge-of-the-universe
+image_root: /images/projects/edge-of-the-universe
 images:
   - IMG_9379.jpg
   - 985A3265.jpg

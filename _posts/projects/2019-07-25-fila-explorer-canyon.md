@@ -13,6 +13,7 @@ video_player: https://player.vimeo.com/video/350378822
 video_poster: http://i.vimeocdn.com/video/801629040_640.jpg
 credits:
 - LED Design: <a href="https://smooth.technology/">Smooth Technology</a>
+- Fabrication: Pink Sparrow
 - Photo credit: <a href="https://www.andrewwhite.nyc/">Andrew White</a>
 - Video credit: <a href="https://matteprojects.com/">Matte Projects</a>
 tech: 

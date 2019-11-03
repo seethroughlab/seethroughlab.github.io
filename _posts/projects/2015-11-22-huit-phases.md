@@ -8,8 +8,8 @@ description: From sensory overload to sensory deprivation, huit phases de l’il
 client: Palais de Tokyo, centre d’art contemporain
 role: Contributing Artist, Technical Director
 video_player: https://player.vimeo.com/video/156899190
-video_poster: /img/projects/huit/phase-7-exodus-by-hugo-arcier-.gif
-image_root: /img/projects/huit/
+video_poster: /images/projects/huit/phase-7-exodus-by-hugo-arcier-.gif
+image_root: /images/projects/huit/
 images:
   - 1-wide_keyshot_1600_c.JPG
   - 1a_1600_c.jpg

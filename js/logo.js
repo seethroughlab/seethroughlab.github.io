@@ -60,12 +60,13 @@ document.onmousemove = function(e) {
     mouse.y = e.pageY;
 };
 
-var offset = height/100;
-var HALF_PI = Math.PI / 2.0;
+var offset = height/400;
+var ANGLE = Math.PI / 6.0;
+var AMOUNT = 0.004;
 function animate() {
 
-	rgbPass.uniforms[ "angle" ].value = Math.map(mouse.x, 0, width, -HALF_PI, HALF_PI);
-	rgbPass.uniforms[ "amount" ].value = Math.map(mouse.y, 0, height, -.01, .01);
+	rgbPass.uniforms[ "angle" ].value = Math.map(mouse.x, 0, width, -ANGLE, ANGLE);
+	rgbPass.uniforms[ "amount" ].value = Math.map(mouse.y, 0, height, -AMOUNT, AMOUNT);
 
 
 	meshes.front.position.y = Math.map(mouse.y, 0, height, -offset, offset);

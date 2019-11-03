@@ -10,10 +10,10 @@ client:
  - <a href="http://leoburnett.com/">Leo Burnett</a>
 role: Technical Director
 video_player: https://player.vimeo.com/video/177394393
-video_poster: /img/projects/tvtransports/poster.jpg
+video_poster: /images/projects/tvtransports/poster.jpg
 press:
  - <a href="https://news.samsung.com/global/samsungs-new-quantum-dot-suhd-tv-social-campaign-transports-you-to-places-you-have-dreamed-of">Samsung’s New Quantum Dot SUHD TV Social Campaign “Transports” You to Places You Have Dreamed of</a>
-image_root: /img/projects/tvtransports
+image_root: /images/projects/tvtransports
 images:
  - image1.jpeg
  - image2.jpeg

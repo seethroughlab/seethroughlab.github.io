@@ -982,6 +982,14 @@ blockquote {
             font-weight:500;
             color:#2c2c2c;
             display: block;
+            margin-bottom: 5px;
+            margin-top: 20px;
+        }
+        ul {
+            margin-left: 20px;
+            li {
+                margin-bottom: 5px;
+            }
         }
     }
     a {

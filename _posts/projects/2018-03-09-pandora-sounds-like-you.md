@@ -9,7 +9,7 @@ client:
  - Pandora
 role: Director/Back-end Programmer
 video_player: https://player.vimeo.com/video/259486511
-video_poster: /img/projects/pandora/poster.png
+video_poster: /images/projects/pandora/poster.png
 credits:
 - Design Direction and Production: <a href="http://toolofna.com">Tool of NA</a>
 - Composition: <a href="https://www.garygunnmusic.com/">Gary Gunn</a>

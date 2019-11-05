@@ -20,6 +20,24 @@
         <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">
         <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
         
+        <!-- Scripts -->
+        <script src="/js/jquery-1.12.4.min.js"></script>
+        <script src="/js/superfish.js"></script>
+        <script src="/js/cubeportfolio.min.js"></script>
+        <script src="/js/owl.carousel.min.js"></script>
+        <script src="/js/main.js"></script>
+        
+        <script src="/js/three.min.js"></script>
+        <script src="/js/postprocessing/EffectComposer.js"></script>
+        <script src="/js/postprocessing/RenderPass.js"></script>
+        <script src="/js/postprocessing/ShaderPass.js"></script>
+        <script src="/js/postprocessing/MaskPass.js"></script>
+        <script src="/js/shaders/CopyShader.js"></script>
+        <script src="/js/shaders/RGBShiftShader.js"></script>
+        <script src="/js/logo.js"></script>
+        
+        <!-- Scripts Ends -->
+
         <!-- Document Title -->      
         <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
 

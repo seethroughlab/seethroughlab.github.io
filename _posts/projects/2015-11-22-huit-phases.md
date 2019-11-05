@@ -1,7 +1,7 @@
 ---
 layout: project
 title: Huit Phases de L'Illumination
-thumbnail: /images/thumbnails/huit_phases.gif
+thumbnail: /images/thumbnails/huit_phases.jpg
 tags : [Android, VR, Unity, Kinect]
 category: projects
 description: From sensory overload to sensory deprivation, huit phases de l’illumination is a collaborative mixed-reality audio-visual experiment. Eight physical installations function as a conduit into eight infinite virtual realities. Using abstractions of time, space, sound, color, form, depth and speed to manipulate the audience's sense of self and connection to the to the present moment we create a forced enlightenment that disconnects the audience from their physical bodies and lets them be one with the virtual universe.

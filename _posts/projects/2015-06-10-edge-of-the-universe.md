@@ -1,7 +1,7 @@
 ---
 layout: project
 title: Edge of the Universe
-thumbnail: /images/thumbnails/edge-of-the-universel.gif
+thumbnail: /images/thumbnails/edge-of-the-universel.jpg
 tags : [music, phones, LEDs, fabrication]
 category: projects
 video_player: https://player.vimeo.com/video/143745092

@@ -2,7 +2,7 @@
 layout: project
 category: projects
 title: Pandora Sounds Like You
-thumbnail: /images/thumbnails/pandora.png
+thumbnail: /images/thumbnails/pandora.jpg
 tags: [nodejs, webgl, ffmpeg]
 description: Sounds Like You is a microsite created for SXSW 2018, and the first project wherein Pandora let an outside company use data from the Music Genome Project. When users visit the beautifully-designed site, we use the qualities of their favorite songs (determined with a series of song choices) to compose a unique, custon song for them, which they can listen to almost immediately, and/or have emailed to themselves so that they can post it on social media.
 client: 

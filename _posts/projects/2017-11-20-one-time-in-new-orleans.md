@@ -2,7 +2,7 @@
 layout: project
 category: projects
 title: One Time in New Orleans
-thumbnail: /images/thumbnails/otino.png
+thumbnail: /images/thumbnails/otino.jpg
 tags: [nodejs, Canon SDK, openFrameworks, Watson, projection, ffmpeg]
 description: We created an intelligent storytelling booth for the New Orleans Tourism Marketing Corporation in a shipping container. Inside, storytellers are recorded while AI is used to analyze what they are saying and decide what to project on and behind them. The result is edited together automatically and posted on the NOTMC website.
 client: 

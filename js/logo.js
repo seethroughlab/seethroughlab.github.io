@@ -64,6 +64,7 @@ var OFFSET = height/400;
 var ANGLE = Math.PI / 6.0;
 var AMOUNT = 0.004;
 
+console.log("animate");
 function animate() {
 
 	rgbPass.uniforms[ "angle" ].value = Math.map(mouse.x, 0, width, -ANGLE, ANGLE);

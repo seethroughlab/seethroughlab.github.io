@@ -45,7 +45,14 @@ layout: default
                         <div class="cbp-item {{ post.date | date: "%Y" }}">
                             <a href="{{ root_url }}{{ post.url }}" class="cbp-caption">
                                 <div class="cbp-caption-defaultWrap">
+                                    {% if post.thumbnail contains ".jpg" %}
                                     <img src="{{post.thumbnail}}" alt="">
+                                    {% elsif post.thumbnail contains ".mp4" %}
+                                    <video autoplay loop muted playsinline>
+                                        <source src="{{post.thumbnail}}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                    {% endif %}
                                 </div>
                                 <div class="cbp-caption-activeWrap">
                                     <div class="cbp-l-caption-alignLeft">
@@ -59,100 +66,7 @@ layout: default
                         </div>
                     {% endif %}
                     {% endfor %}
-                    
 
-          <!--          
-                        <div class="cbp-item">
-                            <a href="details-left-video.html" class="cbp-caption">
-                                <div class="cbp-caption-defaultWrap">
-                                    <img src="images/portfolio/thumbnails-masonry/2/img_1.png" alt="">
-                                </div>
-                                <div class="cbp-caption-activeWrap">
-                                    <div class="cbp-l-caption-alignLeft">
-                                        <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">Handmade Bag</div>
-                                            <div class="cbp-l-caption-desc">Design</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="cbp-item branding">
-                            <a href="details-top-image.html" class="cbp-caption">
-                                <div class="cbp-caption-defaultWrap">
-                                    <img src="images/portfolio/thumbnails-masonry/2/img_9.png" alt="">
-                                </div>
-                                <div class="cbp-caption-activeWrap">
-                                    <div class="cbp-l-caption-alignLeft">
-                                        <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">Shopping Bag</div>
-                                            <div class="cbp-l-caption-desc">Branding</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="cbp-item web-design">
-                            <a href="details-top-gallery.html" class="cbp-caption">
-                                <div class="cbp-caption-defaultWrap">
-                                    <img src="images/portfolio/thumbnails-masonry/2/img_8.png" alt="">
-                                </div>
-                                <div class="cbp-caption-activeWrap">
-                                    <div class="cbp-l-caption-alignLeft">
-                                        <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">Cardboard</div>
-                                            <div class="cbp-l-caption-desc">Design</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="cbp-item graphic">
-                            <a href="details-right-gallery.html" class="cbp-caption">
-                                <div class="cbp-caption-defaultWrap">
-                                    <img src="images/portfolio/thumbnails-masonry/2/img_12.png" alt="">
-                                </div>
-                                <div class="cbp-caption-activeWrap">
-                                    <div class="cbp-l-caption-alignLeft">
-                                        <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">Magazine</div>
-                                            <div class="cbp-l-caption-desc">Identity</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="cbp-item">
-                            <a href="details-right-slider.html" class="cbp-caption">
-                                <div class="cbp-caption-defaultWrap">
-                                    <img src="images/portfolio/thumbnails-masonry/2/img_4.png" alt="">
-                                </div>
-                                <div class="cbp-caption-activeWrap">
-                                    <div class="cbp-l-caption-alignLeft">
-                                        <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">Ceramic Bottles</div>
-                                            <div class="cbp-l-caption-desc">Design</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="cbp-item web-design">
-                            <a href="details-bottom-image.html" class="cbp-caption">
-                                <div class="cbp-caption-defaultWrap">
-                                    <img src="images/portfolio/thumbnails-masonry/2/img_13.png" alt="">
-                                </div>
-                                <div class="cbp-caption-activeWrap">
-                                    <div class="cbp-l-caption-alignLeft">
-                                        <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">Paper Pouch</div>
-                                            <div class="cbp-l-caption-desc">Branding</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        -->    
                     </div>
                     <!-- Portfolio Items -->
                     

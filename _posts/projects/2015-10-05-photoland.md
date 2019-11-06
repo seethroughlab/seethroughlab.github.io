@@ -1,7 +1,7 @@
 ---
 layout: project
 title: Photoland Hermès
-thumbnail: /images/thumbnails/photoland.gif
+thumbnail: /images/thumbnails/photoland.mp4
 tags : [openFrameworks, nodeJS, Arduino, Canon]
 category: projects
 video_player: https://player.vimeo.com/video/163616555

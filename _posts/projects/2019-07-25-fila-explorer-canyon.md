@@ -2,7 +2,7 @@
 layout: project
 category: projects
 title: FILA Explorer Canyon
-thumbnail: /images/thumbnails/fila-canyon.mp4
+thumbnail: /images/thumbnails/fila-canyon.jpg
 tags: [LED, openFrameworks, openCV, arduino]
 description: MKG came to me with the idea of building an interactive canyon
 client: 

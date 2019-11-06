@@ -60,20 +60,19 @@ document.onmousemove = function(e) {
     mouse.y = e.pageY;
 };
 
-var offset = height/400;
+var OFFSET = height/400;
 var ANGLE = Math.PI / 6.0;
 var AMOUNT = 0.004;
+
 function animate() {
 
 	rgbPass.uniforms[ "angle" ].value = Math.map(mouse.x, 0, width, -ANGLE, ANGLE);
 	rgbPass.uniforms[ "amount" ].value = Math.map(mouse.y, 0, height, -AMOUNT, AMOUNT);
 
-
-	meshes.front.position.y = Math.map(mouse.y, 0, height, -offset, offset);
-	meshes.back.position.y = Math.map(mouse.y, 0, height, offset, -offset);
+	meshes.front.position.y = Math.map(mouse.y, 0, height, -OFFSET, OFFSET);
+	meshes.back.position.y = Math.map(mouse.y, 0, height, OFFSET, -OFFSET);
 
     requestAnimationFrame( animate );
-    //renderer.render( scene, camera );
     composer.render( 0.1 );
 }
 animate();

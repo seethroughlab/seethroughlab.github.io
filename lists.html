@@ -1,0 +1,183 @@
+---
+layout: default
+title: Lists
+permalink: /lists/
+friends:
+ - <a href="http://aramique.com/">Aramique</a> : Creative Director
+ - <a href="http://www.maumorgo.com/">Mau Morgo</a> : Designer
+ - <a href="http://www.luisaph.com/">Luisa Pereira</a> : Interaction design and development
+ - <a href="https://vimeo.com/laserstorm">Lars Berg</a> : GLGL Wizard
+ - <a href="http://moonmilk.com/">Ranjit Bhatnagar</a> : Electronics Whisperer 
+ - <a href="http://www.11thstworkshop.com/">11th Street Workshop</a> : Fabrication
+ - <a href="#">Volvox Studio</a> : Creative Tech Studio
+ - <a href="#">Matt Felsen</a> : Creative Technologist
+ - <a href="https://www.screen-club.com/">Martial Geoffre-Rouland</a> : Creative Tech
+ - <a href="https://www.instagram.com/ltblstudio/">Benjamin Petit</a> : Creative Tech
+ - <a href="https://blindsp0t.com/">Antoine</a> : Creative Tech
+ - <a href="http://www.smooth.technology">Smooth Technology</a> : Creative Tech Studio/LED wizards
+ - Ben Tricklebank : Director
+ - Aaron Koblin : Artist
+ - Pink Sparrow : Fabrication
+ - SCPS : Fabrication
+ - SFDS : Fabrication
+ - Beednark : Fabrication
+ - <a href="https://vimeo.com/flightphase">Flightphase</a> : Art and Design Studio
+pintrest:
+ - Liquid Simulation: https://www.pinterest.com/jefftimesten/liquid-sim/
+ - Photogrammetry: https://www.pinterest.com/jefftimesten/photogrammetry/
+ - Horde: https://www.pinterest.com/jefftimesten/horde/
+ - Parametric Statue : https://www.pinterest.com/jefftimesten/parametric-statue/
+ - Colored Light Portraits: https://www.pinterest.com/jefftimesten/colored-light-portraits/
+ - Light Puddle : https://www.pinterest.com/jefftimesten/light-puddle/
+ - Light Canyon : https://www.pinterest.com/jefftimesten/light-canyon
+ - Light Bugs : https://www.pinterest.com/jefftimesten/light-bugs/
+ - Acid Gradients : https://www.pinterest.com/jefftimesten/acid-gradients/
+ - Neon Geometry : https://www.pinterest.com/jefftimesten/neon-geometry/
+ - Surreal Environment : https://www.pinterest.com/jefftimesten/surreal-environment/
+ - Graffiti Style : https://www.pinterest.com/jefftimesten/graffiti-style/
+ - Clean and Fun Dataviz : https://www.pinterest.com/jefftimesten/clean-and-fun-dataviz/
+clients:
+ - IBM (via Tool)
+ - Sorel (via Helo)
+ - Lexus (via Team One)
+ - Fila (via MKG)
+ - Pandora (via Tool)
+ - Intel (via Tool)
+ - New Orleans Tourism Marketing Corporation (via Tool and 360i)
+ - Campari (via Imprint)
+ - Samsung (via Tool and Leo Burnett)
+ - Infiniti (via Tool and CP+B)
+ - Delta (via Tool and MKG)
+ - Hermès (via Mash Studio)
+ - Samsung (via Protein)
+ - Lysol (via Tool and McCann)
+ - Acer (via Tool and Sid Lee)
+ - University of Dayton (via Flightphase and 160over90)
+ - MPC Digital
+ - Nike (via <a href="https://wearesubrosa.com/">Sub Rosa</a>)
+ - New York IFP Media Center (via MPC Digital)
+ - National Building Museum (via Rockwell LAB)
+software:
+ - openFrameworks
+ - Vuforia AR
+ - Unity
+ - Node.js
+ - Processing
+ - Electron.js
+ - PhoneGap/Cordova
+ - Ableton Live
+ - openCV
+ - Blender
+ - Projection Mapping
+ - Photogrammetry
+ - Myo
+hardware:
+- Arduino
+- HTC Vive
+- Raspberry Pi
+- ILDA Laser Projector
+- Android/iOS
+- WS2811 LEDs (Neopixels)
+- Canon Camera/SDK
+- Hololens
+- Neurosky Mindwave Mobile
+- Heart rate sensors (multiple)
+- Microsoft Kinect
+---
+
+<!-- Main Wrapper -->
+<div id="main-wrapper">
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-sm-12 margin-top-80 margin-bottom-45">
+                <h2 class="title">Lists</h2>
+                <p class="body-text">Here are some lists of stuff. It's like See-Through Lab as a Buzfeed "article".</p>
+            </div>
+            
+            <div class="col-sm-12">
+                <div id="portfolio-container" class="cbp" data-layoutmode="grid" data-gaphorizontal="30" data-gapvertical="30" data-captionanimation="zoom" data-animationtype="quicksand" data-large-desktop="3" data-medium-desktop="3" data-tablet="2">
+                         
+                    <div class="cbp-item">
+                        <h4><span>Partners</span></h4>
+                        <p><em>Here are some of the wonderful collaborators I have had the pleasure of working with.</em></p>
+                        <ul class="project-meta margin-top-20 margin-bottom-20">
+                        {% for item in page.friends %}
+                        {% for hash in item %}
+                            <li>{{ hash[0] }}: {{ hash[1] }}</li>
+                        {% endfor %}
+                        {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="cbp-item">
+                        <h4><span>Clients</span></h4>
+                        <p><em>Here are some of the clients I've worked for over the years.</em></p>
+                        <ul class="project-meta margin-top-20 margin-bottom-20">
+                        {% for item in page.clients %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+
+     
+                    <div class="cbp-item">
+                        <h4><span>Visual Research</span></h4>
+                        <p><em>Here are some of the Pintrest boards that have I have created as research for projects.</em></p>
+                        <ul class="project-meta margin-top-20 margin-bottom-20">
+                            {% for item in page.pintrest %}
+                            {% for hash in item %}
+                                <li><a href="{{ hash[1] }}">{{ hash[0] }}</a></li>
+                            {% endfor %}
+                            {% endfor %}
+                            </ul>
+                    </div>
+
+
+                    <div class="cbp-item">
+                        <h4><span>Software</span></h4>
+                        <p><em>Here is some of the software that I have used in my projects.</em></p>
+                        <ul class="project-meta margin-top-20 margin-bottom-20">
+                            {% for item in page.software %}
+                                <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="cbp-item">
+                        <h4><span>Hardware</span></h4>
+                        <p><em>Some of my the hardware I've worked with in my projects.</em></p>
+                        <ul class="project-meta margin-top-20 margin-bottom-20">
+                            {% for item in page.hardware %}
+                                <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+
+                    <div class="cbp-item">
+                        <h4><span>Inspirations</span></h4>
+                        <p><em>Here are some of the artists who inspire me.</em></p>
+                        <p>Coming Soon</p>
+                    </div>
+
+
+                    <div class="cbp-item">
+                        <h4><span>Code</span></h4>
+                        <p><em>Here are some of the code that I have released from various projects.</em></p>
+                        <p>Coming Soon</p>
+                    </div>
+
+
+                </div>
+                    
+            </div>
+        </div>
+            
+        <hr class="sep-line ">
+        
+            
+    </div>
+</div>    
+<!-- Main Wrapper Ends -->

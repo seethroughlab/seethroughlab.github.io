@@ -53,3 +53,4 @@ exclude:
   - vendor/ruby/
   - Rakefile
   - _scripts
+  - playground

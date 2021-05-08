@@ -9,7 +9,7 @@
   "author": "Jeff Crouse",
   "license": "MIT",
   "dependencies": {
-    "handlebars": "^4.5.1",
+    "handlebars": "^4.7.7",
     "moment": "^2.24.0",
     "slug": "^1.1.0",
     "vimeo": "^2.1.1"

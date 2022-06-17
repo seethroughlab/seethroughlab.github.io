@@ -1,70 +1,51 @@
 ---
-layout: default
-title: Contact
 permalink: /contact/
+title: Contact
 ---
 
-        <!-- Main Wrapper -->
-        <div id="main-wrapper">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div id="map-block">
-                            <div id="googleMap" data-zoom="10" data-latitude="41.506330" data-longitude="-73.965460"></div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="page-title has-description margin-top-50">
-                            <h1>Want to get in touch?</h1>
-                            <p>Write me a message via form, I will reply shortly.</p>
-                        </div>
-                    </div>
-                    <div class="col-sm-8 col-md-8">
-                        <form method="post" id="contact-form" class="contact-form">
-                            <div class="form-process"></div>
-                            <div class="col-sm-6 no-padding-left form-control-wrap">
-                                <input id="name" class="form-control" placeholder="Name*" name="name" type="text">
-                                <span class="name contact-error-msg">Please fill in the required field.</span>
-                            </div>
-                            <div class="col-sm-6 no-padding-right form-control-wrap">
-                                <input id="Email" class="form-control" placeholder="Email*" name="email" type="email" >
-                                <span class="email contact-error-msg">Please enter a valid email address.</span>
-                            </div>
-                            <div class="col-sm-12 no-padding-left no-padding-right form-control-wrap">
-                                <textarea id="message" class="form-control" placeholder="Your Message*" name="message"  ></textarea>
-                                <span class="message contact-error-msg">Please fill in the required field.</span>
-                            </div>
-                            <div class="form-submit">
-                                <button name="submit" type="submit" id="submit">Send Message</button>
-                            </div>
-                            <br>
-                            <span class="contact-failed">Message not sent, Please try again.</span>
-                            <span class="contact-success">Message sent successfully.</span>
-                        </form>
-                    </div>
-                    <div class="col-sm-4 col-md-4">
-                        <div class="contact-info">
-                            <div>
-                                <span>Email</span>
-                                jeff@seethroughlab.com
-                            </div>
-                            <div>
-                                <span>Phone</span>
-                                +1 646 246 5999
-                            </div>
-                            <address>
-                                <span>Studio Address</span>
-                                211 Fishkill Avenue, Room 203<br>Beacon, NY 12508
-                            </address>    
+<!DOCTYPE html>
+<html lang="en">
+    {% include head.html %}
+    <body>
 
-                            <address>
-                                <span>Mailing Address</span>
-                                465 Main Street, Apt 6<br>Beacon, NY 12508
-                            </address>    
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Page Wrapper -->
+        <div id="page" class="site">
+            {% include header.html %}
+    
+            <div class="site-content-contain">
+                <div id="content" class="site-content">                    
+                    <div id="primary" class="content-area">
+                        <main id="main" class="site-main" role="main">   
+                            <article class="page">                                
+                                <div class="entry-content">     
+                                    <div class="container m-t-35"> 
+                                        <div class="row"> 
+                                            <div class="col-sm-12">
+                                                <div class="map-block">
+                                                    <div id="googleMap" data-zoom="14" data-latitude="41.859928" data-longitude="-87.624130" style="width: 100%; height: 100%;"></div>
+                                                </div>
+                                            </div>
+                                        </div>     
+                                    </div>         
+                                </div>   
+                            </article>    
+                        </main><!-- #main -->
+                    </div><!-- #primary -->                
+
+                    <a id="gotoTop" href="#" class="scroll-top-link" data-easing="easeOutQuad" data-speed="700" ><i class="fa fa-angle-up"></i></a>
+
+                </div><!-- #content -->
+            {% include footer.html %}
+            </div> <!-- .site-content-contain -->         
         </div>    
-        <!-- Main Wrapper Ends -->
-        <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyDBRa4imp1at3C_iZBSdznRoBS1Eetn1o8"></script>
+        <!-- Page Wrapper Ends -->
+
+
+        {% include scripts.html %}
+        <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC5WUP34b625BjlxnHEoTIHKy7DrS4BBo&callback=initMap&v=weekly"
+        defer
+        ></script>
+        
+    </body>
+</html>

@@ -1,5 +1,5 @@
 ---
-layout: project
+layout: portfolio-single-small-slider
 title: Acer Predator
 thumbnail: /images/thumbnails/ferrofluid.jpg
 tags : [ferrofluid, magnets, servos, software]

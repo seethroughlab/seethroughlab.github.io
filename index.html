@@ -1,79 +1,191 @@
 ---
-layout: default
+theme-template: index-clean.html
 ---
+<!DOCTYPE html>
+<html lang="en">
+    
+    {% include head.html %}
 
+    <body>
 
-<!-- Main Wrapper -->
-<div id="main-wrapper">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="page-title">
-                    <h1 class="heading">{{ site.description }}</h1>
-                </div>
-                <!-- Portfolio Wrap -->
-                <div class="portfolio-wrap">
-                    <!-- Portfolio Filter -->
-                    <div id="filters-container" class="cbp-l-filters-text text-left">
-                        <div data-filter="*" class="cbp-filter-item-active cbp-filter-item">
-                            All 
-                        </div>
-                        <div data-filter=".2015" class="cbp-filter-item">
-                            2015
-                        </div>
-                        <div data-filter=".2016" class="cbp-filter-item">
-                            2016
-                        </div>
-                        <div data-filter=".2017" class="cbp-filter-item">
-                            2017
-                        </div>
-                        <div data-filter=".2018" class="cbp-filter-item">
-                            2018
-                        </div>
-                        <div data-filter=".2019" class="cbp-filter-item">
-                            2019
-                        </div>
-                    </div>
-                    <!-- Portfolio Filter -->
-                    
-                    <!-- Portfolio Items -->
-                    <div id="portfolio-container" class="cbp" data-layoutmode="grid" data-gaphorizontal="30" data-gapvertical="30" data-captionanimation="zoom" data-animationtype="quicksand" data-large-desktop="3" data-medium-desktop="3" data-tablet="2">
-                        
+        <!-- Page Wrapper -->
+        <div id="page" class="site">
 
-                    {% for post in site.categories.projects %}
-                    {%  if post.hidden != true %}
-                        <div class="cbp-item {{ post.date | date: "%Y" }}">
-                            <a href="{{ root_url }}{{ post.url }}" class="cbp-caption">
-                                <div class="cbp-caption-defaultWrap">
-                                    {% if post.thumbnail contains ".jpg" %}
-                                    <img src="{{post.thumbnail}}" alt="">
-                                    {% elsif post.thumbnail contains ".mp4" %}
-                                    <video autoplay loop muted playsinline>
-                                        <source src="{{post.thumbnail}}" type="video/mp4">
-                                        Your browser does not support the video tag.
-                                    </video>
-                                    {% endif %}
-                                </div>
-                                <div class="cbp-caption-activeWrap">
-                                    <div class="cbp-l-caption-alignLeft">
-                                        <div class="cbp-l-caption-body">
-                                            <div class="cbp-l-caption-title">{{ post.title | upcase }}</div>
-                                            <div class="cbp-l-caption-desc">{{ post.date | date: "%b %Y" }}</div>
+            {% include header.html %}
+
+            <div class="site-content-contain">
+                <div id="content" class="site-content">                    
+                    <div id="primary" class="content-area">
+                        <main id="main" class="site-main" role="main">
+                            <article class="page">                                
+                                <div class="entry-content">
+
+                                    <div class="container m-t-75 m-t-35-res"> 
+                                        <div class="row"> 
+                                            <div class="col-sm-12 offset-lg-1 col-lg-10">
+                                                  <div class="heading-block text-center">
+                                                    <h1 class="block-size-1">
+                                                        {{ site.description }}		
+                                                    </h1>
+                                                </div>
+                                            </div>
+                                        </div>     
+                                    </div>         
+
+                                    <div class="container m-t-65 m-b-100"> 
+                                        <div class="row"> 
+                                            <div class="col-sm-12">
+                                                <div class="portfolio-wrap">                                                   
+                                                    <div id="portfolio-container-grid" class="cbp cbp-caption-tilt" 
+                                                         data-loadmoreaction="click" data-loadnoofitems="1" data-layoutmode="masonry" data-captionanimation="tilt" data-animationtype="fadeOut" 
+                                                         data-gaphorizontal="50" data-gapvertical="60" data-displaytype="scroll-fadeInUp" data-large-desktop="2" data-tablet-landscape="2" data-tablet-portrait="1" data-mobile="1" 
+                                                         data-defaultfilter="*" >
+
+                                                        {% for post in site.categories.projects %}
+                                                        <div class="cbp-item graphic illustration">                                                            
+                                                            <a class="cbp-caption" href="{{ post.url }}">                                                                
+                                                                <div class="cbp-caption">		                                                                    
+                                                                    <div class="cbp-caption-defaultWrap">							
+                                                                        <img src="{{post.thumbnail}}" class="portfolio-thumbnail" alt="Flyer" >
+                                                                    </div>                                                                  
+                                                                </div>  
+                                                                <div class="cbp-l-grid-agency-title alignCenter">{{ post.title | upcase }}</div>
+                                                                <div class="cbp-l-grid-agency-desc alignCenter">{{ post.date | date: "%b %Y" }}</div>
+                                                            </a>                                                            
+                                                        </div>
+                                                        {% endfor %}
+                                                        <!--
+                                                        <div class="cbp-item  illustration">
+                                                            <a class="cbp-caption" href="portfolio-single-image-gallery.html" >
+                                                                <div class="cbp-caption">		                                                                    
+                                                                    <div class="cbp-caption-defaultWrap">							
+                                                                        <img src="assets/images/portfolio/masonry/catalogue-2-min-600x400.jpg" class="portfolio-thumbnail" alt="Cosmetic" >
+                                                                    </div>                                                                    
+                                                                </div>  
+                                                                <div class="cbp-l-grid-agency-title alignCenter">Catalogue</div>
+                                                                <div class="cbp-l-grid-agency-desc alignCenter">Graphic</div>
+                                                            </a>                                                            
+                                                        </div>
+
+                                                        <div class="cbp-item  branding">                                                           
+                                                            <a class="cbp-caption" href="portfolio-single-wide-slider.html">
+                                                                <div class="cbp-caption">		                                                                    
+                                                                    <div class="cbp-caption-defaultWrap">							
+                                                                        <img src="assets/images/portfolio/masonry/headphone-min.jpg" class="portfolio-thumbnail" alt="Catalogue" >
+                                                                    </div>                                                                  
+                                                                </div>  
+                                                                <div class="cbp-l-grid-agency-title alignCenter">Pink Headphone</div>
+                                                                <div class="cbp-l-grid-agency-desc alignCenter">Gadget</div>
+                                                            </a>                                                           
+                                                        </div>
+
+                                                        <div class="cbp-item  logo">                                                           
+                                                            <a class="cbp-caption" href="portfolio-single-multiple-media.html">
+                                                                <div class="cbp-caption">		                                                                    
+                                                                    <div class="cbp-caption-defaultWrap">							
+                                                                        <img src="assets/images/portfolio/masonry/business-card-min-600x500.jpg" class="portfolio-thumbnail" alt="Jar" >
+                                                                    </div>                                                                   
+                                                                </div>  
+                                                                <div class="cbp-l-grid-agency-title alignCenter">Business Card</div>
+                                                                <div class="cbp-l-grid-agency-desc alignCenter">Branding</div>
+                                                            </a>                                                            
+                                                        </div>
+
+                                                        <div class="cbp-item  art illustration">                                                            
+                                                            <a class="cbp-caption" href="portfolio-single-hero-alt.html">
+                                                                <div class="cbp-caption">		                                                                    
+                                                                    <div class="cbp-caption-defaultWrap">							
+                                                                        <img src="assets/images/portfolio/masonry/pillow-min-600x500.jpg" class="portfolio-thumbnail" alt="Cardboard" >
+                                                                    </div>                                                                   
+                                                                </div>  
+                                                                <div class="cbp-l-grid-agency-title alignCenter">Cusion Mockup</div>
+                                                                <div class="cbp-l-grid-agency-desc alignCenter">Photoshop</div>
+                                                            </a>                                                            
+                                                        </div>
+
+                                                        <div class="cbp-item  illustration">                                                            
+                                                            <a class="cbp-caption" href="portfolio-single-small-gallery-alt.html">
+                                                                <div class="cbp-caption">		                                                                    
+                                                                    <div class="cbp-caption-defaultWrap">							
+                                                                        <img src="assets/images/portfolio/masonry/wristband-min-600x350.jpg" class="portfolio-thumbnail" alt="Wristband" >
+                                                                    </div>                                                                    
+                                                                </div>  
+                                                                <div class="cbp-l-grid-agency-title alignCenter">Wristband</div>
+                                                                <div class="cbp-l-grid-agency-desc alignCenter">Blue</div>
+                                                            </a>                                                            
+                                                        </div>
+
+                                                        <div class="cbp-item  branding">                                                            
+                                                            <a class="cbp-caption" href="portfolio-single-small-slider.html">
+                                                                <div class="cbp-caption">		                                                                    
+                                                                    <div class="cbp-caption-defaultWrap">							
+                                                                        <img src="assets/images/portfolio/masonry/cardboard-min-1-600x500.jpg" class="portfolio-thumbnail" alt="Pillow" >
+                                                                    </div>                                                                  
+                                                                </div>  
+                                                                <div class="cbp-l-grid-agency-title alignCenter">Funky Paper</div>
+                                                                <div class="cbp-l-grid-agency-desc alignCenter">Identity</div>
+                                                            </a>                                                            
+                                                        </div>
+
+                                                        <div class="cbp-item logo">                                                            
+                                                            <a class="cbp-caption" href="portfolio-single-small-videos.html">
+                                                                <div class="cbp-caption">		                                                                    
+                                                                    <div class="cbp-caption-defaultWrap">							
+                                                                        <img src="assets/images/portfolio/masonry/jar-600x500.jpg" class="portfolio-thumbnail" alt="Business Card" >
+                                                                    </div>                                                                   
+                                                                </div>  
+                                                                <div class="cbp-l-grid-agency-title alignCenter">Small Jar</div>
+                                                                <div class="cbp-l-grid-agency-desc alignCenter">Art</div>
+                                                            </a>                                                            
+                                                        </div>
+
+                                                        <div class="cbp-item branding logo">                                                            
+                                                            <a class="cbp-caption cbp-lightbox" data-title="Cosmetic" href="assets/images/portfolio/masonry/cosmetic-min-600x650.jpg">
+                                                                <div class="cbp-caption">		                                                                    
+                                                                    <div class="cbp-caption-defaultWrap">							
+                                                                        <img src="assets/images/portfolio/masonry/cosmetic-min-600x650.jpg" class="portfolio-thumbnail" alt="Cosmetic" >
+                                                                    </div>                                                                  
+                                                                </div>  
+                                                                <div class="cbp-l-grid-agency-title alignCenter">Lightbox Project</div>
+                                                                <div class="cbp-l-grid-agency-desc alignCenter">Image</div>
+                                                            </a>                                                            
+                                                        </div>       
+
+                                                        <div class="cbp-item  art illustration">                                                            
+                                                            <a class="cbp-caption cbp-lightbox" data-title="Flyer" href="https://player.vimeo.com/video/317770729">
+                                                                <div class="cbp-caption">		                                                                    
+                                                                    <div class="cbp-caption-defaultWrap">							
+                                                                        <img src="assets/images/portfolio/masonry/flyer-min-600x500.jpg" class="portfolio-thumbnail" alt="Flyer" >
+                                                                    </div>                                                                  
+                                                                </div>  
+                                                                <div class="cbp-l-grid-agency-title alignCenter">Lightbox Project</div>
+                                                                <div class="cbp-l-grid-agency-desc alignCenter">Video</div>
+                                                            </a>                                                            
+                                                        </div>                     
+                                                        -->
+                                                    </div><!--End #grid-container-->
+                                                    
+                                                </div>                                               
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    {% endif %}
-                    {% endfor %}
+                                    </div><!--container-->
 
-                    </div>
-                    <!-- Portfolio Items -->
+                                </div>
+                            </article>     
+                        </main><!-- #main -->
+                    </div><!-- #primary -->
                     
-                </div>
-                <!-- Portfolio Wrap Ends -->
-            </div>
-        </div>
-    </div>
-</div>    
-<!-- Main Wrapper Ends -->
+                    <a id="gotoTop" href="#" class="scroll-top-link" data-easing="easeOutQuad" data-speed="700" ><i class="fa fa-angle-up"></i></a>
+                    
+                </div><!-- #content -->                
+
+                {% include footer.html %}
+
+            </div> <!-- .site-content-contain -->        
+        </div>    
+        <!-- Page Wrapper Ends -->
+
+        {% include scripts.html %}
+
+    </body>
+</html>

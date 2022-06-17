@@ -1,5 +1,5 @@
 ---
-layout: project
+layout: portfolio-single-small-slider
 title: Edge of the Universe
 thumbnail: /images/thumbnails/edge-of-the-universel.jpg
 tags : [music, phones, LEDs, fabrication]

@@ -1,5 +1,5 @@
 ---
-layout: project
+layout: portfolio-single-small-slider
 category: projects
 title: Pandora Sounds Like You
 thumbnail: /images/thumbnails/pandora.jpg

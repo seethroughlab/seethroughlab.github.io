@@ -1,5 +1,5 @@
 ---
-layout: project
+layout: portfolio-single-small-slider
 title: Samsung TV Transports
 thumbnail: /images/thumbnails/tv-transports.jpg
 tags : [nodejs, BrightSign, Raspberry Pi, Canon EDSDK, ffmpeg, Arduino, LEDs]

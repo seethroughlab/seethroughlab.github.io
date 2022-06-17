@@ -1,5 +1,5 @@
 ---
-layout: project
+layout: portfolio-single-small-slider
 title: Photoland Hermès
 thumbnail: /images/thumbnails/photoland.jpg
 tags : [openFrameworks, nodeJS, Arduino, Canon]

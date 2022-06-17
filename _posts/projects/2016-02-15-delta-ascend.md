@@ -1,5 +1,5 @@
 ---
-layout: project
+layout: portfolio-single-small-slider
 title: Delta Ascend
 thumbnail: /images/thumbnails/delta-ascend.jpg
 tags : [ArtNet, openFrameworks, Enttec, Arduino]

@@ -1,5 +1,5 @@
 ---
-layout: project
+layout: portfolio-single-small-slider
 title: Huit Phases de L'Illumination
 thumbnail: /images/thumbnails/huit_phases.jpg
 tags : [Android, VR, Unity, Kinect]

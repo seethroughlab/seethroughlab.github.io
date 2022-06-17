@@ -1,6 +1,5 @@
-_site/
-.sass-cache/
-.jekyll-cache/
+_site
+.sass-cache
+.jekyll-cache
 .jekyll-metadata
-*.code-workspace
-_scripts/make_bts/node_modules
+vendor

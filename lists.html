@@ -1,12 +1,11 @@
 ---
-layout: default
-title: Lists
 permalink: /lists/
+title: Lists
 friends:
  - <a href="http://aramique.com/">Aramique</a> : Creative Director
  - <a href="http://www.maumorgo.com/">Mau Morgo</a> : Designer
  - <a href="http://www.luisaph.com/">Luisa Pereira</a> : Interaction design and development
- - <a href="https://vimeo.com/laserstorm">Lars Berg</a> : GLGL Wizard
+ - <a href="https://vimeo.com/laserstorm">Lars Berg</a> : GLSL Wizard
  - <a href="http://moonmilk.com/">Ranjit Bhatnagar</a> : Electronics Whisperer 
  - <a href="http://www.11thstworkshop.com/">11th Street Workshop</a> : Fabrication
  - <a href="#">Volvox Studio</a> : Creative Tech Studio
@@ -70,7 +69,9 @@ software:
  - Blender
  - Projection Mapping
  - Photogrammetry
- - Myo
+ - Myo Armband
+ - TouchDesigner
+ - Unreal Engine
 hardware:
 - Arduino
 - HTC Vive
@@ -85,99 +86,94 @@ hardware:
 - Microsoft Kinect
 ---
 
-<!-- Main Wrapper -->
-<div id="main-wrapper">
-    <div class="container">
+<!DOCTYPE html>
+<html lang="en">
+    {% include head.html %}
+    <body>
 
-        <div class="row">
-
-            <div class="col-sm-12 margin-top-80 margin-bottom-45">
-                <h2 class="title">Lists</h2>
-                <p class="body-text">Here are some lists of stuff. It's like See-Through Lab as a Buzfeed "article".</p>
-            </div>
-            
-            <div class="col-sm-12">
-                <div id="portfolio-container" class="cbp" data-layoutmode="grid" data-gaphorizontal="30" data-gapvertical="30" data-captionanimation="zoom" data-animationtype="quicksand" data-large-desktop="3" data-medium-desktop="3" data-tablet="2">
-                         
-                    <div class="cbp-item">
-                        <h4><span>Partners</span></h4>
-                        <p><em>Here are some of the wonderful collaborators I have had the pleasure of working with.</em></p>
-                        <ul class="project-meta margin-top-20 margin-bottom-20">
-                        {% for item in page.friends %}
-                        {% for hash in item %}
-                            <li>{{ hash[0] }}: {{ hash[1] }}</li>
-                        {% endfor %}
-                        {% endfor %}
-                        </ul>
-                    </div>
-
-                    <div class="cbp-item">
-                        <h4><span>Clients</span></h4>
-                        <p><em>Here are some of the clients I've worked for over the years.</em></p>
-                        <ul class="project-meta margin-top-20 margin-bottom-20">
-                        {% for item in page.clients %}
-                            <li>{{ item }}</li>
-                        {% endfor %}
-                        </ul>
-                    </div>
-
-     
-                    <div class="cbp-item">
-                        <h4><span>Visual Research</span></h4>
-                        <p><em>Here are some of the Pintrest boards that have I have created as research for projects.</em></p>
-                        <ul class="project-meta margin-top-20 margin-bottom-20">
-                            {% for item in page.pintrest %}
-                            {% for hash in item %}
-                                <li><a href="{{ hash[1] }}">{{ hash[0] }}</a></li>
-                            {% endfor %}
-                            {% endfor %}
-                            </ul>
-                    </div>
+        <!-- Page Wrapper -->
+        <div id="page" class="site">
+            {% include header.html %}
+    
+            <div class="site-content-contain">
+                <div id="content" class="site-content">                    
+                    <div id="primary" class="content-area">
+                        <main id="main" class="site-main" role="main">   
+                            <article class="page">                                
+                                <div class="entry-content">     
+                                    <div class="container m-t-35"> 
+                                        <div class="row"> 
+                                            <div class="col-sm-12 col-md-12 col-lg-8">
+                                                <div class="heading-block text-left">
+                                                    <h1 class="block-size-5">
+                                                        Here are some lists of stuff. It's like See-Through Lab as a listicle.
+                                                    </h1>
+                                                </div>
+                                            </div>
+                                        </div>     
+                                    </div>         
 
 
-                    <div class="cbp-item">
-                        <h4><span>Software</span></h4>
-                        <p><em>Here is some of the software that I have used in my projects.</em></p>
-                        <ul class="project-meta margin-top-20 margin-bottom-20">
-                            {% for item in page.software %}
-                                <li>{{ item }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                                    <div class="container m-t-35"> 
+                                        <div class="row"> 
+                                            <div class="col-sm-4 col-md-4 col-lg-6">
+                                                <h4>Partners</h4>
+                                                <p>Here are some of the wonderful collaborators I have had the pleasure of working with.</p>
+                                                <ul>
+                                                    {% for item in page.friends %}
+                                                    {% for hash in item %}
+                                                        <li>{{ hash[0] }}: {{ hash[1] }}</li>
+                                                    {% endfor %}
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
 
-                    <div class="cbp-item">
-                        <h4><span>Hardware</span></h4>
-                        <p><em>Some of my the hardware I've worked with in my projects.</em></p>
-                        <ul class="project-meta margin-top-20 margin-bottom-20">
-                            {% for item in page.hardware %}
-                                <li>{{ item }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                                            <div class="col-sm-4 col-md-4 col-lg-6">
+                                                <h4>Clients</h4>
+                                                <p>Here are some of the clients I've worked for over the years.</p>
+                                                <ul>
+                                                    {% for item in page.clients %}
+                                                        <li>{{ item }}</li>
+                                                    {% endfor %}
+                                                 </ul>
+                                            </div>
 
+                                            <div class="col-sm-4 col-md-4 col-lg-6">
+                                                <h4>Software</h4>
+                                                <p>Here is some of the software that I have used in my projects.</p>
+                                                <ul>
+                                                    {% for item in page.software %}
+                                                    <li>{{ item }}</li>
+                                                    {% endfor %}
+                                                 </ul>
+                                            </div>
 
-                    <div class="cbp-item">
-                        <h4><span>Inspirations</span></h4>
-                        <p><em>Here are some of the artists who inspire me.</em></p>
-                        <p>Coming Soon</p>
-                    </div>
+                                            <div class="col-sm-4 col-md-4 col-lg-6">
+                                                <h4>Hardware</h4>
+                                                <p>Some of my the hardware I've worked with in my projects.</p>
+                                                <ul>
+                                                    {% for item in page.hardware %}
+                                                    <li>{{ item }}</li>
+                                                {% endfor %}
+                                                 </ul>
+                                            </div>
 
+                                        </div>
+                                    </div>
 
-                    <div class="cbp-item">
-                        <h4><span>Code</span></h4>
-                        <p><em>Here are some of the code that I have released from various projects.</em></p>
-                        <p>Coming Soon</p>
-                    </div>
+                                </div>   
+                            </article>    
+                        </main><!-- #main -->
+                    </div><!-- #primary -->                
 
+                    <a id="gotoTop" href="#" class="scroll-top-link" data-easing="easeOutQuad" data-speed="700" ><i class="fa fa-angle-up"></i></a>
 
-                </div>
-                    
-            </div>
-        </div>
-            
-        <hr class="sep-line ">
-        
-            
-    </div>
-</div>    
-<!-- Main Wrapper Ends -->
+                </div><!-- #content -->
+            {% include footer.html %}
+            </div> <!-- .site-content-contain -->         
+        </div>    
+        <!-- Page Wrapper Ends -->
+
+    {% include scripts.html %}
+</body>
+</html>

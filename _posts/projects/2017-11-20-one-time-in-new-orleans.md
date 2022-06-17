@@ -1,5 +1,5 @@
 ---
-layout: project
+layout: portfolio-single-small-slider
 category: projects
 title: One Time in New Orleans
 thumbnail: /images/thumbnails/otino.jpg

@@ -1,5 +1,5 @@
 ---
-layout: project
+layout: portfolio-single-small-slider
 title: Light Echoes Barbican
 thumbnail: /images/thumbnails/light_echoes.jpg
 tags : [openFrameworks, Canon, DMX, lasers]

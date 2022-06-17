@@ -1,25 +1,58 @@
 ---
 permalink: /404.html
-layout: default
 ---
 
-<style type="text/css" media="screen">
-  .container {
-    margin: 10px auto;
-    max-width: 600px;
-    text-align: center;
-  }
-  h1 {
-    margin: 30px 0;
-    font-size: 4em;
-    line-height: 1;
-    letter-spacing: -1px;
-  }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+    {% include head.html %}
+    <body>
 
-<div class="container">
-  <h1>404</h1>
+        <!-- Page Wrapper -->
+        <div id="page" class="site">
+            {% include header.html %}
+    
+            <div class="site-content-contain">
+                <div id="content" class="site-content">                    
+                    <div id="primary" class="content-area">
+                        <main id="main" class="site-main" role="main">   
+                            <article class="page">                                
+                                <div class="entry-content">     
+                                    <div class="container m-t-35"> 
+                                        <div class="row"> 
+                                            <div class="col-sm-12 col-md-12 col-lg-8">
+                                                <div class="heading-block text-left">
+                                                    <h1 class="block-size-5">
+                                                      Page not found :(
+                                                    </h1>
+                                                </div>
+                                            </div>
+                                        </div>     
+                                    </div>         
 
-  <p><strong>Page not found :(</strong></p>
-  <p>The requested page could not be found.</p>
-</div>
+
+                                    <div class="container m-t-35"> 
+                                        <div class="row"> 
+                                            <div class="col-sm-4 col-md-4 col-lg-6">
+                                              <img src="/images/error404.gif" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+
+                                    <br />
+                                </div>   
+                            </article>    
+                        </main><!-- #main -->
+                    </div><!-- #primary -->                
+
+                    <a id="gotoTop" href="#" class="scroll-top-link" data-easing="easeOutQuad" data-speed="700" ><i class="fa fa-angle-up"></i></a>
+
+                </div><!-- #content -->
+            {% include footer.html %}
+            </div> <!-- .site-content-contain -->         
+        </div>    
+        <!-- Page Wrapper Ends -->
+
+    {% include scripts.html %}
+</body>
+</html>

@@ -1,58 +1,100 @@
 ---
-layout: default
-title: About
 permalink: /about/
+theme-template: about-basic.html
 ---
+<!DOCTYPE html>
+<html lang="en">
+    {% include head.html %}
+    <body>
 
-<!-- Main Wrapper -->
-<div id="main-wrapper">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="page-title">
-                    <h1 class="heading">{{ site.description }}</h1>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <p>Check out this 360 video to see a typical day at See-through Lab</p>
-                <!--<img src="/images/avatar.png" alt="Avatar" class="avatar-img">-->
-                <div class="project-video embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/Q3ygmgQV50M"  height="500" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-12 margin-top-35">
+        <!-- Page Wrapper -->
+        <div id="page" class="site">
+            
+            {% include header.html %}
 
-                <h2>See-through Lab is Jeff Crouse, who goes by a few titles: Interactive Director, Creative Technologist, Technical Director.</h2>
+            <div class="site-content-contain">
+                <div id="content" class="site-content">                    
+                    <div id="primary" class="content-area">
+                        <main id="main" class="site-main" role="main">
+                            <article class="page">                                
+                                <div class="entry-content">
 
-                <p>Since 2007, I have been collaborating with artists, studios, and agencies to create immersive experiences that utilize emerging technologies thoughtfully to create ground-breaking, award winning experiences. My work is informed by my studies in storytelling and game design and my experience in advertising, architecture, and entertainment. I create projects that transport and inspire, grounded in the fundamentals of interactivity and narrative, but with an eye towards new paradigms. Using interactivity to tell stories is rarely straightforward, but the process of problem solving is what keeps me excited about each new project.</p>
+                                    <div class="container">
+                                        <div class="row">                                    
+                                            <div class="d-none d-lg-block d-xl-block">                                                                     
+                                                <div class="empty-space-30"></div>
+                                            </div>                                           
+                                        </div>
 
-                <p>My specialty is acting as a bridge between the creative and the technical. As a former full-time digital artist, I have experience concepting and pitching. I prefer to be involved in a project from the beginning to help clients to craft concepts that are feasible but ambitious. That challenge users while also being accessible. That effectively communicate a message in a way that is only possible with immersive and interactive media.</p>
+                                        <div class="row m-b-90">                                    
+                                            <div class="col-sm-12 col-lg-6 "> 
+                                                <div class="single-image">
+                                                    <figure class="figure">
+                                                        <img src="/assets/images/other/about-me-6-min.jpg" class="figure-img img-fluid" alt="About Me">                                                
+                                                    </figure>
+                                                </div>                                           
+                                            </div>                                                                            
 
-                <p>In production I am almost always hands-on. I strongly believe in using the right tool for the job and putting the concept first, which requires flexibility and willingness to learn on the job. I also bring my eight years of experience as a creative coding teacher to the job when working with teams. </p>
+                                            <div class="col-sm-12 col-lg-6 p-x-25 m-t-50"> 
+                                                <div class="heading-block text-left">
+                                                    <h1 class="block-size-1 sub-size">
+                                                        See-through Lab is Jeff Crouse, who goes by a few titles: Interactive Director, Creative Technologist, Technical Director.
+                                                    </h1>
+                                                </div>
+                                                <div class="text-block text-left mb-35">
+                                                    <p>Since 2007, I have been collaborating with artists, studios, and agencies to create immersive experiences that utilize emerging technologies thoughtfully to create ground-breaking, award winning experiences. My work is informed by my studies in storytelling and game design and my experience in advertising, architecture, and entertainment. I create projects that transport and inspire, grounded in the fundamentals of interactivity and narrative, but with an eye towards new paradigms. Using interactivity to tell stories is rarely straightforward, but the process of problem solving is what keeps me excited about each new project.</p>
 
-                <p>I believe in thorough prototyping and an iterative workflow. I work closely with designers, directors, animators, musicians, engineers, fabricators, and photographers to build, test, and refine interactive experiences. Over 13 years and dozens of projects, I have built up a process for just such an iterative workflow while also staying flexible enough to slot into most teams.</p>
+                                                    <p>My specialty is acting as a bridge between the creative and the technical. As a former full-time digital artist, I have experience concepting and pitching. I prefer to be involved in a project from the beginning to help clients to craft concepts that are feasible but ambitious. That challenge users while also being accessible. That effectively communicate a message in a way that is only possible with immersive and interactive media.</p>
+                                    
+                                                    <p>In production I am almost always hands-on. I strongly believe in using the right tool for the job and putting the concept first, which requires flexibility and willingness to learn on the job. I also bring my eight years of experience as a creative coding teacher to the job when working with teams. </p>
+                                    
+                                                    <p>I believe in thorough prototyping and an iterative workflow. I work closely with designers, directors, animators, musicians, engineers, fabricators, and photographers to build, test, and refine interactive experiences. Over 13 years and dozens of projects, I have built up a process for just such an iterative workflow while also staying flexible enough to slot into most teams.</p>
+                                    
+                                                    <p>Let’s chat about how I can help you with:</p>
+                                                </div>
 
-                <p>Let’s chat about how I can help you with your interactive/immersive project.</p>
-                
-                <h3 class="margin-top-40">Specialty</h3>
-                    <div class="lists clearfix">
-                        <ul>
-                            <li>Immersive Experiences</li>
-                            <li>Interactive Installations</li>
-                            <li>LED Sculpture</li>
-                            <li>Kinetic Sculpture</li>
-                        </ul>
-                        <ul>
-                            <li>Custom Software</li>
-                            <li>Generative Graphics</li>
-                            <li>Creative Concepting</li>
-                            <li>Consulting</li>
-                        </ul>
-                    </div>
-            </div>
-        </div>
-    </div>
-</div>    
-<!-- Main Wrapper Ends -->
+                                                <div class="row">                                    
+                                                    <div class="col-sm-6">
+                                                        <ul class="hyphen-text">
+                                                            <li>Immersive Experiences</li>
+                                                            <li>Interactive Installations</li>
+                                                            <li>LED Sculpture</li>
+                                                            <li>Kinetic Sculpture</li>
+                                                        </ul>
+                                                    </div> 
+                                                    <div class="col-sm-6">
+                                                        <ul class="hyphen-text">
+                                                            <li>Custom Software</li>
+                                                            <li>Generative Graphics</li>
+                                                            <li>Creative Concepting</li>
+                                                            <li>Consulting</li>
+                                                        </ul>
+                                                    </div> 
+                                                </div>    
+
+                                                <div class="btn-container solid m-t-50">
+                                                    <a href="#" role="button" title="GET IN TOUCH">GET IN TOUCH</a>
+                                                </div>
+
+                                            </div>                                                                            
+                                        </div>                                
+                                    </div>
+
+                                </div>
+                            </article>        
+                        </main><!-- #main -->
+                    </div><!-- #primary -->                                
+
+                    <a id="gotoTop" href="#" class="scroll-top-link" data-easing="easeOutQuad" data-speed="700" ><i class="fa fa-angle-up"></i></a>
+
+                </div><!-- #content -->
+
+                {% include footer.html %}
+
+            </div> <!-- .site-content-contain -->        
+        </div>    
+        <!-- Page Wrapper Ends -->
+
+        {% include scripts.html %}
+    </body>
+</html>

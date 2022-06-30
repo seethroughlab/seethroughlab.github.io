@@ -41,8 +41,8 @@ theme-template: index-clean.html
                                                          data-gaphorizontal="50" data-gapvertical="60" data-displaytype="scroll-fadeInUp" data-large-desktop="2" data-tablet-landscape="2" data-tablet-portrait="1" data-mobile="1" 
                                                          data-defaultfilter="*" >
 
-                                                        {% for post in site.categories.projects %}
-                                                        <div class="cbp-item graphic illustration">                                                            
+                                                        {% for post in site.posts %}
+                                                        <div class="cbp-item">                                                            
                                                             <a class="cbp-caption" href="{{ post.url }}">                                                                
                                                                 <div class="cbp-caption">		                                                                    
                                                                     <div class="cbp-caption-defaultWrap">							
@@ -54,115 +54,7 @@ theme-template: index-clean.html
                                                             </a>                                                            
                                                         </div>
                                                         {% endfor %}
-                                                        <!--
-                                                        <div class="cbp-item  illustration">
-                                                            <a class="cbp-caption" href="portfolio-single-image-gallery.html" >
-                                                                <div class="cbp-caption">		                                                                    
-                                                                    <div class="cbp-caption-defaultWrap">							
-                                                                        <img src="assets/images/portfolio/masonry/catalogue-2-min-600x400.jpg" class="portfolio-thumbnail" alt="Cosmetic" >
-                                                                    </div>                                                                    
-                                                                </div>  
-                                                                <div class="cbp-l-grid-agency-title alignCenter">Catalogue</div>
-                                                                <div class="cbp-l-grid-agency-desc alignCenter">Graphic</div>
-                                                            </a>                                                            
-                                                        </div>
-
-                                                        <div class="cbp-item  branding">                                                           
-                                                            <a class="cbp-caption" href="portfolio-single-wide-slider.html">
-                                                                <div class="cbp-caption">		                                                                    
-                                                                    <div class="cbp-caption-defaultWrap">							
-                                                                        <img src="assets/images/portfolio/masonry/headphone-min.jpg" class="portfolio-thumbnail" alt="Catalogue" >
-                                                                    </div>                                                                  
-                                                                </div>  
-                                                                <div class="cbp-l-grid-agency-title alignCenter">Pink Headphone</div>
-                                                                <div class="cbp-l-grid-agency-desc alignCenter">Gadget</div>
-                                                            </a>                                                           
-                                                        </div>
-
-                                                        <div class="cbp-item  logo">                                                           
-                                                            <a class="cbp-caption" href="portfolio-single-multiple-media.html">
-                                                                <div class="cbp-caption">		                                                                    
-                                                                    <div class="cbp-caption-defaultWrap">							
-                                                                        <img src="assets/images/portfolio/masonry/business-card-min-600x500.jpg" class="portfolio-thumbnail" alt="Jar" >
-                                                                    </div>                                                                   
-                                                                </div>  
-                                                                <div class="cbp-l-grid-agency-title alignCenter">Business Card</div>
-                                                                <div class="cbp-l-grid-agency-desc alignCenter">Branding</div>
-                                                            </a>                                                            
-                                                        </div>
-
-                                                        <div class="cbp-item  art illustration">                                                            
-                                                            <a class="cbp-caption" href="portfolio-single-hero-alt.html">
-                                                                <div class="cbp-caption">		                                                                    
-                                                                    <div class="cbp-caption-defaultWrap">							
-                                                                        <img src="assets/images/portfolio/masonry/pillow-min-600x500.jpg" class="portfolio-thumbnail" alt="Cardboard" >
-                                                                    </div>                                                                   
-                                                                </div>  
-                                                                <div class="cbp-l-grid-agency-title alignCenter">Cusion Mockup</div>
-                                                                <div class="cbp-l-grid-agency-desc alignCenter">Photoshop</div>
-                                                            </a>                                                            
-                                                        </div>
-
-                                                        <div class="cbp-item  illustration">                                                            
-                                                            <a class="cbp-caption" href="portfolio-single-small-gallery-alt.html">
-                                                                <div class="cbp-caption">		                                                                    
-                                                                    <div class="cbp-caption-defaultWrap">							
-                                                                        <img src="assets/images/portfolio/masonry/wristband-min-600x350.jpg" class="portfolio-thumbnail" alt="Wristband" >
-                                                                    </div>                                                                    
-                                                                </div>  
-                                                                <div class="cbp-l-grid-agency-title alignCenter">Wristband</div>
-                                                                <div class="cbp-l-grid-agency-desc alignCenter">Blue</div>
-                                                            </a>                                                            
-                                                        </div>
-
-                                                        <div class="cbp-item  branding">                                                            
-                                                            <a class="cbp-caption" href="portfolio-single-small-slider.html">
-                                                                <div class="cbp-caption">		                                                                    
-                                                                    <div class="cbp-caption-defaultWrap">							
-                                                                        <img src="assets/images/portfolio/masonry/cardboard-min-1-600x500.jpg" class="portfolio-thumbnail" alt="Pillow" >
-                                                                    </div>                                                                  
-                                                                </div>  
-                                                                <div class="cbp-l-grid-agency-title alignCenter">Funky Paper</div>
-                                                                <div class="cbp-l-grid-agency-desc alignCenter">Identity</div>
-                                                            </a>                                                            
-                                                        </div>
-
-                                                        <div class="cbp-item logo">                                                            
-                                                            <a class="cbp-caption" href="portfolio-single-small-videos.html">
-                                                                <div class="cbp-caption">		                                                                    
-                                                                    <div class="cbp-caption-defaultWrap">							
-                                                                        <img src="assets/images/portfolio/masonry/jar-600x500.jpg" class="portfolio-thumbnail" alt="Business Card" >
-                                                                    </div>                                                                   
-                                                                </div>  
-                                                                <div class="cbp-l-grid-agency-title alignCenter">Small Jar</div>
-                                                                <div class="cbp-l-grid-agency-desc alignCenter">Art</div>
-                                                            </a>                                                            
-                                                        </div>
-
-                                                        <div class="cbp-item branding logo">                                                            
-                                                            <a class="cbp-caption cbp-lightbox" data-title="Cosmetic" href="assets/images/portfolio/masonry/cosmetic-min-600x650.jpg">
-                                                                <div class="cbp-caption">		                                                                    
-                                                                    <div class="cbp-caption-defaultWrap">							
-                                                                        <img src="assets/images/portfolio/masonry/cosmetic-min-600x650.jpg" class="portfolio-thumbnail" alt="Cosmetic" >
-                                                                    </div>                                                                  
-                                                                </div>  
-                                                                <div class="cbp-l-grid-agency-title alignCenter">Lightbox Project</div>
-                                                                <div class="cbp-l-grid-agency-desc alignCenter">Image</div>
-                                                            </a>                                                            
-                                                        </div>       
-
-                                                        <div class="cbp-item  art illustration">                                                            
-                                                            <a class="cbp-caption cbp-lightbox" data-title="Flyer" href="https://player.vimeo.com/video/317770729">
-                                                                <div class="cbp-caption">		                                                                    
-                                                                    <div class="cbp-caption-defaultWrap">							
-                                                                        <img src="assets/images/portfolio/masonry/flyer-min-600x500.jpg" class="portfolio-thumbnail" alt="Flyer" >
-                                                                    </div>                                                                  
-                                                                </div>  
-                                                                <div class="cbp-l-grid-agency-title alignCenter">Lightbox Project</div>
-                                                                <div class="cbp-l-grid-agency-desc alignCenter">Video</div>
-                                                            </a>                                                            
-                                                        </div>                     
-                                                        -->
+                                                       
                                                     </div><!--End #grid-container-->
                                                     
                                                 </div>                                               

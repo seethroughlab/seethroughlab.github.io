@@ -1,0 +1,178 @@
+---
+theme-template: portfolio-single-small-slider.html
+---
+<!DOCTYPE html>
+<html lang="en">
+{% include head.html %}
+    
+    <body class="single single-portfolio portfolio-details-right">
+
+        <!-- Page Wrapper -->
+        <div id="page" class="site">
+
+{% include header.html %}
+
+            <div class="site-content-contain">
+                <div id="content" class="site-content">                 
+                    <div id="primary" class="content-area">
+                        <main id="main" class="site-main" role="main">        
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <article class="portfolio right-sidebar clearfix">
+                                            <div class="entry-content">
+                                                {% if page.video_player %}
+                                                <div class="media-wrap">                                                   
+                                                    <div class="portfolio-media embed-responsive embed-responsive-16by9">
+                                                        <iframe title="{{page.title}}" src="{{page.video_player}}?title=1&byline=0&amp;portrait=0" width="1260" height="709" allow="autoplay; fullscreen" allowfullscreen=""></iframe>
+                                                    </div>                                                    
+                                                </div>
+                                                {% endif %}
+
+                                                <br />
+                                                <br />
+
+                                                {% if page.images %}
+                                                <div class="media-wrap">
+                                                    <div class="swiper-container single-image-slider">	
+                                                        <div class="swiper-wrapper" >
+                                                            {% for img in page.images %}
+                                                            <div class="swiper-slide" >
+                                                                <img width="1200" height="800" alt="Flyer"  src="{{ page.image_root }}/{{ img }}">                                                                
+                                                            </div>
+                                                            {% endfor %}
+                                                                 
+                                                        </div>	
+                                                        <div class="swiper-pagination"></div>	  
+                                                    </div>	    
+                                                </div>
+                                                {% endif %}                 
+                                            </div><!-- .entry-content -->
+
+                                            <header class="entry-header">	
+                                                <h2 class="entry-title">{{page.title}}</h2>
+                                                <div class="description">{{ page.date | date: "%b %Y" }}</div>
+                                                <div class="entry-meta">
+                                                    <div class="meta-desc">
+                                                        {{ content }}
+                                                    </div>   
+                                                    <div class="meta-entries">
+                                                        <ul>
+                                                            <li><span>Role</span>{{ page.role }}</li>
+                                                            <li><span>Client</span>{{ page.client | join: '/'}}</li>
+                                                            <li><span>Credits</span>
+                                                                {% for item in page.credits %}
+                                                                {% for hash in item %}
+                                                                    {{ hash[0] }}: {{ hash[1] }}<br/>
+                                                                {% endfor %}
+                                                                {% endfor %}
+                                                            </li>
+                                                            {% if page.tech %}
+                                                            <li><span>Tech</span>{{ page.tech | join: ', '}}</li>
+                                                            {% endif %}
+                                                            {% if page.links %}
+                                                            <li><span>Links</span>{{ page.links | join: '<br />'}}</li>
+                                                            {% endif %}
+      
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </header><!-- .entry-header -->		
+                                        </article>
+
+                                        <div class="portfolio-navigation-wrap">
+                                            <ul class="portfolio-navigation">
+                                                
+                                                <li class="portfolio-prev">
+                                                    {% if page.previous.url %}
+                                                    <a href="{{page.previous.url}}" rel="prev">                                                        
+                                                        <span>{{page.previous.title}}</span>
+                                                    </a>
+                                                    {% endif %}
+                                                </li>
+                                                
+                                                <li>
+                                                    <a href="/">                                                        
+                                                        <img src="/assets/images/svg/grid.svg" alt="All Portfolio">
+                                                    </a>
+                                                </li>
+                                                
+                                                <li class="portfolio-next">
+                                                    {% if page.next.url %}
+                                                    <a href="{{page.next.url}}" rel="next">                                        
+                                                        <span>{{page.next.title}}</span>
+                                                    </a>
+                                                    {% endif %}
+                                                </li>
+                                               
+                                            </ul>
+                                        </div>      
+
+                                        <div class="related-portfolio-post">
+                                            <h3>Related BTS</h3>
+                                            <div class="portfolio-wrap">
+                                                <div id="portfolio-container-grid" class="cbp" data-layoutmode="grid" data-gapvertical="30" data-gaphorizontal="30" data-displaytype="default" data-large-desktop="3" data-tablet-landscape="3" data-tablet-portrait="3" data-mobile="1">
+                                                </div>                                                    
+                                            </div>
+                                        </div>
+                                    </div>                                 
+                                </div>                             
+                            </div>                             
+                        </main><!-- #main -->
+                    </div><!-- #primary -->                   
+
+                    <a id="gotoTop" href="#" class="scroll-top-link" data-easing="easeOutQuad" data-speed="700" ><i class="fa fa-angle-up"></i></a>
+
+                </div><!-- #content -->
+
+{% include footer.html %}
+                
+            </div> <!-- .site-content-contain -->        
+
+        </div>    
+        <!-- Page Wrapper Ends -->
+
+{% include scripts.html %}
+
+    <script src="https://cdn.jsdelivr.net/npm/fuzzysort@2.0.1/fuzzysort.min.js"></script>
+    <script>
+    const grid = $("#portfolio-container-grid");
+    const shuffle = function(array) {
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return array;
+    }
+    $.getJSON("/js/bts.json", function( data, textStatus, jqxhr ) {
+        var results = fuzzysort.go("{% if page.bts_search %}{{ page.bts_search }}{% else %}{{ page.title }}{% endif %}", data, {key:'title'});
+        console.log(results);
+        if(results.total<1) {
+            $(".related-portfolio-post").hide();
+            return;
+        }
+
+        var indices = shuffle([...Array(results.total).keys()]);
+
+
+        for(var i=0; i<Math.min(3, indices.length); i++) {
+            const j = indices[i];
+            const post = results[j].obj;
+            grid.append(`<div class="cbp-item">
+                <a class="cbp-caption cbp-lightbox" data-title="${post.title}" href="${post.link}">
+                    <div class="cbp-caption">
+                        <div class="cbp-caption-defaultWrap">
+                            <img src="${post.thumbnail}" class="portfolio-thumbnail" >
+                        </div>
+                    </div>
+                    <div class="cbp-l-grid-agency-title alignCenter">${post.title}</div>
+                    <div class="cbp-l-grid-agency-desc alignCenter">${new Date(post.date).toLocaleDateString("en-US")}</div>
+                </a>                                                                        
+            </div>`);
+        }
+    });
+    </script>
+    </body>
+</html>

@@ -1,7 +1,7 @@
 {
-  "name": "make_bts",
+  "name": "site_scripts",
   "version": "1.0.0",
-  "description": "",
+  "description": "Scripts used in the generation of seethroughlab.com",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,8 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "jsonpath": "^1.1.1",
-    "moment": "^2.29.3",
-    "slug": "^5.3.0",
     "vimeo": "^2.1.1"
   }
 }

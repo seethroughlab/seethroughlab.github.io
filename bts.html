@@ -91,7 +91,8 @@ theme-template: portfolio-3-grid.html
         var posts = null;
 
         function populate() {
-            clear();
+            $(".cbp-item", grid).remove();
+
             const hash = window.location.hash.replace("#", "");
             const n = parseInt(hash);
             if(Number.isInteger(n)) {
@@ -123,9 +124,6 @@ theme-template: portfolio-3-grid.html
             populate();
         });
 
-        function clear() {
-
-        }
 
         $("#next").click(function(e){
             start = Math.min(start+perpage, posts.length);

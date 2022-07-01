@@ -37,16 +37,14 @@ theme-template: portfolio-3-grid.html
 
                                                     <div id="portfolio-container-grid" class="cbp cbp-caption-ribbon cbp-ribbon-alignLeft" 
                                                          data-loadmoreaction="click" data-loadnoofitems="1" data-layoutmode="grid" data-captionanimation="fadeIn" data-animationtype="fadeOut" 
-                                                         data-gaphorizontal="30" data-gapvertical="0" data-displaytype="default" data-large-desktop="3" data-tablet-landscape="3" data-tablet-portrait="2" data-mobile="1" 
+                                                         data-gaphorizontal="20" data-gapvertical="0" data-displaytype="default" data-large-desktop="3" data-tablet-landscape="3" data-tablet-portrait="2" data-mobile="1" 
                                                          data-defaultfilter="*" >
                     
                                                     </div><!--End #grid-container-->
                                                 </div>                                               
                                             </div>
                                         </div>
-                                        
                                     </div>    <!--End container-->
-
                                 </div>   
                             </article>
                             
@@ -85,24 +83,30 @@ theme-template: portfolio-3-grid.html
         {% include scripts.html %}
         
         <script>
+            
+        // https://www.seattlecfug.org/demos/cubePortfolio-ColdFusion-SQL/assets/cubeportfolio/documentation/index.html
         const grid = $("#portfolio-container-grid");
-        const perpage = 39;
-        var start = 0;
+        var perpage;
+        var start;
         var posts = null;
 
-        function populate() {
-            $(".cbp-item", grid).remove();
+        grid.on('initComplete.cbp', function() {
+            $.getJSON("/js/bts.json", function( data, textStatus, jqxhr ) {
+                posts = data;
+                perpage = Math.min(posts.length, 30);
+                populate();
+            });
+        });
 
-            const hash = window.location.hash.replace("#", "");
-            const n = parseInt(hash);
-            if(Number.isInteger(n)) {
-                start = n;
-            }
-            var end = start + perpage;
-            console.log("populate", start, end);
-            for(var i=start; i<end; i++) {
-                var post = posts[i];
-                grid.append(`<div class="cbp-item ${post.tags ? post.tags.join(" ") : ""}">                                                            
+        async function clear() {
+            return new Promise((resolve, reject) => {
+                grid.cubeportfolio('remove', $(".cbp-item"), resolve);
+            });
+        }
+
+        async function append(post) {
+            return new Promise((resolve, reject) => {
+                grid.cubeportfolio('append', `<div class="cbp-item ${post.tags ? post.tags.join(" ") : ""}">                                                            
                     <a class="cbp-caption cbp-lightbox" data-title="${post.title}" href="${post.link}">
                         <div class="cbp-caption-defaultWrap">							
                             <img src="${post.thumbnail}" class="portfolio-thumbnail">
@@ -116,14 +120,23 @@ theme-template: portfolio-3-grid.html
                             </div>
                         </div>
                     </a>                                                            
-                </div>`);
-            }
+                </div>`, resolve);
+            });
         }
 
-        addEventListener('hashchange', event => { 
-            populate();
-        });
+        async function populate() {
+            await clear();
 
+            const n = parseInt(window.location.hash.replace("#", ""));
+            start = Number.isInteger(n) ? n : 0;
+            
+            for(var i=start; i<start + perpage; i++) {
+                await append(posts[i])
+            }
+            //grid.cubeportfolio('layout');
+        }
+
+        addEventListener('hashchange', populate);
 
         $("#next").click(function(e){
             start = Math.min(start+perpage, posts.length);
@@ -135,11 +148,6 @@ theme-template: portfolio-3-grid.html
             start = Math.max(0, start-perpage);
             window.location.hash = `#${start}`;
             e.preventDefault();
-        });
-
-        $.getJSON("/js/bts.json", function( data, textStatus, jqxhr ) {
-            posts = data;
-            populate();
         });
         </script>
     </body>

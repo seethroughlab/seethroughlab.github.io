@@ -707,9 +707,13 @@ var KRAFT = KRAFT || {};
               
                     // using the done promise callback
                     .done( function( data ) {
-
-                        // here we will handle errors and validation messages
-                        if ( !data.success ) {
+                        
+                        if(data.ok) 
+                        {
+                            contact_success.toggleClass( 'validated' );
+                        } 
+                        else if(data.errors)
+                        { // here we will handle errors and validation messages
 
                            // handle errors for name
                             if ( data.errors.name ) {
@@ -731,10 +735,7 @@ var KRAFT = KRAFT || {};
                                 contact_failed.toggleClass( 'validation-error' );
                             }                  
                         }
-                        else {
-                            contact_success.toggleClass( 'validated' );
-                        }
-
+                  
                         form_process.fadeOut();
 
                     })            

@@ -18,15 +18,114 @@ title: Contact
                         <main id="main" class="site-main" role="main">   
                             <article class="page">                                
                                 <div class="entry-content">     
-                                    <div class="container m-t-35"> 
+                                    <div class="container m-t-32"> 
+
+                                        <div class="row">
+                                            <div class="col-sm-12">                                            
+                                                <div class="heading-block">
+                                                    <h1 class="block-size-1">
+                                                        Have a project or an idea you would like to collaborate on? Please get in touch.
+                                                    </h1>
+                                                </div>
+                                            </div>
+                                        </div>      
+
+
+
                                         <div class="row"> 
                                             <div class="col-sm-12">
                                                 <div class="map-block">
                                                     <div id="googleMap" data-zoom="14" data-latitude="41.859928" data-longitude="-87.624130" style="width: 100%; height: 100%;"></div>
                                                 </div>
                                             </div>
-                                        </div>     
-                                    </div>         
+                                        </div> 
+                                        
+
+                                        <div class="row m-t-25">                                    
+                                            <div class="col-sm-4 text-center">
+                                                <div class="content-box-wrap">
+                                                    <div class="single-image m-b-15">
+                                                        <figure class="figure">
+                                                            <img src="/images/mobile.png"  alt="Mobile">                                                
+                                                        </figure>
+                                                    </div>          
+                                                    <div class="content-box text-center">
+                                                        <h6>(646) 246-5999</h6>                                                             
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-4 text-center">
+                                                <div class="content-box-wrap">
+                                                    <div class="single-image m-b-15">
+                                                        <figure class="figure">
+                                                            <img src="/images/envelope.png"  alt="Email">                                                
+                                                        </figure>
+                                                    </div>          
+                                                    <div class="content-box">
+                                                        <h6>jeff@seethroughlab.com</h6>                                                              
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 text-center">
+                                                <div class="content-box-wrap">
+                                                    <div class="single-image m-b-15">
+                                                        <figure class="figure">
+                                                            <img src="/images/map.png"  alt="Address">                                                
+                                                        </figure>
+                                                    </div>          
+                                                    <div class="content-box">
+                                                        <h6>1620 S Michigan Ave, Unit 806<br />Chicago, IL 60616</h6>                                                              
+                                                    </div>
+                                                </div>
+                                            </div>    
+                                        </div>
+
+                                        <div class="row m-t-40">                                    
+                                            <div class="col-sm-12">
+                                                 <div role="form" class="kraftcf">                                                    
+                                                    <form id="contact-form" action="https://formspree.io/f/moqarbzd" method="post" class="kraftcf-form" novalidate="novalidate">                                                       
+                                                        <div class="contact-form-main">
+                                                            <div class="contact-form-fields-wrap clearfix">
+                                                                <div class="contact-form-fields">
+                                                                    <span class="kraftcf-form-control-wrap name">
+                                                                        <input type="text" name="name" value="" size="40" class="kraftcf-form-control kraftcf-text kraftcf-validates-as-required" aria-required="true" aria-invalid="false" placeholder="Name*">
+                                                                        <span role="alert" class="kraftcf-not-valid-tip">The field is required.</span>
+                                                                    </span>
+                                                                </div>
+                                                                <div class="contact-form-fields">
+                                                                    <span class="kraftcf-form-control-wrap email">
+                                                                        <input type="email" name="email" value="" size="40" class="kraftcf-form-control kraftcf-text kraftcf-email kraftcf-validates-as-required kraftcf-validates-as-email" aria-required="true" aria-invalid="false" placeholder="Email*">
+                                                                        <span role="alert" class="kraftcf-not-valid-tip">The field is required.</span>
+                                                                        <span role="alert" class="kraftcf-not-valid-tip">The e-mail address entered is invalid.</span>
+                                                                    </span>
+                                                                </div>
+                                                                <div class="contact-form-fields">
+                                                                    <span class="kraftcf-form-control-wrap subject">
+                                                                        <input type="text" name="subject" value="" size="40" class="kraftcf-form-control kraftcf-text" placeholder="Subject">                                                                       
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <p>
+                                                                <span class="kraftcf-form-control-wrap message">
+                                                                    <textarea name="message" cols="40" rows="10" class="kraftcf-form-control kraftcf-textarea kraftcf-validates-as-required" aria-required="true" aria-invalid="false" placeholder="Message*"></textarea>
+                                                                    <span role="alert" class="kraftcf-not-valid-tip">The field is required.</span>
+                                                                </span>
+                                                            </p>
+                                                            <p>
+                                                                <input type="submit" value="SEND MESSAGE" class="kraftcf-form-control kraftcf-submit">
+                                                            </p>
+                                                        </div>
+                                                        <div class="kraftcf-response-output kraftcf-display-none kraftcf-validation-errors" role="alert">One or more fields have an error. Please check and try again.</div>
+                                                        <div class="kraftcf-response-output kraftcf-display-none kraftcf-mail-sent-ok" role="alert">Thank you for your message. It has been sent.</div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>    
+
+
+
+                                    </div> 
                                 </div>   
                             </article>    
                         </main><!-- #main -->
@@ -43,7 +142,7 @@ title: Contact
 
         {% include scripts.html %}
         <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC5WUP34b625BjlxnHEoTIHKy7DrS4BBo&callback=initMap&v=weekly"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBRa4imp1at3C_iZBSdznRoBS1Eetn1o8&v=weekly"
         defer
         ></script>
         

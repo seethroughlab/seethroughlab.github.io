@@ -68,7 +68,11 @@ theme-template: portfolio-single-small-slider.html
                                                                 {% endfor %}
                                                             </li>
                                                             {% if page.tech %}
-                                                            <li><span>Tech</span>{{ page.tech | join: ', '}}</li>
+                                           
+                                                            <li>
+                                                                <span>Tech</span>
+                                                                {{ page.tech | join: '<br />'}}
+                                                            </li>
                                                             {% endif %}
                                                             {% if page.links %}
                                                             <li><span>Links</span>{{ page.links | join: '<br />'}}</li>

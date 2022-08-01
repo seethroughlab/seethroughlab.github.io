@@ -65,7 +65,6 @@ a {
 }
 a:hover {
   color: #151515;
-  text-decoration: none;
 }
 
 dfn, em, i {
@@ -1773,7 +1772,6 @@ Portfolio Details
   margin-bottom: 7px;
 }
 .single-portfolio .portfolio .entry-header .entry-meta .meta-entries ul li, .single-portfolio .portfolio .entry-header .entry-meta .meta-entries ul li a {
-  text-decoration: none;
   font-size: 14px;
   line-height: normal;
   font-weight: 400;

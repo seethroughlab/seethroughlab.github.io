@@ -12,7 +12,7 @@ links:
 credits:
  - Artist: Pierre Huyghe
  - Photo: Niels Fabæk
- - Producers: Anne-Sophie Tisseyre, Bernardita Pérez, Eduardo Pérez Infante
+ - Producers: Bernardita Pérez, Eduardo Pérez Infante
  - Creative Technologist: <a href="https://www.screen-club.com/">Martial Geoffre-Rouland</a>
  - AV Consultants: <a href="https://cadmos.fr/">CADMOS</a>
 image_root: /images/projects/offspring

@@ -19,7 +19,7 @@ friends:
  - Pink Sparrow : Fabrication
  - SCPS : Fabrication
  - SFDS : Fabrication
- - Beednark : Fabrication
+ - Bednark : Fabrication
  - <a href="https://vimeo.com/flightphase">Flightphase</a> : Art and Design Studio
 pintrest:
  - Liquid Simulation: https://www.pinterest.com/jefftimesten/liquid-sim/
@@ -36,6 +36,9 @@ pintrest:
  - Graffiti Style : https://www.pinterest.com/jefftimesten/graffiti-style/
  - Clean and Fun Dataviz : https://www.pinterest.com/jefftimesten/clean-and-fun-dataviz/
 clients:
+ - American Airlines and British Airways (via Gensler)
+ - Dell (via Gansler)
+ - Accenture (via Landor & Fitch)
  - IBM (via Tool)
  - Sorel (via Helo)
  - Lexus (via Team One)
@@ -132,7 +135,8 @@ hardware:
                                                 <h4>Clients</h4>
                                                 <p>Here are some of the clients I've worked for over the years.</p>
                                                 <ul>
-                                                    {% for item in page.clients %}
+                                                    {% assign clients = page.clients | sort %}
+                                                    {% for item in clients %}
                                                         <li>{{ item }}</li>
                                                     {% endfor %}
                                                  </ul>

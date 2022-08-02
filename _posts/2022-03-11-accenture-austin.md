@@ -17,7 +17,7 @@ tech:
  - TouchDesigner
  - <a href="https://www.stereolabs.com/zed-2/">Zed 2</a>
 links:
-image_root: /images/projects/accenture-window/
+image_root: /images/projects/accenture-window
 images: 
  - MTVideo_1.gif
  - MTVideo_2.gif

@@ -9,7 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "fast-glob": "^3.2.11",
     "jsonpath": "^1.1.1",
-    "vimeo": "^2.1.1"
+    "vimeo": "^2.1.1",
+    "webp-converter": "^2.3.3"
   }
 }

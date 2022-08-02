@@ -38,7 +38,10 @@ theme-template: portfolio-single-small-slider.html
                                                         <div class="swiper-wrapper" >
                                                             {% for img in page.images %}
                                                             <div class="swiper-slide" >
-                                                                <img width="1200" height="800" src="{{ page.image_root }}/{{ img }}">                                                                
+                                                                <picture alt="{{page.title}}">
+                                                                    <source srcset="{{ page.image_root }}/{{ img }}.webp" type="image/webp">	
+                                                                    <img src="{{ page.image_root }}/{{ img }}">      
+                                                                </picture>                                                          
                                                             </div>
                                                             {% endfor %}
                                                                  
@@ -152,7 +155,6 @@ theme-template: portfolio-single-small-slider.html
     }
     $.getJSON("/js/bts.json", function( data, textStatus, jqxhr ) {
         var results = fuzzysort.go("{% if page.bts_search %}{{ page.bts_search }}{% else %}{{ page.title }}{% endif %}", data, {key:'title'});
-        console.log(results);
         if(results.total<1) {
             $(".related-portfolio-post").hide();
             return;

@@ -3,81 +3,84 @@ theme-template: index-clean.html
 ---
 <!DOCTYPE html>
 <html lang="en">
-    
-    {% include head.html %}
+	
+	{% include head.html %}
 
-    <body>
+	<body>
 
-        <!-- Page Wrapper -->
-        <div id="page" class="site">
+		<!-- Page Wrapper -->
+		<div id="page" class="site">
 
-            {% include header.html %}
+			{% include header.html %}
 
-            <div class="site-content-contain">
-                <div id="content" class="site-content">                    
-                    <div id="primary" class="content-area">
-                        <main id="main" class="site-main" role="main">
-                            <article class="page">                                
-                                <div class="entry-content">
+			<div class="site-content-contain">
+				<div id="content" class="site-content">                    
+					<div id="primary" class="content-area">
+						<main id="main" class="site-main" role="main">
+							<article class="page">                                
+								<div class="entry-content">
 
-                                    <div class="container m-t-75 m-t-35-res"> 
-                                        <div class="row"> 
-                                            <div class="col-sm-12 offset-lg-1 col-lg-10">
-                                                  <div class="heading-block text-center">
-                                                    <h1 class="block-size-1">
-                                                        {{ site.description }}		
-                                                    </h1>
-                                                </div>
-                                            </div>
-                                        </div>     
-                                    </div>         
+									<div class="container m-t-75 m-t-35-res"> 
+										<div class="row"> 
+											<div class="col-sm-12 offset-lg-1 col-lg-10">
+												  <div class="heading-block text-center">
+													<h1 class="block-size-1">
+														{{ site.description }}		
+													</h1>
+												</div>
+											</div>
+										</div>     
+									</div>         
 
-                                    <div class="container m-t-65 m-b-100"> 
-                                        <div class="row"> 
-                                            <div class="col-sm-12">
-                                                <div class="portfolio-wrap">                                                   
-                                                    <div id="portfolio-container-grid" class="cbp cbp-caption-tilt" 
-                                                         data-loadmoreaction="click" data-loadnoofitems="1" data-layoutmode="masonry" data-captionanimation="tilt" data-animationtype="fadeOut" 
-                                                         data-gaphorizontal="50" data-gapvertical="60" data-displaytype="scroll-fadeInUp" data-large-desktop="2" data-tablet-landscape="2" data-tablet-portrait="1" data-mobile="1" 
-                                                         data-defaultfilter="*" >
+									<div class="container m-t-65 m-b-100"> 
+										<div class="row"> 
+											<div class="col-sm-12">
+												<div class="portfolio-wrap">                                                   
+													<div id="portfolio-container-grid" class="cbp cbp-caption-tilt" 
+														 data-loadmoreaction="click" data-loadnoofitems="1" data-layoutmode="masonry" data-captionanimation="tilt" data-animationtype="fadeOut" 
+														 data-gaphorizontal="50" data-gapvertical="60" data-displaytype="scroll-fadeInUp" data-large-desktop="2" data-tablet-landscape="2" data-tablet-portrait="1" data-mobile="1" 
+														 data-defaultfilter="*" >
 
-                                                        {% for post in site.posts %}
-                                                        <div class="cbp-item">                                                            
-                                                            <a class="cbp-caption" href="{{ post.url }}">                                                                
-                                                                <div class="cbp-caption">		                                                                    
-                                                                    <div class="cbp-caption-defaultWrap">							
-                                                                        <img src="{{post.thumbnail}}" class="portfolio-thumbnail" alt="Flyer" >
-                                                                    </div>                                                                  
-                                                                </div>  
-                                                                <div class="cbp-l-grid-agency-title alignCenter">{{ post.title | upcase }}</div>
-                                                                <div class="cbp-l-grid-agency-desc alignCenter">{{ post.date | date: "%b %Y" }}</div>
-                                                            </a>                                                            
-                                                        </div>
-                                                        {% endfor %}
-                                                       
-                                                    </div><!--End #grid-container-->
-                                                    
-                                                </div>                                               
-                                            </div>
-                                        </div>
-                                    </div><!--container-->
+														{% for post in site.posts %}
+														<div class="cbp-item">                                                            
+															<a class="cbp-caption" href="{{ post.url }}">                                                                
+																<div class="cbp-caption">		                                                                    
+																	<div class="cbp-caption-defaultWrap">	
+																		<picture class="portfolio-thumbnail" alt="{{post.title}}">
+																			<source srcset="{{post.thumbnail}}.webp" type="image/webp">	
+																			<img src="{{post.thumbnail}}">
+																		</picture>			
+																	</div>                                                                  
+																</div>  
+																<div class="cbp-l-grid-agency-title alignCenter">{{ post.title | upcase }}</div>
+																<div class="cbp-l-grid-agency-desc alignCenter">{{ post.date | date: "%b %Y" }}</div>
+															</a>                                                            
+														</div>
+														{% endfor %}
+													   
+													</div><!--End #grid-container-->
+													
+												</div>                                               
+											</div>
+										</div>
+									</div><!--container-->
 
-                                </div>
-                            </article>     
-                        </main><!-- #main -->
-                    </div><!-- #primary -->
-                    
-                    <a id="gotoTop" href="#" class="scroll-top-link" data-easing="easeOutQuad" data-speed="700" ><i class="fa fa-angle-up"></i></a>
-                    
-                </div><!-- #content -->                
+								</div>
+							</article>     
+						</main><!-- #main -->
+					</div><!-- #primary -->
+					
+					<a id="gotoTop" href="#" class="scroll-top-link" data-easing="easeOutQuad" data-speed="700" ><i class="fa fa-angle-up"></i></a>
+					
+				</div><!-- #content -->                
 
-                {% include footer.html %}
+				{% include footer.html %}
 
-            </div> <!-- .site-content-contain -->        
-        </div>    
-        <!-- Page Wrapper Ends -->
+			</div> <!-- .site-content-contain -->        
+		</div>    
+		<!-- Page Wrapper Ends -->
 
-        {% include scripts.html %}
+		{% include scripts.html %}
 
-    </body>
+	</body>
 </html>

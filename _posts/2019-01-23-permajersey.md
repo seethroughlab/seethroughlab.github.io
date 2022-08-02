@@ -5,9 +5,7 @@ title: Permajersey
 hidden: true
 thumbnail: /images/thumbnails/permajersey.jpg
 tags: [LED, threejs, openFrameworks]
-client: 
- - AMEX
- - Momentum
+client: N/A
 role: Creative Technologist/Interactive Director
 video_player: https://player.vimeo.com/video/320542113
 video_poster: https://i.vimeocdn.com/video/762993797_1280x720.jpg
@@ -17,12 +15,8 @@ credits:
 tech: 
  - openFrameworks app
  - ofxAssimpModelLoader
- - ofxOpenCv
- - ofxOsc
  - ofxSpout
  - ofxImGui
- - ofxCv
- - ofxRay
 links:
 image_root: /images/projects/permajersey/
 images: 
@@ -64,4 +58,6 @@ images:
 - untitled-158.jpg
 ---
 
-AmEx contacted Tool of NA about creating a jersey to go along with their "Jersey Assurance" program. 
+Along with the geniuses at Smooth Technology, we created a basketball jersey made of LEDs. The jersey could transition between a library of different teams and numbers.
+
+The client name and details have been withheld because the project never launched. 

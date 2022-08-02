@@ -1,30 +1,38 @@
-    <head>
-        <!-- Document Title -->      
-        <title>{{ site.title | escape }} | {% if page.title %}{{ page.title | escape }}{% endif %}</title>
+	<head>
+		<!-- Document Title -->      
+		<title>{{ site.title | escape }} | {% if page.title %}{{ page.title | escape }}{% endif %}</title>
 
-        <!-- Metas -->      
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="author" content="CaliberThemes" />
+		<!-- Metas -->      
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="CaliberThemes" />
 
-        <!-- Favicon -->      
-        <link rel="icon" type="image/png" href="/images/favicon.png" />
+		<!-- Favicon -->      
+		<link rel="icon" type="image/png" href="/images/favicon.png" />
 
-        <!-- Links -->      
-        <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&subset=latin,latin-ext" rel="stylesheet" type="text/css" />
-        <link rel='stylesheet' id='bootstrap-css'  href='/assets/lib/bootstrap/css/bootstrap.min.css' type='text/css' media='all' />
-        <link rel='stylesheet' id='font-awesome-css'  href='/assets/css/icons/font-awesome.min.css' type='text/css' media='all' />       
-        <link rel='stylesheet' id='swiper-css' href='/assets/lib/swiper/css/swiper.min.css' type='text/css' media='all' />
-        <link rel='stylesheet' id='cubeportfolio-css'  href='/assets/lib/cubeportfolio/css/cubeportfolio.min.css' type='text/css' media='all' />    
+		<!-- Links -->      
+		<link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&subset=latin,latin-ext" rel="stylesheet" type="text/css" />
+		<link rel='stylesheet' id='bootstrap-css'  href='/assets/lib/bootstrap/css/bootstrap.min.css' type='text/css' media='all' />
+		<link rel='stylesheet' id='font-awesome-css'  href='/assets/css/icons/font-awesome.min.css' type='text/css' media='all' />       
+		<link rel='stylesheet' id='swiper-css' href='/assets/lib/swiper/css/swiper.min.css' type='text/css' media='all' />
+		<link rel='stylesheet' id='cubeportfolio-css'  href='/assets/lib/cubeportfolio/css/cubeportfolio.min.css' type='text/css' media='all' />    
 
-        <link rel='stylesheet' id='main-css'  href='/style.css' type='text/css' media='all' />
-        <style>
-            canvas {
-                height:120px;
-                width:120px;
-                border-radius:50%;
-                -moz-border-radius:50%;
-                -webkit-border-radius:50%;
-            }
-            </style>
-    </head>
+		<link rel='stylesheet' id='main-css'  href='/style.css' type='text/css' media='all' />
+		<style>
+			canvas {
+				height:120px;
+				width:120px;
+				border-radius:50%;
+				-moz-border-radius:50%;
+				-webkit-border-radius:50%;
+			}
+		</style>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-0CBDQZ8Q9X"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-0CBDQZ8Q9X');
+		</script>
+	</head>

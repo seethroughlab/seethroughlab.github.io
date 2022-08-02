@@ -42,7 +42,6 @@ images:
 - untitled-103.jpg
 - untitled-119.jpg
 - untitled-125.jpg
-- untitled-126.jpg
 - untitled-129.jpg
 - untitled-132.jpg
 - untitled-134.jpg

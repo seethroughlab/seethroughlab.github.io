@@ -24,7 +24,11 @@ async function parse_video(video) {
         return;
 
     var images = jp.query(video.pictures, '$.sizes[?(@.width>600)]');
-    
+    if(typeof video.uri !== 'string') {
+        console.log(`video.uri is ${video.uri}`)
+        return false;
+    }
+    console.log(`Processing ${video.uri}`)
     const id = video.uri.split("/").at(-1);
 
     const content = {};

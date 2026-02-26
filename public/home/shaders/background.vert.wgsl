@@ -1,4 +1,6 @@
-// Fullscreen background vertex shader
+// Background vertex shader — half-screen diagonal triangle
+// Generates vertices at (-1,-1), (1,-1), (-1,1) covering the bottom-left
+// half of the viewport. The upper-right half shows the black clear color.
 struct VertexOutput {
     @builtin(position) position: vec4<f32>,
     @location(0) uv: vec2<f32>,
@@ -8,7 +10,7 @@ struct VertexOutput {
 fn main(@builtin(vertex_index) vertexIndex: u32) -> VertexOutput {
     var output: VertexOutput;
 
-    // Generate fullscreen triangle coordinates
+    // Half-screen triangle: covers bottom-left diagonal only
     let x = f32((vertexIndex & 1u) << 1u) - 1.0;
     let y = f32((vertexIndex & 2u)) - 1.0;
 

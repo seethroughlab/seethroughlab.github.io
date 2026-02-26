@@ -1,6 +1,7 @@
 /**
  * Background Renderer
- * Renders fullscreen CRT effect on a separate canvas, sharing the WebGPU device
+ * Renders a diagonal CRT effect covering the bottom-left half of the screen,
+ * with the upper-right half left as black. Shares the WebGPU device.
  */
 
 export class BackgroundRenderer {

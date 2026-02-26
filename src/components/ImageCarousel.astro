@@ -1,0 +1,155 @@
+---
+interface Props {
+  images: string[];
+  title: string;
+}
+
+const { images, title } = Astro.props;
+const single = images.length === 1;
+---
+
+<div class="carousel" role="region" aria-label={`${title} images`} tabindex="0">
+  <div class="carousel-track">
+    {images.map((src, i) => (
+      <div class="carousel-slide">
+        <img
+          src={src}
+          alt={`${title} — image ${i + 1}`}
+          loading={i === 0 ? "eager" : "lazy"}
+          decoding={i === 0 ? "sync" : "async"}
+        />
+      </div>
+    ))}
+  </div>
+  {!single && (
+    <button class="carousel-btn carousel-prev" aria-label="Previous image">&lsaquo;</button>
+    <button class="carousel-btn carousel-next" aria-label="Next image">&rsaquo;</button>
+    <div class="carousel-counter">
+      <span class="carousel-current">1</span> / {images.length}
+    </div>
+  )}
+</div>
+
+<style>
+  .carousel {
+    position: relative;
+    max-width: 64rem;
+    margin: 0 auto 3rem;
+    background: #0d0d0d;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    outline: none;
+  }
+  .carousel:focus-visible {
+    outline: 2px solid #666;
+    outline-offset: 2px;
+  }
+  .carousel-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+  .carousel-slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 10;
+  }
+  .carousel-slide img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border: none;
+    font-size: 2rem;
+    line-height: 1;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 2;
+  }
+  .carousel:hover .carousel-btn,
+  .carousel:focus-within .carousel-btn {
+    opacity: 1;
+  }
+  /* Always show on touch devices */
+  @media (hover: none) {
+    .carousel-btn {
+      opacity: 1;
+    }
+  }
+  .carousel-btn:hover {
+    background: rgba(0, 0, 0, 0.85);
+  }
+  .carousel-prev { left: 0.75rem; }
+  .carousel-next { right: 0.75rem; }
+  .carousel-counter {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    background: rgba(0, 0, 0, 0.6);
+    color: #ccc;
+    font-size: 0.8rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.25rem;
+    z-index: 2;
+    font-variant-numeric: tabular-nums;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLDivElement>('.carousel').forEach((carousel) => {
+    const track = carousel.querySelector<HTMLDivElement>('.carousel-track')!;
+    const prev = carousel.querySelector<HTMLButtonElement>('.carousel-prev');
+    const next = carousel.querySelector<HTMLButtonElement>('.carousel-next');
+    const counter = carousel.querySelector<HTMLSpanElement>('.carousel-current');
+    const slides = track.querySelectorAll<HTMLDivElement>('.carousel-slide');
+
+    if (slides.length <= 1) return;
+
+    function go(dir: number) {
+      const w = track.clientWidth;
+      track.scrollBy({ left: dir * w, behavior: 'smooth' });
+    }
+
+    prev?.addEventListener('click', () => go(-1));
+    next?.addEventListener('click', () => go(1));
+
+    carousel.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') { go(-1); e.preventDefault(); }
+      if (e.key === 'ArrowRight') { go(1); e.preventDefault(); }
+    });
+
+    // IntersectionObserver for counter
+    if (counter) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              const idx = Array.from(slides).indexOf(entry.target as HTMLDivElement);
+              if (idx !== -1) counter.textContent = String(idx + 1);
+            }
+          }
+        },
+        { root: track, threshold: 0.5 }
+      );
+      slides.forEach((slide) => observer.observe(slide));
+    }
+  });
+</script>

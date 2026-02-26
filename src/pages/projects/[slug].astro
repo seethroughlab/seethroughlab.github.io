@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { getCollection } from 'astro:content';
+import VideoPlayer from '../../components/VideoPlayer.astro';
+import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -11,38 +12,66 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const { title, client, year, coverImage } = project.data;
+const { title, client, year, coverImage, videoSrc, role, tech } = project.data;
+const { Content } = await render(project);
 ---
 
 <Base title={`${title} — See Through Lab`}>
-  <article class="py-12 max-w-3xl mx-auto">
-    {coverImage && (
-      <div class="aspect-video overflow-hidden mb-8">
+  <article class="py-12">
+    {/* Hero */}
+    {videoSrc ? (
+      <div class="max-w-5xl mx-auto mb-12">
+        <VideoPlayer src={videoSrc} poster={coverImage || undefined} />
+      </div>
+    ) : coverImage ? (
+      <div class="max-w-5xl mx-auto aspect-video overflow-hidden mb-12">
         <img
           src={coverImage}
           alt={title}
           class="w-full h-full object-cover"
         />
       </div>
-    )}
+    ) : null}
 
-    <h1 class="font-serif text-4xl md:text-5xl mb-4">{title}</h1>
+    {/* Metadata header */}
+    <div class="max-w-3xl mx-auto">
+      <h1 class="font-serif text-4xl md:text-5xl mb-4">{title}</h1>
 
-    {(client || year) && (
-      <p class="text-text-muted uppercase tracking-widest text-sm mb-8">
-        {[client, year].filter(Boolean).join(' · ')}
-      </p>
-    )}
+      {(client || year) && (
+        <p class="text-text-muted uppercase tracking-widest text-sm mb-2">
+          {[client, year].filter(Boolean).join(' · ')}
+        </p>
+      )}
 
-    <p class="text-text-muted text-lg mb-12">
-      Full project page coming soon.
-    </p>
+      {role && (
+        <p class="text-text-muted text-sm mb-4">{role}</p>
+      )}
 
-    <a
-      href="/"
-      class="text-text-muted hover:text-text-primary transition-colors duration-200 text-sm uppercase tracking-widest"
-    >
-      &larr; Back to Work
-    </a>
+      {tech.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-12">
+          {tech.map((t) => (
+            <span class="text-xs uppercase tracking-wider text-text-muted border border-border px-3 py-1 rounded-full">
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* If no tech but we still need spacing before body */}
+      {tech.length === 0 && <div class="mb-12" />}
+
+      {/* MDX body */}
+      <div class="prose">
+        <Content />
+      </div>
+
+      {/* Back navigation */}
+      <a
+        href="/"
+        class="inline-block mt-16 text-text-muted hover:text-text-primary transition-colors duration-200 text-sm uppercase tracking-widest"
+      >
+        &larr; Back to Work
+      </a>
+    </div>
   </article>
 </Base>

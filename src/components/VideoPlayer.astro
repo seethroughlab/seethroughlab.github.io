@@ -1,0 +1,19 @@
+---
+interface Props {
+  src: string;
+  poster?: string;
+}
+
+const { src, poster } = Astro.props;
+---
+
+<div class="aspect-video overflow-hidden bg-black">
+  <video
+    class="w-full h-full object-cover"
+    controls
+    playsinline
+    preload="metadata"
+    src={src}
+    poster={poster}
+  />
+</div>

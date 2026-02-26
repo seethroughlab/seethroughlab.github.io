@@ -1,0 +1,104 @@
+---
+import Base from '../../layouts/Base.astro';
+import InstagramEmbed from '../../components/InstagramEmbed.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const research = await getCollection('research');
+  return research.map((entry) => ({
+    params: { slug: entry.data.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { title, subtitle, status, coverImage, githubUrl, labUrl, instagramPosts } = entry.data;
+const { Content } = await render(entry);
+
+const statusStyles: Record<string, string> = {
+  active: 'border-emerald-800 text-emerald-500',
+  archived: 'border-border text-text-muted',
+  experiment: 'border-amber-800 text-amber-500',
+};
+---
+
+<Base title={`${title} — See Through Lab`}>
+  <article class="py-12">
+    {/* Hero */}
+    {coverImage && (
+      <div class="max-w-5xl mx-auto aspect-video overflow-hidden mb-12">
+        <img
+          src={coverImage}
+          alt={title}
+          class="w-full h-full object-cover"
+        />
+      </div>
+    )}
+
+    <div class="max-w-3xl mx-auto">
+      {/* Status badge */}
+      <span class={`inline-block text-xs uppercase tracking-wider rounded-full border px-3 py-1 mb-4 ${statusStyles[status]}`}>
+        {status}
+      </span>
+
+      <h1 class="font-serif text-4xl md:text-5xl mb-4">{title}</h1>
+
+      {subtitle && (
+        <p class="text-text-muted text-lg mb-6">{subtitle}</p>
+      )}
+
+      {/* Action links */}
+      {(githubUrl || labUrl) && (
+        <div class="flex flex-wrap gap-3 mb-12">
+          {githubUrl && (
+            <a
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 text-sm uppercase tracking-widest text-text-muted border border-border px-4 py-2 rounded-full hover:text-text-primary hover:border-text-muted transition-colors duration-200"
+            >
+              GitHub
+            </a>
+          )}
+          {labUrl && (
+            <a
+              href={labUrl}
+              class="inline-flex items-center gap-2 text-sm uppercase tracking-widest text-text-muted border border-border px-4 py-2 rounded-full hover:text-text-primary hover:border-text-muted transition-colors duration-200"
+            >
+              Launch
+            </a>
+          )}
+        </div>
+      )}
+
+      {/* Spacing when no action links */}
+      {!githubUrl && !labUrl && <div class="mb-12" />}
+
+      {/* MDX body */}
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+
+    {/* Instagram posts */}
+    {instagramPosts && instagramPosts.length > 0 && (
+      <div class="max-w-5xl mx-auto mt-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {instagramPosts.map((url: string) => (
+            <InstagramEmbed url={url} />
+          ))}
+        </div>
+      </div>
+    )}
+
+    <div class="max-w-3xl mx-auto">
+      {/* Back navigation */}
+      <a
+        href="/research"
+        class="inline-block mt-16 text-text-muted hover:text-text-primary transition-colors duration-200 text-sm uppercase tracking-widest"
+      >
+        &larr; Back to Research
+      </a>
+    </div>
+  </article>
+</Base>

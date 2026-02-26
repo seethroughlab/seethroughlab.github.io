@@ -1,0 +1,36 @@
+---
+import Base from '../../layouts/Base.astro';
+import ResearchCard from '../../components/ResearchCard.astro';
+import { getCollection } from 'astro:content';
+
+const research = await getCollection('research');
+
+// Sort by status (active → experiment → archived), then alphabetical
+const statusOrder: Record<string, number> = { active: 0, experiment: 1, archived: 2 };
+research.sort((a, b) => {
+  const statusDiff = statusOrder[a.data.status] - statusOrder[b.data.status];
+  if (statusDiff !== 0) return statusDiff;
+  return a.data.title.localeCompare(b.data.title);
+});
+---
+
+<Base title="Research — See Through Lab">
+  <div class="py-12">
+    <div class="mb-12">
+      <h1 class="font-serif text-4xl md:text-5xl mb-4">Research</h1>
+      <p class="text-text-muted text-lg">Ongoing projects, tools, and experiments.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {research.map((entry) => (
+        <ResearchCard
+          title={entry.data.title}
+          slug={entry.data.slug}
+          subtitle={entry.data.subtitle}
+          status={entry.data.status}
+          coverImage={entry.data.coverImage}
+        />
+      ))}
+    </div>
+  </div>
+</Base>

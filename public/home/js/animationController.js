@@ -4,9 +4,10 @@
  */
 
 export class AnimationController {
-    constructor(renderer, canvas) {
+    constructor(renderer, canvas, bgRenderer) {
         this.renderer = renderer;
         this.canvas = canvas;
+        this.bgRenderer = bgRenderer || null;
         this.uniforms = renderer.getUniforms();
 
         this.isRunning = false;
@@ -120,6 +121,15 @@ export class AnimationController {
         // Update canvas CSS size to match container
         this.canvas.style.width = `${rect.width}px`;
         this.canvas.style.height = `${rect.height}px`;
+
+        // Resize background canvas to full viewport
+        if (this.bgRenderer) {
+            const bgW = window.innerWidth * dpr;
+            const bgH = window.innerHeight * dpr;
+            this.bgRenderer.resize(bgW, bgH);
+            this.bgRenderer.canvas.style.width = `${window.innerWidth}px`;
+            this.bgRenderer.canvas.style.height = `${window.innerHeight}px`;
+        }
     }
 
     /**
@@ -173,7 +183,12 @@ export class AnimationController {
         this.uniforms.setNoiseParams(this.currentNoiseScale, this.currentNoiseStrength);
         this.uniforms.setDisplacement(this.currentDisplacement);
 
-        // Render
+        // Render background CRT effect
+        if (this.bgRenderer) {
+            this.bgRenderer.render(deltaTime);
+        }
+
+        // Render logo
         this.renderer.render();
 
         // Continue loop

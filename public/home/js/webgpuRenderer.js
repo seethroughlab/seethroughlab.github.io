@@ -11,7 +11,6 @@ export class WebGPURenderer {
         this.device = null;
         this.context = null;
         this.pipeline = null;
-        this.backgroundPipeline = null;
         this.uniformBindGroup = null;
         this.geometryBuffers = [];
         this.uniforms = null;
@@ -55,21 +54,19 @@ export class WebGPURenderer {
      * Load shaders from files
      */
     async loadShaders() {
-        const [vertexShaderCode, fragmentShaderCode, bgVertexShaderCode, bgFragmentShaderCode] = await Promise.all([
+        const [vertexShaderCode, fragmentShaderCode] = await Promise.all([
             fetch('/home/shaders/logo.vert.wgsl').then(r => r.text()),
             fetch('/home/shaders/logo.frag.wgsl').then(r => r.text()),
-            fetch('/home/shaders/background.vert.wgsl').then(r => r.text()),
-            fetch('/home/shaders/background.frag.wgsl').then(r => r.text())
         ]);
 
-        return { vertexShaderCode, fragmentShaderCode, bgVertexShaderCode, bgFragmentShaderCode };
+        return { vertexShaderCode, fragmentShaderCode };
     }
 
     /**
      * Create render pipeline
      */
     async createPipeline() {
-        const { vertexShaderCode, fragmentShaderCode, bgVertexShaderCode, bgFragmentShaderCode } = await this.loadShaders();
+        const { vertexShaderCode, fragmentShaderCode } = await this.loadShaders();
 
         // Create shader modules
         const vertexShaderModule = this.device.createShaderModule({
@@ -160,41 +157,7 @@ export class WebGPURenderer {
         // Create bind group
         this.uniformBindGroup = this.uniforms.createBindGroup(bindGroupLayout);
 
-        // --- Create Background Pipeline ---
-        const bgVertexShaderModule = this.device.createShaderModule({
-            label: 'Background Vertex Shader',
-            code: bgVertexShaderCode,
-        });
-
-        const bgFragmentShaderModule = this.device.createShaderModule({
-            label: 'Background Fragment Shader',
-            code: bgFragmentShaderCode,
-        });
-
-        this.backgroundPipeline = this.device.createRenderPipeline({
-            label: 'Background Render Pipeline',
-            layout: pipelineLayout, // Use same layout (shares uniforms)
-            vertex: {
-                module: bgVertexShaderModule,
-                entryPoint: 'main',
-                buffers: [], // No vertex buffers needed (fullscreen triangle)
-            },
-            fragment: {
-                module: bgFragmentShaderModule,
-                entryPoint: 'main',
-                targets: [
-                    {
-                        format: this.format,
-                    },
-                ],
-            },
-            primitive: {
-                topology: 'triangle-list',
-                cullMode: 'none',
-            },
-        });
-
-        console.log('Render pipelines created');
+        console.log('Render pipeline created');
     }
 
     /**
@@ -247,7 +210,7 @@ export class WebGPURenderer {
      * Render frame
      */
     render() {
-        if (!this.device || !this.pipeline || !this.backgroundPipeline) return;
+        if (!this.device || !this.pipeline) return;
 
         // Update uniforms
         this.uniforms.writeToBuffer();
@@ -263,19 +226,14 @@ export class WebGPURenderer {
             colorAttachments: [
                 {
                     view: textureView,
-                    clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
+                    clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 0.0 },
                     loadOp: 'clear',
                     storeOp: 'store',
                 },
             ],
         });
 
-        // --- RENDER BACKGROUND FIRST ---
-        renderPass.setPipeline(this.backgroundPipeline);
-        renderPass.setBindGroup(0, this.uniformBindGroup);
-        renderPass.draw(3, 1, 0, 0); // Draw fullscreen triangle
-
-        // --- RENDER LOGO ON TOP ---
+        // --- RENDER LOGO ---
         renderPass.setPipeline(this.pipeline);
         renderPass.setBindGroup(0, this.uniformBindGroup);
 

@@ -7,6 +7,7 @@ import { checkWebGPUSupport } from './utils.js';
 import { loadGeometryData } from './geometry-data.js';
 import { WebGPURenderer } from './webgpuRenderer.js';
 import { AnimationController } from './animationController.js';
+import { BackgroundRenderer } from './backgroundRenderer.js';
 import { AudioSystem } from './audioSystem.js';
 import { MouseMelody } from './mouseMelody.js';
 
@@ -29,10 +30,12 @@ function getGeometryStats(buffers) {
 class App {
     constructor() {
         this.canvas = document.getElementById('canvas');
+        this.bgCanvas = document.getElementById('bg-canvas');
         this.loadingEl = document.getElementById('loading');
         this.errorEl = document.getElementById('error');
 
         this.renderer = null;
+        this.bgRenderer = null;
         this.animationController = null;
         this.audioSystem = null;
         this.mouseMelody = null;
@@ -77,10 +80,20 @@ class App {
             // Upload geometry
             this.renderer.uploadGeometry(buffers);
 
+            // Initialize background renderer (shares device)
+            if (this.bgCanvas) {
+                this.bgRenderer = new BackgroundRenderer(
+                    this.bgCanvas,
+                    this.renderer.device,
+                    this.renderer.format
+                );
+                await this.bgRenderer.initialize();
+            }
+
             this.showLoading('Starting animation...');
 
             // Initialize animation controller
-            this.animationController = new AnimationController(this.renderer, this.canvas);
+            this.animationController = new AnimationController(this.renderer, this.canvas, this.bgRenderer);
 
             // Setup ripple effects on click
             this.setupRippleEffects();
@@ -270,6 +283,10 @@ class App {
     destroy() {
         if (this.animationController) {
             this.animationController.stop();
+        }
+
+        if (this.bgRenderer) {
+            this.bgRenderer.destroy();
         }
 
         if (this.renderer) {

@@ -15,8 +15,8 @@ struct Uniforms {
     rippleStrength: f32,
     scalePulse: f32,
     parallaxStrength: f32,
-    padding1: f32,
-    padding2: f32,
+    resolutionX: f32,
+    resolutionY: f32,
 }
 
 struct FragmentInput {
@@ -40,8 +40,9 @@ fn main(input: FragmentInput) -> @location(0) vec4<f32> {
     let scanline = sin(screenPos.y * scanlineFreq) * scanlineIntensity + (1.0 - scanlineIntensity);
 
     // CRT curvature vignette - darker at edges
-    let screenCenter = vec2<f32>(960.0, 540.0);
-    let distFromCenter = length(screenPos - screenCenter) / 1000.0;
+    let screenCenter = vec2<f32>(uniforms.resolutionX * 0.5, uniforms.resolutionY * 0.5);
+    let halfDiag = length(screenCenter);
+    let distFromCenter = length(screenPos - screenCenter) / halfDiag;
     let vignette = 1.0 - (distFromCenter * distFromCenter * 0.6);
 
     // RGB phosphor glow - color separation

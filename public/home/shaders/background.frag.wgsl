@@ -26,36 +26,43 @@ struct FragmentInput {
 
 @group(0) @binding(0) var<uniform> uniforms: Uniforms;
 
+// Simple hash for noise
+fn hash(p: vec2<f32>) -> f32 {
+    let h = dot(p, vec2<f32>(127.1, 311.7));
+    return fract(sin(h) * 43758.5453123);
+}
+
 @fragment
 fn main(input: FragmentInput) -> @location(0) vec4<f32> {
-    // Start with black background
-    var finalColor = vec3<f32>(0.0, 0.0, 0.0);
-
     let screenPos = input.position.xy;
-
-    // --- CRT / SCANLINE EFFECT ---
-    // Scanlines - horizontal lines across the entire screen
-    let scanlineFreq = 600.0;
-    let scanlineIntensity = 0.5; // More visible on dark background
-    let scanline = sin(screenPos.y * scanlineFreq) * scanlineIntensity + (1.0 - scanlineIntensity);
-
-    // CRT curvature vignette - darker at edges
     let screenCenter = vec2<f32>(uniforms.resolutionX * 0.5, uniforms.resolutionY * 0.5);
     let halfDiag = length(screenCenter);
+
+    // --- SCANLINES ---
+    let scanlineFreq = 3.0; // Per-pixel frequency for visible lines
+    let scanlineIntensity = 0.4;
+    let scanline = sin(screenPos.y * scanlineFreq) * scanlineIntensity + (1.0 - scanlineIntensity);
+
+    // --- VIGNETTE ---
     let distFromCenter = length(screenPos - screenCenter) / halfDiag;
-    let vignette = 1.0 - (distFromCenter * distFromCenter * 0.6);
+    let vignette = 1.0 - (distFromCenter * distFromCenter * 0.8);
 
-    // RGB phosphor glow - color separation
-    let phosphorOffset = sin(screenPos.x * 2.0 + uniforms.time * 0.5) * 0.15;
-    let r = scanline * vignette * (0.02 + phosphorOffset * 0.01);
-    let g = scanline * vignette * 0.01;
-    let b = scanline * vignette * (0.02 - phosphorOffset * 0.01);
+    // --- PHOSPHOR RGB SUB-PIXELS ---
+    let phosphorOffset = sin(screenPos.x * 2.0 + uniforms.time * 0.5) * 0.3;
+    let base = 0.06; // Base glow brightness
+    let r = scanline * vignette * (base + phosphorOffset * 0.03);
+    let g = scanline * vignette * (base * 0.5);
+    let b = scanline * vignette * (base - phosphorOffset * 0.03);
 
-    finalColor = vec3<f32>(r, g, b);
+    var finalColor = vec3<f32>(r, g, b);
 
-    // Flicker effect
-    let flicker = sin(uniforms.time * 60.0) * 0.04 + 0.96;
+    // --- FILM GRAIN / NOISE ---
+    let grain = hash(screenPos + vec2<f32>(uniforms.time * 100.0, uniforms.time * 73.0));
+    finalColor += (grain - 0.5) * 0.02;
+
+    // --- FLICKER ---
+    let flicker = sin(uniforms.time * 60.0) * 0.06 + 0.94;
     finalColor *= flicker;
 
-    return vec4<f32>(finalColor, 1.0);
+    return vec4<f32>(max(finalColor, vec3<f32>(0.0)), 1.0);
 }

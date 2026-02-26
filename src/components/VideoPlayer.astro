@@ -5,6 +5,7 @@ interface Props {
 }
 
 const { src, poster } = Astro.props;
+const isHLS = src.endsWith(".m3u8");
 ---
 
 <div class="aspect-video overflow-hidden bg-black">
@@ -13,7 +14,40 @@ const { src, poster } = Astro.props;
     controls
     playsinline
     preload="metadata"
-    src={src}
     poster={poster}
+    data-src={isHLS ? src : undefined}
+    src={isHLS ? undefined : src}
   />
 </div>
+
+{isHLS && (
+  <script>
+    function initHLS() {
+      document.querySelectorAll("video[data-src]").forEach((video) => {
+        const src = video.dataset.src;
+        if (!src || video.dataset.hlsInit) return;
+        video.dataset.hlsInit = "true";
+
+        if (video.canPlayType("application/vnd.apple.mpegurl")) {
+          // Safari: native HLS
+          video.src = src;
+        } else if (window.Hls && window.Hls.isSupported()) {
+          const hls = new window.Hls();
+          hls.loadSource(src);
+          hls.attachMedia(video);
+        }
+      });
+    }
+
+    // Load hls.js for non-Safari browsers
+    const testVideo = document.createElement("video");
+    if (!testVideo.canPlayType("application/vnd.apple.mpegurl")) {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js";
+      script.onload = initHLS;
+      document.head.appendChild(script);
+    } else {
+      initHLS();
+    }
+  </script>
+)}

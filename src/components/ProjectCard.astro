@@ -1,14 +1,17 @@
 ---
+import VideoPreview from './VideoPreview.astro';
+
 interface Props {
   title: string;
   slug: string;
   client: string;
   year?: number;
   coverImage: string;
+  videoSrc?: string;
   index: number;
 }
 
-const { title, slug, client, year, coverImage, index } = Astro.props;
+const { title, slug, client, year, coverImage, videoSrc, index } = Astro.props;
 
 // Alternate layout: even rows = image left, odd rows = image right
 const imageFirst = index % 2 === 0;
@@ -25,7 +28,9 @@ const imageFirst = index % 2 === 0;
   ]}>
     {/* Image panel */}
     <div class="aspect-video overflow-hidden bg-surface md:[direction:ltr]">
-      {coverImage ? (
+      {videoSrc ? (
+        <VideoPreview src={videoSrc} poster={coverImage} alt={title} />
+      ) : coverImage ? (
         <img
           src={coverImage}
           alt={title}

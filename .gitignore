@@ -20,4 +20,6 @@ Thumbs.db
 
 # Migration artifacts
 raw/
+processed/
 migration-report.json
+*accessKeys.csv

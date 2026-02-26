@@ -126,7 +126,7 @@ export class AnimationController {
         if (this.bgRenderer) {
             const bgW = window.innerWidth * dpr;
             const bgH = window.innerHeight * dpr;
-            this.bgRenderer.resize(bgW, bgH);
+            this.bgRenderer.resize(bgW, bgH, dpr);
             this.bgRenderer.canvas.style.width = `${window.innerWidth}px`;
             this.bgRenderer.canvas.style.height = `${window.innerHeight}px`;
         }

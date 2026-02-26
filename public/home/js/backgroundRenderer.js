@@ -15,6 +15,7 @@ export class BackgroundRenderer {
         this.time = 0;
         this.resolutionX = 1;
         this.resolutionY = 1;
+        this.dpr = 1;
     }
 
     /**
@@ -90,11 +91,12 @@ export class BackgroundRenderer {
     /**
      * Resize the background canvas
      */
-    resize(width, height) {
+    resize(width, height, dpr) {
         this.canvas.width = width;
         this.canvas.height = height;
         this.resolutionX = width;
         this.resolutionY = height;
+        this.dpr = dpr || 1;
     }
 
     /**
@@ -108,6 +110,7 @@ export class BackgroundRenderer {
         // Write uniforms — only time (offset 0) and resolution (offsets 56, 60) matter
         const data = new Float32Array(16);
         data[0] = this.time;       // time
+        data[1] = this.dpr;        // dpr (device pixel ratio)
         data[14] = this.resolutionX; // resolutionX (was padding1)
         data[15] = this.resolutionY; // resolutionY (was padding2)
 

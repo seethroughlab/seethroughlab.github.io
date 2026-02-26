@@ -13,5 +13,11 @@
     "@tailwindcss/vite": "^4.2.1",
     "astro": "^5.17.1",
     "tailwindcss": "^4.2.1"
+  },
+  "devDependencies": {
+    "fs-extra": "^11.3.3",
+    "playwright": "^1.58.2",
+    "slugify": "^1.6.6",
+    "turndown": "^7.2.2"
   }
 }

@@ -1,0 +1,48 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.data.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { title, client, year, coverImage } = project.data;
+---
+
+<Base title={`${title} — See Through Lab`}>
+  <article class="py-12 max-w-3xl mx-auto">
+    {coverImage && (
+      <div class="aspect-video overflow-hidden mb-8">
+        <img
+          src={coverImage}
+          alt={title}
+          class="w-full h-full object-cover"
+        />
+      </div>
+    )}
+
+    <h1 class="font-serif text-4xl md:text-5xl mb-4">{title}</h1>
+
+    {(client || year) && (
+      <p class="text-text-muted uppercase tracking-widest text-sm mb-8">
+        {[client, year].filter(Boolean).join(' · ')}
+      </p>
+    )}
+
+    <p class="text-text-muted text-lg mb-12">
+      Full project page coming soon.
+    </p>
+
+    <a
+      href="/"
+      class="text-text-muted hover:text-text-primary transition-colors duration-200 text-sm uppercase tracking-widest"
+    >
+      &larr; Back to Work
+    </a>
+  </article>
+</Base>

@@ -1,0 +1,54 @@
+---
+interface Props {
+  title: string;
+  slug: string;
+  client: string;
+  year?: number;
+  coverImage: string;
+  index: number;
+}
+
+const { title, slug, client, year, coverImage, index } = Astro.props;
+
+// Alternate layout: even rows = image left, odd rows = image right
+const imageFirst = index % 2 === 0;
+---
+
+<a
+  href={`/projects/${slug}`}
+  class="group block"
+>
+  {/* Mobile: always image on top */}
+  <div class:list={[
+    'grid grid-cols-1 md:grid-cols-2',
+    !imageFirst && 'md:[direction:rtl]',
+  ]}>
+    {/* Image panel */}
+    <div class="aspect-video overflow-hidden bg-surface md:[direction:ltr]">
+      {coverImage ? (
+        <img
+          src={coverImage}
+          alt={title}
+          class="w-full h-full object-cover transition-[filter] duration-300 group-hover:brightness-110"
+          loading="lazy"
+        />
+      ) : (
+        <div class="w-full h-full bg-surface" />
+      )}
+    </div>
+
+    {/* Title panel */}
+    <div class="bg-surface flex items-center justify-center p-8 md:p-12 md:[direction:ltr]">
+      <div class="text-center">
+        <h2 class="font-serif text-card-title leading-tight text-text-muted transition-colors duration-300 group-hover:text-text-primary">
+          {title}
+        </h2>
+        {(client || year) && (
+          <p class="text-text-muted text-sm mt-3 uppercase tracking-widest">
+            {[client, year].filter(Boolean).join(' · ')}
+          </p>
+        )}
+      </div>
+    </div>
+  </div>
+</a>

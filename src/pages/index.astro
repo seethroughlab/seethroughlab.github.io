@@ -1,7 +1,29 @@
 ---
 import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const projects = await getCollection('projects');
+
+// Sort: featured first, then by order, then alphabetical
+projects.sort((a, b) => {
+  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+  if (a.data.order !== b.data.order) return a.data.order - b.data.order;
+  return a.data.title.localeCompare(b.data.title);
+});
 ---
 
 <Base>
-  <p class="text-text-muted text-center py-16">Loading projects...</p>
+  <div class="flex flex-col gap-16 md:gap-20 py-8">
+    {projects.map((project, i) => (
+      <ProjectCard
+        title={project.data.title}
+        slug={project.data.slug}
+        client={project.data.client}
+        year={project.data.year}
+        coverImage={project.data.coverImage}
+        index={i}
+      />
+    ))}
+  </div>
 </Base>

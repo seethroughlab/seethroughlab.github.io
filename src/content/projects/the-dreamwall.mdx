@@ -1,0 +1,38 @@
+---
+title: "The Dreamwall"
+slug: "the-dreamwall"
+client: "" # TODO: add client
+year: 2024 # TODO: verify
+tags: [] # TODO: add tags
+coverImage: "/images/projects/the-dreamwall/the-dreamwall-01.png"
+videoSrc: ""
+featured: false
+order: 2
+role: "" # TODO: add role
+tech: [] # TODO: add tech
+---
+
+{/* Scraped from https://www.seethroughlab.com/the-dreamwall — review and clean up */}
+
+00:00
+
+01:00
+
+% buffered00:00
+
+For _Dreamwall_, I led the development of the behind-the-scenes system that powers its real-time generative artwork. Built for AllianceBernstein’s Hudson Yards office and directed by Emil Lanne, the piece required not just beautiful AI-generated images, but a way to continuously create them in a way that felt intentional and art-directed. I built a system that communicates with the Stability AI API to generate new images every minute, indefinitely—each one based on carefully curated prompt structures shaped by human aesthetic preferences.
+
+To achieve consistency and predictability from a stochastic system, I first created a “mad libs”-style prompt generator to explore thousands of image combinations. I then built a lightweight rating interface that allowed the creative director to identify successful outputs. This data fed back into the system, allowing us to define templates that consistently produced the desired visual qualities. I also worked with Jiangnan Hou to develop the TouchDesigner system that drives the installation itself—pulling in new images, managing transitions, and ensuring smooth real-time playback on a large-scale video wall.
+
+The result is a living installation that blends creative direction with generative chaos—a stream of AI hallucinations shaped by human feedback, running endlessly and uniquely in real time.
+
+**SEPTEMBER 2024**
+
+**Client  
+**Alliance Bernstein / Gensler DXD
+
+**Role  
+**Developer
+
+**Tech  
+**TouchDesigner, StabilityAI API, Node.js, MongoDB

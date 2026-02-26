@@ -1,5 +1,23 @@
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
-node_modules
+# Node
+node_modules/
+npm-debug.log*
+
+# Astro
+dist/
+.astro/
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Migration artifacts
+raw/
+migration-report.json

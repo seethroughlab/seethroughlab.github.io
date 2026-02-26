@@ -14,18 +14,17 @@ function isActive(href: string): boolean {
 }
 ---
 
-<header class="pt-12 pb-8 md:pt-16 md:pb-12">
-  {/* Logo */}
-  <a href="/" class="block mb-4">
-    <h1 class="logo-text select-none" aria-label="See Through Lab">
-      SEE<br />THROUGH<br />LAB
-    </h1>
+<header class="pt-0 pb-8 md:pb-12">
+  {/* WebGPU Logo Header */}
+  <a href="/" class="block" aria-label="See Through Lab">
+    <div id="webgpu-header" class="relative w-full" style="height: 280px;">
+      <canvas id="canvas" class="block w-full h-full" style="touch-action: none;"></canvas>
+      <div id="loading" class="absolute inset-0 flex items-center justify-center bg-bg text-text-muted text-sm z-10 transition-opacity duration-500" style="opacity: 1;">
+        Loading...
+      </div>
+      <div id="error" class="hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-900/10 border border-red-500/50 text-red-400 p-5 rounded-lg max-w-[80%] text-center z-10"></div>
+    </div>
   </a>
-
-  {/* Tagline */}
-  <p class="text-center text-tagline text-text-muted mb-8">
-    Experimental art & technology studio.
-  </p>
 
   {/* Desktop nav */}
   <nav class="hidden md:flex justify-center gap-8" aria-label="Main navigation">
@@ -65,3 +64,5 @@ function isActive(href: string): boolean {
     </nav>
   </details>
 </header>
+
+<script is:inline type="module" src="/home/js/main.js"></script>

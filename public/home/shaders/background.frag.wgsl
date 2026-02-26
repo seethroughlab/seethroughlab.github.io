@@ -39,29 +39,28 @@ fn main(input: FragmentInput) -> @location(0) vec4<f32> {
     let halfDiag = length(screenCenter);
 
     // --- SCANLINES ---
-    let scanlineFreq = 3.0; // Per-pixel frequency for visible lines
-    let scanlineIntensity = 0.4;
-    let scanline = sin(screenPos.y * scanlineFreq) * scanlineIntensity + (1.0 - scanlineIntensity);
+    // Period of ~4px gives clear alternating bright/dark rows
+    let scanline = sin(screenPos.y * 1.5) * 0.35 + 0.65;
 
     // --- VIGNETTE ---
     let distFromCenter = length(screenPos - screenCenter) / halfDiag;
-    let vignette = 1.0 - (distFromCenter * distFromCenter * 0.8);
+    let vignette = 1.0 - (distFromCenter * distFromCenter * 1.0);
 
     // --- PHOSPHOR RGB SUB-PIXELS ---
-    let phosphorOffset = sin(screenPos.x * 2.0 + uniforms.time * 0.5) * 0.3;
-    let base = 0.06; // Base glow brightness
-    let r = scanline * vignette * (base + phosphorOffset * 0.03);
-    let g = scanline * vignette * (base * 0.5);
-    let b = scanline * vignette * (base - phosphorOffset * 0.03);
+    let phosphorWave = sin(screenPos.x * 2.0 + uniforms.time * 0.5);
+    let base = 0.18;
+    let r = scanline * vignette * (base + phosphorWave * 0.06);
+    let g = scanline * vignette * (base * 0.45);
+    let b = scanline * vignette * (base - phosphorWave * 0.06);
 
     var finalColor = vec3<f32>(r, g, b);
 
     // --- FILM GRAIN / NOISE ---
     let grain = hash(screenPos + vec2<f32>(uniforms.time * 100.0, uniforms.time * 73.0));
-    finalColor += (grain - 0.5) * 0.02;
+    finalColor += (grain - 0.5) * 0.04;
 
     // --- FLICKER ---
-    let flicker = sin(uniforms.time * 60.0) * 0.06 + 0.94;
+    let flicker = sin(uniforms.time * 60.0) * 0.08 + 0.92;
     finalColor *= flicker;
 
     return vec4<f32>(max(finalColor, vec3<f32>(0.0)), 1.0);

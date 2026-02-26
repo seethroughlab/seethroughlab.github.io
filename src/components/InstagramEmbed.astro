@@ -1,0 +1,35 @@
+---
+interface Props {
+  url: string;
+}
+
+const { url } = Astro.props;
+
+// Extract shortcode from Instagram URL
+// Handles: instagram.com/p/SHORTCODE/, instagram.com/reel/SHORTCODE/, etc.
+const match = url.match(/instagram\.com\/(?:p|reel)\/([^/?]+)/);
+const shortcode = match ? match[1] : null;
+const embedUrl = shortcode ? `https://www.instagram.com/p/${shortcode}/embed/` : null;
+---
+
+{embedUrl ? (
+  <div class="max-w-[540px] mx-auto">
+    <iframe
+      src={embedUrl}
+      width="540"
+      height="620"
+      frameborder="0"
+      scrolling="no"
+      allowtransparency="true"
+      loading="lazy"
+      class="w-full"
+    ></iframe>
+    <noscript>
+      <a href={url} target="_blank" rel="noopener noreferrer">View on Instagram</a>
+    </noscript>
+  </div>
+) : (
+  <p class="text-text-muted">
+    <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+  </p>
+)}

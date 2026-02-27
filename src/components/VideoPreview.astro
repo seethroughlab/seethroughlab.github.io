@@ -3,12 +3,13 @@ interface Props {
   src: string;
   poster: string;
   alt: string;
+  startTime?: number;
 }
 
-const { src, poster, alt } = Astro.props;
+const { src, poster, alt, startTime } = Astro.props;
 ---
 
-<div class="video-preview relative w-full h-full" data-hls-src={src}>
+<div class="video-preview relative w-full h-full" data-hls-src={src} data-start-time={startTime || undefined}>
   <img
     src={poster}
     alt={alt}
@@ -81,14 +82,17 @@ const { src, poster, alt } = Astro.props;
     if (container.dataset.active === "true") return;
     container.dataset.active = "true";
 
+    const startTime = parseFloat(container.dataset.startTime || "0");
+
     if (isNativeHLS()) {
       video.src = src;
+      if (startTime) video.currentTime = startTime;
       video.addEventListener("playing", () => fadeIn(video), { once: true });
       try { await video.play(); } catch { /* autoplay blocked */ }
     } else {
       const HlsLib = await loadHlsLib();
       if (HlsLib && HlsLib.isSupported()) {
-        const hls = new HlsLib({ capLevelToPlayerSize: true });
+        const hls = new HlsLib({ capLevelToPlayerSize: true, startPosition: startTime || -1 });
         (container as any)._hls = hls;
         hls.loadSource(src);
         hls.attachMedia(video);

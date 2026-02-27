@@ -11,6 +11,7 @@ const projects = defineCollection({
     tags: z.array(z.string()).default([]),
     coverImage: z.string().default(''),
     videoSrc: z.string().default(''),
+    videoStartTime: z.number().default(0),
     featured: z.boolean().default(false),
     order: z.number().default(99),
     role: z.string().default(''),

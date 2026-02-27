@@ -90,6 +90,37 @@
     display: none;
   }
 
+  /* CRT overlay for project card thumbnails */
+  .crt-overlay {
+    position: relative;
+  }
+
+  .crt-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 2px,
+        rgba(0, 0, 0, 0.3) 2px,
+        rgba(0, 0, 0, 0.3) 4px
+      ),
+      radial-gradient(
+        ellipse at center,
+        transparent 40%,
+        rgba(0, 0, 0, 0.6) 100%
+      );
+    transition: opacity 300ms;
+  }
+
+  .group:hover .crt-overlay::after {
+    opacity: 0.6;
+  }
+
   /* Chromatic aberration logo class */
   .logo-text {
     font-size: clamp(3rem, 10vw, 7rem);

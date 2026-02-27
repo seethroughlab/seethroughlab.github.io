@@ -8,10 +8,11 @@ interface Props {
   year?: number;
   coverImage: string;
   videoSrc?: string;
+  videoStartTime?: number;
   index: number;
 }
 
-const { title, slug, client, year, coverImage, videoSrc, index } = Astro.props;
+const { title, slug, client, year, coverImage, videoSrc, videoStartTime, index } = Astro.props;
 
 // Alternate layout: even rows = image left, odd rows = image right
 const imageFirst = index % 2 === 0;
@@ -27,9 +28,9 @@ const imageFirst = index % 2 === 0;
     !imageFirst && 'md:[direction:rtl]',
   ]}>
     {/* Image panel */}
-    <div class="aspect-video overflow-hidden bg-surface md:[direction:ltr]">
+    <div class="crt-overlay aspect-video overflow-hidden bg-surface md:[direction:ltr]">
       {videoSrc ? (
-        <VideoPreview src={videoSrc} poster={coverImage} alt={title} />
+        <VideoPreview src={videoSrc} poster={coverImage} alt={title} startTime={videoStartTime} />
       ) : coverImage ? (
         <img
           src={coverImage}

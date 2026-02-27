@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Contact — See Through Lab">
+  <div class="py-12 max-w-3xl mx-auto">
+    <h1 class="font-serif text-4xl md:text-5xl mb-6">Contact</h1>
+
+    <p class="text-text-muted text-lg mb-12">
+      Get in touch for project inquiries, collaborations, or teaching opportunities.
+    </p>
+
+    <div class="flex flex-wrap gap-3">
+      <a
+        id="email-link"
+        href="#"
+        class="inline-flex items-center text-sm uppercase tracking-widest text-text-muted border border-border px-4 py-2 rounded-full hover:text-text-primary hover:border-text-muted transition-colors duration-200 min-h-[44px]"
+      >
+        Email
+      </a>
+      <a
+        href="https://linkedin.com/in/jeffrey-crouse"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center text-sm uppercase tracking-widest text-text-muted border border-border px-4 py-2 rounded-full hover:text-text-primary hover:border-text-muted transition-colors duration-200 min-h-[44px]"
+      >
+        LinkedIn
+      </a>
+      <a
+        href="https://github.com/seethroughlab"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center text-sm uppercase tracking-widest text-text-muted border border-border px-4 py-2 rounded-full hover:text-text-primary hover:border-text-muted transition-colors duration-200 min-h-[44px]"
+      >
+        GitHub
+      </a>
+      <a
+        href="https://instagram.com/seethroughlab"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center text-sm uppercase tracking-widest text-text-muted border border-border px-4 py-2 rounded-full hover:text-text-primary hover:border-text-muted transition-colors duration-200 min-h-[44px]"
+      >
+        Instagram
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function() {
+      var a = 'jeff';
+      var b = 'seethroughlab';
+      var c = '.com';
+      var addr = a + '@' + b + c;
+      var el = document.getElementById('email-link');
+      if (el) {
+        el.href = 'mailto:' + addr;
+        el.textContent = addr;
+      }
+    })();
+  </script>
+</Base>

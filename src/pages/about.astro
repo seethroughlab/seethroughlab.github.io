@@ -11,46 +11,155 @@ const skills = [
   'WebGL / Three.js',
   'Arduino',
 ];
+
+const services = [
+  'Interactive Installations & Experiential',
+  'Real-Time Graphics & Live Visuals',
+  'Creative Prototyping & R&D',
+  'Workshops & Technical Consulting',
+];
+
+// Fetch client/agency list from published Google Sheet at build time
+function parseCSV(text: string): string[][] {
+  const rows: string[][] = [];
+  const lines = text.split('\n');
+  for (const line of lines) {
+    const row: string[] = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (inQuotes) {
+        if (ch === '"' && line[i + 1] === '"') {
+          current += '"';
+          i++;
+        } else if (ch === '"') {
+          inQuotes = false;
+        } else {
+          current += ch;
+        }
+      } else if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === ',') {
+        row.push(current.trim());
+        current = '';
+      } else {
+        current += ch;
+      }
+    }
+    row.push(current.trim());
+    rows.push(row);
+  }
+  return rows;
+}
+
+const excludeNames = new Set([
+  '', 'n/a', 'self-directed', 'self directed',
+]);
+
+// Normalize messy spreadsheet entries to clean display names
+const nameNormalization: Record<string, string> = {
+  // Agencies
+  'Tool of NA': 'Tool',
+  'Reconstrukt': 'Reconstrukt',
+  'Kunsten Museum of Modern Art, Denmar': 'Kunsten Museum',
+  'The Mill, Lisbon': 'The Mill',
+  // Clients — split compound entries
+  'American Airlines/British Airways': 'American Airlines',
+  'Intel x SMS audio': 'Intel',
+  'Citibank/No Kid Hungry': 'Citibank',
+  'New Museum/Calvin Klein': 'New Museum',
+  'NOTMC (New Orleans Tourism Marketing Corporation)': 'New Orleans Tourism',
+  'Aaron Koblin+Ben Tricklebank': 'Aaron Koblin',
+  'GiantSpoon/GlassEye': 'Giant Spoon',
+  'University of Daton': 'University of Dayton',
+  'Pierre Huyghe Studio': 'Pierre Huyghe',
+  'Pierre Huyghe': 'Pierre Huyghe',
+  'AmEx/NBA': 'American Express',
+};
+
+function normalizeName(name: string): string {
+  const trimmed = name.trim();
+  return nameNormalization[trimmed] ?? trimmed;
+}
+
+let clients: string[] = [];
+let agencies: string[] = [];
+
+try {
+  const res = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQFT-Uwc8rWouTYKCpRiIRCu75r1P9KlJVqt0zFa1N5hHw85P5RoKmd25KK2xuicKdJReuN0ydoj0SJ/pub?output=csv');
+  const csv = await res.text();
+  const rows = parseCSV(csv);
+  const headers = rows[0];
+  const agencyIdx = headers.indexOf('Agency');
+  const clientIdx = headers.indexOf('Client');
+
+  const clientSet = new Set<string>();
+  const agencySet = new Set<string>();
+
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i];
+    const rawClient = (row[clientIdx] ?? '').trim();
+    const rawAgency = (row[agencyIdx] ?? '').trim();
+
+    const client = normalizeName(rawClient);
+    const agency = normalizeName(rawAgency);
+
+    if (!excludeNames.has(client.toLowerCase())) {
+      clientSet.add(client);
+    }
+    if (!excludeNames.has(agency.toLowerCase())) {
+      agencySet.add(agency);
+    }
+  }
+
+  clients = [...clientSet].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+  agencies = [...agencySet].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+} catch (e) {
+  // Fallback: build continues without client/agency data
+  console.warn('Failed to fetch client data from Google Sheets:', e);
+}
+
+const linkClass = 'inline-flex items-center text-sm uppercase tracking-widest text-text-muted border border-border px-4 py-2 rounded-full hover:text-text-primary hover:border-text-muted transition-colors duration-200 min-h-[44px]';
 ---
 
 <Base title="About — See Through Lab">
   <div class="py-12 max-w-3xl mx-auto">
     <h1 class="font-serif text-4xl md:text-5xl mb-12">About</h1>
 
-    {/* Headshot */}
-    <div class="mb-12">
-      <img
-        src="/images/headshot.jpg"
-        alt="Jeff Crouse"
-        class="w-full md:max-w-[400px] rounded"
-      />
-    </div>
-
-    {/* Bio */}
-    <!-- TODO: update bio -->
-    <div class="prose mb-12">
-      <p>
-        See Through Lab is the studio practice of Jeff Crouse, a creative technologist
-        working at the intersection of art, design, and emerging technology. With a
-        background spanning interactive installations, live visuals, and generative
-        systems, the studio bridges creative vision and technical execution.
-      </p>
-      <p>
-        The work is built on an iterative process — prototyping fast, testing in
-        context, and refining through collaboration with artists, brands, and cultural
-        institutions. Each project is an opportunity to push a medium forward, whether
-        that means real-time graphics on a 40-foot LED wall or a generative audio
-        tool running in the browser.
-      </p>
-      <p>
-        Jeff has taught creative coding and physical computing at NYU's ITP program
-        and continues to explore how creative tools can be made more accessible
-        through workshops and open-source contributions.
-      </p>
+    {/* Headshot + Bio */}
+    <div class="md:flex md:gap-10 mb-12">
+      <div class="shrink-0 mb-8 md:mb-0">
+        <img
+          src="/images/headshot.jpg"
+          alt="Jeff Crouse"
+          class="w-full md:w-[300px] rounded"
+        />
+      </div>
+      <div class="prose">
+        <p>
+          See Through Lab is the studio practice of Jeff Crouse, a creative technologist
+          working at the intersection of art, design, and emerging technology. With a
+          background spanning interactive installations, live visuals, and generative
+          systems, the studio bridges creative vision and technical execution.
+        </p>
+        <p>
+          The work is built on an iterative process — prototyping fast, testing in
+          context, and refining through collaboration with artists, brands, and cultural
+          institutions. Each project is an opportunity to push a medium forward, whether
+          that means real-time graphics on a 40-foot LED wall or a generative audio
+          tool running in the browser.
+        </p>
+        <p>
+          Jeff has taught creative coding and physical computing at NYU's ITP program
+          and continues to explore how creative tools can be made more accessible
+          through workshops and open-source contributions.
+        </p>
+      </div>
     </div>
 
     {/* Skills & Tools */}
-    <div>
+    <div class="mb-12">
       <h2 class="font-serif text-2xl mb-6">Skills & Tools</h2>
       <div class="flex flex-wrap gap-3">
         {skills.map((skill) => (
@@ -60,5 +169,100 @@ const skills = [
         ))}
       </div>
     </div>
+
+    {/* Services */}
+    <div class="mb-12">
+      <h2 class="font-serif text-2xl mb-6">Services</h2>
+      <div class="flex flex-wrap gap-3">
+        {services.map((service) => (
+          <span class="inline-block text-sm text-text-muted border border-border px-4 py-2 rounded-full">
+            {service}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    {/* Selected Clients & Agencies */}
+    {(clients.length > 0 || agencies.length > 0) && (
+      <div class="mb-12">
+        <h2 class="font-serif text-2xl mb-6">Selected Clients & Agencies</h2>
+        {clients.length > 0 && (
+          <div class="mb-4">
+            <h3 class="text-sm uppercase tracking-widest text-text-muted mb-2">Clients</h3>
+            <p class="text-text-muted leading-relaxed">
+              {clients.join(' · ')}
+            </p>
+          </div>
+        )}
+        {agencies.length > 0 && (
+          <div>
+            <h3 class="text-sm uppercase tracking-widest text-text-muted mb-2">Agencies</h3>
+            <p class="text-text-muted leading-relaxed">
+              {agencies.join(' · ')}
+            </p>
+          </div>
+        )}
+      </div>
+    )}
+
+    {/* Social Links */}
+    <div class="mb-12">
+      <h2 class="font-serif text-2xl mb-6">Links</h2>
+      <div class="flex flex-wrap gap-3">
+        <a
+          href="https://instagram.com/seethroughlab"
+          target="_blank"
+          rel="noopener noreferrer"
+          class={linkClass}
+        >
+          Instagram
+        </a>
+        <a
+          href="https://github.com/seethroughlab"
+          target="_blank"
+          rel="noopener noreferrer"
+          class={linkClass}
+        >
+          GitHub
+        </a>
+        <a
+          href="https://linkedin.com/in/jeffrey-crouse"
+          target="_blank"
+          rel="noopener noreferrer"
+          class={linkClass}
+        >
+          LinkedIn
+        </a>
+      </div>
+    </div>
+
+    {/* Get in Touch CTA */}
+    <div>
+      <h2 class="font-serif text-2xl mb-4">Get in Touch</h2>
+      <p class="text-text-muted mb-6">
+        Interested in working together? Reach out for project inquiries, collaborations, or teaching opportunities.
+      </p>
+      <a
+        id="email-link"
+        href="#"
+        class={linkClass}
+      >
+        Email
+      </a>
+    </div>
   </div>
+
+  <script is:inline>
+    (function() {
+      var a = 'jeff';
+      var b = 'seethroughlab';
+      var c = '.com';
+      var addr = a + '@' + b + c;
+      var el = document.getElementById('email-link');
+      if (el) {
+        el.href = 'mailto:' + addr;
+        el.textContent = addr;
+      }
+    })();
+  </script>
 </Base>

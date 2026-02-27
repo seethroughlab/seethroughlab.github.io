@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import InstagramEmbed from '../../components/InstagramEmbed.astro';
+import VideoGrid from '../../components/VideoGrid.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -12,7 +13,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { title, subtitle, status, coverImage, githubUrl, labUrl, instagramPosts } = entry.data;
+const { title, subtitle, status, coverImage, githubUrl, labUrl, instagramPosts, videos } = entry.data;
 const { Content } = await render(entry);
 
 const statusStyles: Record<string, string> = {
@@ -79,6 +80,13 @@ const statusStyles: Record<string, string> = {
         <Content />
       </div>
     </div>
+
+    {/* Videos */}
+    {videos && videos.length > 0 && (
+      <div class="max-w-5xl mx-auto mt-12">
+        <VideoGrid videos={videos} links={instagramPosts} />
+      </div>
+    )}
 
     {/* Instagram posts */}
     {instagramPosts && instagramPosts.length > 0 && (

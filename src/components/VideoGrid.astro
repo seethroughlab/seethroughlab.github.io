@@ -1,0 +1,142 @@
+---
+interface Props {
+  videos: string[];
+  links?: string[];
+}
+
+const { videos, links = [] } = Astro.props;
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  {videos.map((src, i) => {
+    const poster = src.replace('index.m3u8', 'poster.jpg');
+    const link = links[i];
+    return (
+      <div class="relative aspect-square bg-black overflow-hidden cursor-pointer group" data-video-grid-item>
+        <img
+          src={poster}
+          alt={`Video ${i + 1}`}
+          class="w-full h-full object-contain"
+          loading="lazy"
+        />
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none" data-play-overlay>
+          <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 transition-colors duration-200">
+            <svg class="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
+        </div>
+        {link && (
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="absolute top-2 right-2 z-10 pointer-events-auto opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            data-ig-link
+          >
+            <svg class="w-6 h-6 text-white/60 hover:text-white transition-colors duration-200" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+            </svg>
+          </a>
+        )}
+        <video
+          class="absolute inset-0 w-full h-full object-contain hidden"
+          controls
+          playsinline
+          preload="none"
+          data-hls-src={src}
+        />
+      </div>
+    );
+  })}
+</div>
+
+<script>
+  function initVideoGrid() {
+    let activeHls: any = null;
+    let activeVideo: HTMLVideoElement | null = null;
+
+    function ensureHlsJs(): Promise<void> {
+      if ((window as any).Hls) return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js';
+        script.onload = () => resolve();
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+
+    function stopActive() {
+      if (activeHls) {
+        activeHls.destroy();
+        activeHls = null;
+      }
+      if (activeVideo) {
+        activeVideo.pause();
+        activeVideo.removeAttribute('src');
+        activeVideo.classList.add('hidden');
+        const item = activeVideo.closest('[data-video-grid-item]');
+        if (item) {
+          const img = item.querySelector('img');
+          const overlay = item.querySelector('[data-play-overlay]');
+          if (img) img.classList.remove('hidden');
+          if (overlay) (overlay as HTMLElement).classList.remove('hidden');
+        }
+        activeVideo = null;
+      }
+    }
+
+    document.querySelectorAll('[data-video-grid-item]').forEach((item) => {
+      item.addEventListener('click', async (e) => {
+        // Don't trigger video play when clicking the Instagram link
+        if ((e.target as Element).closest('[data-ig-link]')) return;
+
+        const video = item.querySelector('video') as HTMLVideoElement;
+        if (!video) return;
+
+        // If clicking on a playing video's controls, let it through
+        if (e.target === video) return;
+
+        const src = video.dataset.hlsSrc;
+        if (!src) return;
+
+        // If this video is already active, do nothing
+        if (video === activeVideo) return;
+
+        // Stop any currently playing video
+        stopActive();
+
+        // Hide poster and overlay, show video
+        const img = item.querySelector('img');
+        const overlay = item.querySelector('[data-play-overlay]');
+        if (img) img.classList.add('hidden');
+        if (overlay) (overlay as HTMLElement).classList.add('hidden');
+        video.classList.remove('hidden');
+
+        activeVideo = video;
+
+        await ensureHlsJs();
+
+        if ((window as any).Hls?.isSupported()) {
+          // Chrome, Firefox, Edge — use hls.js
+          const hls = new (window as any).Hls();
+          hls.loadSource(src);
+          hls.attachMedia(video);
+          hls.on((window as any).Hls.Events.MANIFEST_PARSED, () => {
+            video.play();
+          });
+          activeHls = hls;
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          // Safari — native HLS
+          video.src = src;
+          video.play();
+        }
+      });
+    });
+  }
+
+  // Run on initial load and on Astro page transitions
+  initVideoGrid();
+  document.addEventListener('astro:after-swap', initVideoGrid);
+</script>

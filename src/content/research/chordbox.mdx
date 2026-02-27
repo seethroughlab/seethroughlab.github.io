@@ -1,8 +1,14 @@
 ---
 title: ChordBox
 slug: chordbox
-subtitle: Chord progression explorer and songwriting aid
+subtitle: Hardware MIDI chord harmonizer built on Teensy 4.1
 status: active
+githubUrl: https://github.com/seethroughlab/chord_box
+coverImage: /images/research/chordbox/cover.jpg
 ---
 
-More details coming soon.
+ChordBox is a hardware MIDI device that transforms single notes into rich chord voicings. Built around a Teensy 4.1 microcontroller, it sits between a MIDI keyboard and a synthesizer or DAW, intercepting incoming notes and outputting full chords with arpeggiation, strumming, and performance effects.
+
+The interface is a 2x4 button matrix with two rotary encoders and a 240x320 color TFT display. Eight chord voicings — close, drop-2, drop-3, spread, rootless, shell, quartal, and clusters — are selectable alongside eleven performance modes including latch, six arpeggio patterns, harp, strum, roll, and tremolo. The display shows the current root note, chord type, active MIDI notes, and all performance settings in real time.
+
+The firmware is C++ built with PlatformIO. MIDI clock sync supports computer, external host, or internal BPM sources. All settings persist across power cycles via EEPROM. The device is class-compliant USB MIDI — no drivers needed.

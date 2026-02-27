@@ -5,4 +5,6 @@ subtitle: WebGPU shader generation via LLM
 status: experiment
 ---
 
-More details coming soon.
+An experiment in using large language models to generate WebGPU shaders from natural language descriptions. Describe a visual effect in plain English, and the system produces working WGSL shader code that renders it in real time.
+
+Shader code is an interesting test case for LLM generation because the output is immediately visual — you can see whether the model understood your intent without reading a line of code. The project explores the boundary between what LLMs can reliably produce in a highly constrained domain (strict type systems, parallel execution models) and where they break down.

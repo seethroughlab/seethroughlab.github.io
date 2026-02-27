@@ -1,9 +1,14 @@
 ---
 title: Vivid
 slug: vivid
-subtitle: A creative tool for visual expression
+subtitle: Text-first creative coding framework with hot-reloadable C++ and WebGPU
 status: active
 githubUrl: https://github.com/jeffcrouse/vivid
+coverImage: /images/research/vivid/cover.png
 ---
 
-More details coming soon.
+Vivid is a creative coding framework built around the idea that code should be the primary interface for audio-visual work — not node graphs, not timelines, just text. Inspired by TouchDesigner's operator architecture but designed for LLM-assisted development, it uses a chain-based system where C++ operators are composed into rendering pipelines that hot-reload without restarting.
+
+The rendering backend is WebGPU via wgpu-native. Each chain is a sequence of operators — generators, filters, compositors — that process textures, geometry, or audio signals. Chains reference other chains, building complex visual networks from simple components. A built-in editor, node graph, and inspector allow real-time parameter adjustment.
+
+What makes Vivid different is its design for AI-assisted development. The codebase includes MCP (Model Context Protocol) support for Claude Code, so an LLM can directly create operators, modify chain configurations, and iterate on visual output through conversation. The text-first architecture makes this natural — there are no drag-and-drop interfaces that would be opaque to an LLM, just source files.

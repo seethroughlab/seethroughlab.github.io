@@ -1,9 +1,14 @@
 ---
 title: Familiar
 slug: familiar
-subtitle: A personal music library and discovery tool
+subtitle: AI-powered local music player that understands sound, not just metadata
 status: active
 githubUrl: https://github.com/jeffcrouse/familiar
+coverImage: /images/research/familiar/cover.png
 ---
 
-More details coming soon.
+Familiar is a self-hosted music player that uses AI to understand what music actually sounds like, not just what it's tagged as. It builds a semantic map of every track in a library using CLAP (Contrastive Language-Audio Pretraining) embeddings, enabling natural language search — asking for "something that sounds like driving at night" returns results based on sonic similarity, not genre metadata.
+
+The player includes three spatial visualizations: a Mood Grid that plots tracks on energy and valence axes, a Music Map that projects CLAP embeddings into 2D clusters using UMAP, and a 3D Explorer for navigating the library in WebGL. A chat interface exposes 33 AI-powered tools for playlist generation, music discovery, and library analysis.
+
+The backend is Python with FastAPI and SQLite, using librosa for audio feature extraction and the CLAP model for embeddings. The frontend is a React + TypeScript progressive web app. Spotify playlists can be imported, Last.fm scrobbling is built in, and a Subsonic-compatible API enables playback from mobile music apps and CarPlay. Everything runs in Docker.

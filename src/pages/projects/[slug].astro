@@ -7,7 +7,7 @@ import ImageCarousel from '../../components/ImageCarousel.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
-  const IMAGE_RE = /\.(jpe?g|png|gif|webp|avif)$/i;
+  const MEDIA_RE = /\.(jpe?g|png|gif|webp|avif|mp4)$/i;
   const projects = await getCollection('projects');
   const paths = await Promise.all(
     projects.map(async (project) => {
@@ -17,7 +17,7 @@ export async function getStaticPaths() {
       try {
         const files = await readdir(dir);
         images = files
-          .filter((f) => IMAGE_RE.test(f))
+          .filter((f) => MEDIA_RE.test(f))
           .sort()
           .map((f) => `/images/projects/${slug}/${f}`);
       } catch {
@@ -38,9 +38,19 @@ const { Content } = await render(project);
 
 const hasVideo = !!videoSrc;
 const hasCarousel = images.length > 0;
+const carouselImages = hasVideo && coverImage
+  ? images.filter((img) => img !== coverImage)
+  : images;
+
+const ogImage = coverImage || images[0] || (videoSrc
+  ? videoSrc.replace('index.m3u8', 'poster.jpg')
+  : undefined);
+
+const pageDescription = [client, year, role].filter(Boolean).join(' · ')
+  || 'Experimental art & technology studio.';
 ---
 
-<Base title={`${title} — See Through Lab`}>
+<Base title={`${title} — See Through Lab`} description={pageDescription} ogImage={ogImage}>
   <article class="py-12">
     {/* Hero: video > carousel > cover image */}
     {hasVideo ? (
@@ -59,9 +69,9 @@ const hasCarousel = images.length > 0;
       </div>
     ) : null}
 
-    {/* Video projects with images: show carousel below video */}
-    {hasVideo && hasCarousel && (
-      <ImageCarousel images={images} title={title} />
+    {/* Video projects with extra images: show carousel below video */}
+    {hasVideo && carouselImages.length > 0 && (
+      <ImageCarousel images={carouselImages} title={title} />
     )}
 
     {/* Metadata header */}

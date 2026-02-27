@@ -6,18 +6,29 @@ interface Props {
 
 const { images, title } = Astro.props;
 const single = images.length === 1;
+const isVideo = (src: string) => /\.mp4$/i.test(src);
 ---
 
-<div class="carousel" role="region" aria-label={`${title} images`} tabindex="0">
+<div class="carousel" role="region" aria-label={`${title} media`} tabindex="0">
   <div class="carousel-track">
     {images.map((src, i) => (
       <div class="carousel-slide">
-        <img
-          src={src}
-          alt={`${title} — image ${i + 1}`}
-          loading={i === 0 ? "eager" : "lazy"}
-          decoding={i === 0 ? "sync" : "async"}
-        />
+        {isVideo(src) ? (
+          <video
+            src={src}
+            muted
+            loop
+            playsinline
+            preload={i === 0 ? "auto" : "none"}
+          />
+        ) : (
+          <img
+            src={src}
+            alt={`${title} — image ${i + 1}`}
+            loading={i === 0 ? "eager" : "lazy"}
+            decoding={i === 0 ? "sync" : "async"}
+          />
+        )}
       </div>
     ))}
   </div>
@@ -63,7 +74,8 @@ const single = images.length === 1;
     justify-content: center;
     aspect-ratio: 16 / 10;
   }
-  .carousel-slide img {
+  .carousel-slide img,
+  .carousel-slide video {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
@@ -136,20 +148,27 @@ const single = images.length === 1;
       if (e.key === 'ArrowRight') { go(1); e.preventDefault(); }
     });
 
-    // IntersectionObserver for counter
-    if (counter) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
+    // IntersectionObserver for counter + video autoplay
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const idx = Array.from(slides).indexOf(entry.target as HTMLDivElement);
+            if (idx !== -1 && counter) counter.textContent = String(idx + 1);
+          }
+          // Play/pause videos based on visibility
+          const video = (entry.target as HTMLDivElement).querySelector('video');
+          if (video) {
             if (entry.isIntersecting) {
-              const idx = Array.from(slides).indexOf(entry.target as HTMLDivElement);
-              if (idx !== -1) counter.textContent = String(idx + 1);
+              video.play().catch(() => {});
+            } else {
+              video.pause();
             }
           }
-        },
-        { root: track, threshold: 0.5 }
-      );
-      slides.forEach((slide) => observer.observe(slide));
-    }
+        }
+      },
+      { root: track, threshold: 0.5 }
+    );
+    slides.forEach((slide) => observer.observe(slide));
   });
 </script>

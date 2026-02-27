@@ -23,3 +23,8 @@ raw/
 processed/
 migration-report.json
 *accessKeys.csv
+
+# Large media at repo root (should live in raw/ or processed/)
+/*.mp4
+/*.webm
+/*.mp4.part

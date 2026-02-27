@@ -6,12 +6,19 @@ import Footer from '../components/Footer.astro';
 interface Props {
   title?: string;
   description?: string;
+  ogImage?: string;
 }
 
 const {
   title = 'See Through Lab',
   description = 'Experimental art & technology studio.',
+  ogImage,
 } = Astro.props;
+
+const siteUrl = 'https://seethroughlab.com';
+const ogImageUrl = ogImage
+  ? ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`
+  : undefined;
 ---
 
 <!doctype html>
@@ -24,6 +31,11 @@ const {
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    <meta name="twitter:card" content={ogImageUrl ? "summary_large_image" : "summary"} />
   </head>
   <body class="bg-bg text-text-primary font-sans min-h-screen flex flex-col">
     <canvas id="bg-canvas" class="fixed inset-0 w-screen h-screen pointer-events-none" style="z-index: 0;"></canvas>

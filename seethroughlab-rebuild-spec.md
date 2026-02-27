@@ -224,15 +224,46 @@ The simplest approach: serve the raw experiment files from `public/lab/[slug]/in
 
 
 ### About (`/about`)
-- Bio text (MDX)
-- Client logos or list
-- Skills/tools list
-- Headshot optional
+
+MDX-driven page. Content lives in `src/content/about.mdx` (single file, not a collection).
+
+**Sections in order:**
+1. **Headshot** — full-width or large portrait image, placed prominently at top or alongside bio. Store as `public/images/headshot.jpg`. Aspect ratio: square or 4:5 portrait. Responsive: full width on mobile, constrained to ~400px on desktop.
+2. **Bio / personal statement** — prose paragraphs in MDX. Seed from current `seethroughlab.com/about` text as a starting point; marked with a `<!-- TODO: update bio -->` comment in the MDX file so it's easy to find and revise. The current text covers the creative/technical bridge angle, iterative workflow, and teaching background — keep the voice but update for current tools and clients.
+3. **Skills & tools** — a clean, typographically tight list or tag-style display. Not a bulleted list — render as a wrapping set of small labels or a simple comma-separated prose line. Seed with: TouchDesigner, Unreal Engine, Node.js, Python, ComfyUI / Stable Diffusion, Ableton Live, WebGL / Three.js, Arduino / physical computing.
+
+**Layout:** Single column, generous vertical spacing, consistent with the dark minimal aesthetic. No sidebar.
+
+**Frontmatter schema** (`src/content/about.mdx`):
+```yaml
+---
+headshot: "/images/headshot.jpg"
+tools:
+  - TouchDesigner
+  - Unreal Engine
+  - Node.js
+  - Python
+  - ComfyUI / Stable Diffusion
+  - Ableton Live
+  - WebGL / Three.js
+  - Arduino
+---
+```
 
 ### Contact (`/contact`)
-- Email address (obfuscated against scrapers)
-- Links: LinkedIn, GitHub, Instagram, Vimeo (legacy), any others
-- No form
+
+Static Astro page (no MDX needed — content won't change often).
+
+**Content:**
+- Brief one-liner: "Get in touch for project inquiries, collaborations, or teaching opportunities."
+- Email address — obfuscated via inline JS that assembles it at runtime (e.g. split into two vars and concatenated on `DOMContentLoaded`). Never written as a plain string in the HTML source.
+- Four social links displayed as icon + label pairs:
+  - LinkedIn → `linkedin.com/in/jeffrey-crouse`
+  - GitHub → `github.com/seethroughlab`
+  - Instagram → *(add handle)*
+  - Email → triggers the obfuscated address
+
+**Layout:** Centered, minimal. Large enough tap targets (44px min). No form, no CAPTCHA, no third-party scripts beyond what's already on the page.
 
 ---
 
@@ -354,6 +385,7 @@ seethroughlab/
 │   │   └── Footer.astro
 │   ├── content/
 │   │   ├── config.ts              ← Zod schemas
+│   │   ├── about.mdx              ← Single file, not a collection
 │   │   ├── projects/
 │   │   │   ├── dreamwall.mdx
 │   │   │   └── ...
@@ -454,7 +486,7 @@ Then run the video processing pipeline (`scripts/process-video.sh`) on each file
 
 #### About page
 
-Scrape `/about` separately — extract bio text and output as `src/pages/about.mdx` for manual cleanup.
+Scrape `/about` separately — extract bio text and output as `src/content/about.mdx` with a `<!-- TODO: update bio -->` comment and placeholder frontmatter for headshot and tools list. Jeff will update the text and fill in the tools list manually.
 
 #### Caveats / manual steps after scraping
 

@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+
+const skills = [
+  'TouchDesigner',
+  'Unreal Engine',
+  'Node.js',
+  'Python',
+  'ComfyUI / Stable Diffusion',
+  'Ableton Live',
+  'WebGL / Three.js',
+  'Arduino',
+];
+---
+
+<Base title="About — See Through Lab">
+  <div class="py-12 max-w-3xl mx-auto">
+    <h1 class="font-serif text-4xl md:text-5xl mb-12">About</h1>
+
+    {/* Headshot */}
+    <div class="mb-12">
+      <img
+        src="/images/headshot.jpg"
+        alt="Jeff Crouse"
+        class="w-full md:max-w-[400px] rounded"
+      />
+    </div>
+
+    {/* Bio */}
+    <!-- TODO: update bio -->
+    <div class="prose mb-12">
+      <p>
+        See Through Lab is the studio practice of Jeff Crouse, a creative technologist
+        working at the intersection of art, design, and emerging technology. With a
+        background spanning interactive installations, live visuals, and generative
+        systems, the studio bridges creative vision and technical execution.
+      </p>
+      <p>
+        The work is built on an iterative process — prototyping fast, testing in
+        context, and refining through collaboration with artists, brands, and cultural
+        institutions. Each project is an opportunity to push a medium forward, whether
+        that means real-time graphics on a 40-foot LED wall or a generative audio
+        tool running in the browser.
+      </p>
+      <p>
+        Jeff has taught creative coding and physical computing at NYU's ITP program
+        and continues to explore how creative tools can be made more accessible
+        through workshops and open-source contributions.
+      </p>
+    </div>
+
+    {/* Skills & Tools */}
+    <div>
+      <h2 class="font-serif text-2xl mb-6">Skills & Tools</h2>
+      <div class="flex flex-wrap gap-3">
+        {skills.map((skill) => (
+          <span class="inline-block text-sm text-text-muted border border-border px-4 py-2 rounded-full">
+            {skill}
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+</Base>

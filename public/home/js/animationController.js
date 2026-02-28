@@ -21,6 +21,11 @@ export class AnimationController {
         this.normalizedMouseX = 0;
         this.normalizedMouseY = 0;
 
+        // Auto-ripple state
+        this.lastAutoRippleTime = 0;
+        this.nextAutoRippleDelay = 3; // first ripple after 3s
+        this.autoRippleSectorIndex = Math.floor(Math.random() * 8);
+
         // Animation parameters
         this.targetNoiseScale = 2.0;
         this.targetNoiseStrength = 0.05;
@@ -177,6 +182,27 @@ export class AnimationController {
             this.targetNoiseStrength * (1 - smoothing);
         this.currentDisplacement = this.currentDisplacement * smoothing +
             this.targetDisplacement * (1 - smoothing);
+
+        // Auto-ripple
+        this.lastAutoRippleTime += deltaTime;
+        if (this.lastAutoRippleTime >= this.nextAutoRippleDelay) {
+            this.lastAutoRippleTime = 0;
+            this.nextAutoRippleDelay = 4 + Math.random() * 2; // 4–6s
+
+            // Pick angle from current sector (8 sectors) with jitter
+            const sectorSize = (Math.PI * 2) / 8;
+            const jitter = (Math.random() - 0.5) * sectorSize * 0.8;
+            const angle = this.autoRippleSectorIndex * sectorSize + jitter;
+
+            // Advance to a non-adjacent sector for variety
+            this.autoRippleSectorIndex = (this.autoRippleSectorIndex + 3 + Math.floor(Math.random() * 3)) % 8;
+
+            // Origin outside logo bounds
+            const radius = 1.2 + Math.random() * 0.3;
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+            this.uniforms.triggerRipple(x, y);
+        }
 
         // Update uniforms
         this.uniforms.update(deltaTime);

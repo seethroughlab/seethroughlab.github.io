@@ -10,14 +10,14 @@ struct Uniforms {
     noiseStrength: f32,
     displacementAmount: f32,
     animationPhase: f32,
-    rippleX: f32,
-    rippleY: f32,
-    rippleTime: f32,
-    rippleStrength: f32,
     scalePulse: f32,
     parallaxStrength: f32,
-    padding1: f32,
-    padding2: f32,
+    _pad0: f32,
+    _pad1: f32,
+    ripple0: vec4<f32>,
+    ripple1: vec4<f32>,
+    ripple2: vec4<f32>,
+    ripple3: vec4<f32>,
 }
 
 struct VertexInput {
@@ -76,6 +76,37 @@ fn fbm(p: vec2<f32>, octaves: i32) -> f32 {
     return value;
 }
 
+// Apply a single ripple effect and return displaced position
+fn applyRipple(pos: vec2<f32>, ripple: vec4<f32>, currentTime: f32) -> vec2<f32> {
+    let rippleX = ripple.x;
+    let rippleY = ripple.y;
+    let rippleTime = ripple.z;
+    let rippleStrength = ripple.w;
+
+    let timeSinceRipple = currentTime - rippleTime;
+    if (timeSinceRipple < 0.0 || timeSinceRipple >= 2.0) {
+        return vec2<f32>(0.0, 0.0);
+    }
+
+    let rippleCenter = vec2<f32>(rippleX, rippleY);
+    let distToRipple = length(pos - rippleCenter);
+
+    let rippleSpeed = 0.8;
+    let rippleRadius = timeSinceRipple * rippleSpeed;
+    let rippleWidth = 0.3;
+
+    let distFromWave = abs(distToRipple - rippleRadius);
+    let rippleIntensity = smoothstep(rippleWidth, 0.0, distFromWave);
+    let rippleDecay = 1.0 - (timeSinceRipple / 2.0);
+
+    if (distToRipple > 0.01) {
+        let rippleDir = normalize(pos - rippleCenter);
+        let rippleAmount = rippleIntensity * rippleDecay * rippleStrength;
+        return rippleDir * rippleAmount * sin(distToRipple * 10.0 - timeSinceRipple * 5.0);
+    }
+    return vec2<f32>(0.0, 0.0);
+}
+
 // Smooth layer separation based on index
 fn layerOffset(layerIdx: f32, time: f32) -> vec2<f32> {
     // Each layer moves in a different circular pattern
@@ -103,42 +134,22 @@ fn main(input: VertexInput) -> VertexOutput {
     // Layer-based displacement (creates depth/parallax)
     let layerDisplacement = layerOffset(input.layerIndex, uniforms.time);
 
-    // Combine displacements
+    // Combine displacements with breathing modulation (~8s period, ±15%)
+    let breathing = sin(uniforms.time * 0.8) * 0.15 + 1.0;
     let noiseDisplacement = vec2<f32>(
         noise2D(pos + vec2<f32>(0.0, uniforms.time * 0.2)) * uniforms.displacementAmount,
         noise2D(pos + vec2<f32>(100.0, uniforms.time * 0.2)) * uniforms.displacementAmount
-    );
+    ) * breathing;
 
     // Apply all displacements
     pos += noiseDisplacement * uniforms.noiseStrength;
     pos += layerDisplacement;
 
-    // --- RIPPLE EFFECT ---
-    // Check if there's an active ripple (rippleTime >= 0 and recent)
-    let timeSinceRipple = uniforms.time - uniforms.rippleTime;
-    if (timeSinceRipple >= 0.0 && timeSinceRipple < 2.0) {
-        let rippleCenter = vec2<f32>(uniforms.rippleX, uniforms.rippleY);
-        let distToRipple = length(pos - rippleCenter);
-
-        // Expanding wave pattern
-        let rippleSpeed = 0.8;
-        let rippleRadius = timeSinceRipple * rippleSpeed;
-        let rippleWidth = 0.3;
-
-        // Wave intensity based on distance from wave front
-        let distFromWave = abs(distToRipple - rippleRadius);
-        let rippleIntensity = smoothstep(rippleWidth, 0.0, distFromWave);
-
-        // Decay over time
-        let rippleDecay = 1.0 - (timeSinceRipple / 2.0);
-
-        // Apply ripple displacement
-        if (distToRipple > 0.01) {
-            let rippleDir = normalize(pos - rippleCenter);
-            let rippleAmount = rippleIntensity * rippleDecay * uniforms.rippleStrength;
-            pos += rippleDir * rippleAmount * sin(distToRipple * 10.0 - timeSinceRipple * 5.0);
-        }
-    }
+    // --- RIPPLE EFFECTS (4 concurrent slots) ---
+    pos += applyRipple(pos, uniforms.ripple0, uniforms.time);
+    pos += applyRipple(pos, uniforms.ripple1, uniforms.time);
+    pos += applyRipple(pos, uniforms.ripple2, uniforms.time);
+    pos += applyRipple(pos, uniforms.ripple3, uniforms.time);
 
     // --- PARALLAX EFFECT ---
     // Mouse-based parallax (layers at different depths move differently)

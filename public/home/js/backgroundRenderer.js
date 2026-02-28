@@ -17,6 +17,13 @@ export class BackgroundRenderer {
         this.resolutionX = 1;
         this.resolutionY = 1;
         this.dpr = 1;
+
+        // CRT glitch burst state
+        this.timeSinceLastGlitch = 0;
+        this.nextGlitchDelay = 5 + Math.random() * 5; // 5-10s
+        this.glitchFramesRemaining = 0;
+        this.glitchIntensity = 0;
+        this.glitchSeed = 0;
     }
 
     /**
@@ -108,12 +115,29 @@ export class BackgroundRenderer {
 
         this.time += deltaTime;
 
-        // Write uniforms — only time (offset 0) and resolution (offsets 56, 60) matter
+        // --- Glitch burst timing ---
+        this.timeSinceLastGlitch += deltaTime;
+        if (this.glitchFramesRemaining > 0) {
+            this.glitchFramesRemaining--;
+            this.glitchIntensity = 0.6 + Math.random() * 0.4; // 0.6-1.0
+            this.glitchSeed = Math.random();
+        } else {
+            this.glitchIntensity = 0;
+            if (this.timeSinceLastGlitch >= this.nextGlitchDelay) {
+                this.timeSinceLastGlitch = 0;
+                this.nextGlitchDelay = 5 + Math.random() * 5; // 5-10s
+                this.glitchFramesRemaining = 6 + Math.floor(Math.random() * 6); // 6-12 frames
+            }
+        }
+
+        // Write uniforms
         const data = new Float32Array(16);
-        data[0] = this.time;       // time
-        data[1] = this.dpr;        // dpr (device pixel ratio)
-        data[14] = this.resolutionX; // resolutionX (was padding1)
-        data[15] = this.resolutionY; // resolutionY (was padding2)
+        data[0] = this.time;            // time
+        data[1] = this.dpr;             // dpr
+        data[2] = this.glitchIntensity; // glitchIntensity
+        data[3] = this.glitchSeed;      // glitchSeed
+        data[14] = this.resolutionX;    // resolutionX
+        data[15] = this.resolutionY;    // resolutionY
 
         this.device.queue.writeBuffer(this.uniformBuffer, 0, data.buffer, 0, data.byteLength);
 

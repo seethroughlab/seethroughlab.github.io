@@ -17,27 +17,31 @@ export class ShaderUniforms {
             noiseStrength: 0.05,
             displacementAmount: 0.02,
             animationPhase: 0.0,
-            // Ripple effect
-            rippleX: 0.0,
-            rippleY: 0.0,
-            rippleTime: -999.0, // Negative = no active ripple
-            rippleStrength: 0.8, // Increased from 0.3
             // Scale pulsing (sync to audio)
             scalePulse: 1.0,
             // Parallax strength
             parallaxStrength: 0.0 // Set in main.js to 0.15
         };
 
+        // 4 concurrent ripple slots: each is {x, y, time, strength}
+        this.ripples = [
+            { x: 0, y: 0, time: -999, strength: 0.8 },
+            { x: 0, y: 0, time: -999, strength: 0.8 },
+            { x: 0, y: 0, time: -999, strength: 0.8 },
+            { x: 0, y: 0, time: -999, strength: 0.8 },
+        ];
+        this.nextRippleSlot = 0;
+
         // Create uniform buffer
-        // Size: 16 floats * 4 bytes = 64 bytes (must be multiple of 16 for alignment)
-        this.bufferSize = 64;
+        // Size: 28 floats * 4 bytes = 112 bytes (must be multiple of 16 for alignment)
+        this.bufferSize = 112;
         this.buffer = device.createBuffer({
             size: this.bufferSize,
             usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
         });
 
         // Typed array for updating buffer
-        this.uniformData = new Float32Array(16);
+        this.uniformData = new Float32Array(28);
 
         // Events for animation triggers
         this.eventCallbacks = [];
@@ -108,12 +112,14 @@ export class ShaderUniforms {
     }
 
     /**
-     * Trigger a ripple effect at position
+     * Trigger a ripple effect at position (round-robin across 4 slots)
      */
     triggerRipple(x, y) {
-        this.values.rippleX = x;
-        this.values.rippleY = y;
-        this.values.rippleTime = this.values.time;
+        const slot = this.ripples[this.nextRippleSlot];
+        slot.x = x;
+        slot.y = y;
+        slot.time = this.values.time;
+        this.nextRippleSlot = (this.nextRippleSlot + 1) % 4;
     }
 
     /**
@@ -142,14 +148,19 @@ export class ShaderUniforms {
         this.uniformData[5] = this.values.noiseStrength;
         this.uniformData[6] = this.values.displacementAmount;
         this.uniformData[7] = this.values.animationPhase;
-        this.uniformData[8] = this.values.rippleX;
-        this.uniformData[9] = this.values.rippleY;
-        this.uniformData[10] = this.values.rippleTime;
-        this.uniformData[11] = this.values.rippleStrength;
-        this.uniformData[12] = this.values.scalePulse;
-        this.uniformData[13] = this.values.parallaxStrength;
-        this.uniformData[14] = 0.0; // padding
-        this.uniformData[15] = 0.0; // padding
+        this.uniformData[8] = this.values.scalePulse;
+        this.uniformData[9] = this.values.parallaxStrength;
+        this.uniformData[10] = 0.0; // padding (vec4 alignment at offset 48)
+        this.uniformData[11] = 0.0; // padding
+        // 4 ripple slots: each vec4(x, y, time, strength)
+        for (let i = 0; i < 4; i++) {
+            const r = this.ripples[i];
+            const base = 12 + i * 4;
+            this.uniformData[base]     = r.x;
+            this.uniformData[base + 1] = r.y;
+            this.uniformData[base + 2] = r.time;
+            this.uniformData[base + 3] = r.strength;
+        }
 
         this.device.queue.writeBuffer(
             this.buffer,

@@ -10,14 +10,14 @@ struct Uniforms {
     noiseStrength: f32,
     displacementAmount: f32,
     animationPhase: f32,
-    rippleX: f32,
-    rippleY: f32,
-    rippleTime: f32,
-    rippleStrength: f32,
     scalePulse: f32,
     parallaxStrength: f32,
-    padding1: f32,
-    padding2: f32,
+    _pad0: f32,
+    _pad1: f32,
+    ripple0: vec4<f32>,
+    ripple1: vec4<f32>,
+    ripple2: vec4<f32>,
+    ripple3: vec4<f32>,
 }
 
 struct FragmentInput {
@@ -148,6 +148,11 @@ fn main(input: FragmentInput) -> @location(0) vec4<f32> {
     // Flicker effect
     let flicker = sin(uniforms.time * 60.0) * 0.03 + 0.97;
     finalColor *= flicker;
+
+    // --- COLOR DRIFT --- (~60s cycle, ±0.03 hue shift)
+    var driftHsv = rgb2hsv(finalColor);
+    driftHsv.x = fract(driftHsv.x + sin(uniforms.time * 0.5) * 0.12);
+    finalColor = hsv2rgb(driftHsv);
 
     return vec4<f32>(finalColor, 1.0);
 }

@@ -116,6 +116,11 @@ const { videos, links = [] } = Astro.props;
 
         activeVideo = video;
 
+        // Call play() synchronously to preserve the user-gesture context.
+        // Browsers require play() within the synchronous click handler;
+        // calling it after an await breaks the gesture chain.
+        video.play();
+
         await ensureHlsJs();
 
         if ((window as any).Hls?.isSupported()) {
@@ -123,14 +128,10 @@ const { videos, links = [] } = Astro.props;
           const hls = new (window as any).Hls();
           hls.loadSource(src);
           hls.attachMedia(video);
-          hls.on((window as any).Hls.Events.MANIFEST_PARSED, () => {
-            video.play();
-          });
           activeHls = hls;
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
           // Safari — native HLS
           video.src = src;
-          video.play();
         }
       });
     });

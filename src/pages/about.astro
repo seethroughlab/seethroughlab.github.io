@@ -130,11 +130,13 @@ const linkClass = 'inline-flex items-center text-sm uppercase tracking-widest te
     {/* Headshot + Bio */}
     <div class="md:flex md:gap-10 mb-12">
       <div class="shrink-0 mb-8 md:mb-0">
-        <img
-          src="/images/headshot.jpg"
-          alt="Jeff Crouse"
-          class="w-full md:w-[300px] rounded"
-        />
+        <div class="crt-overlay overflow-hidden w-full md:w-[300px]">
+          <img
+            src="/images/headshot.jpg"
+            alt="Jeff Crouse"
+            class="w-full h-full object-cover"
+          />
+        </div>
       </div>
       <div class="prose">
         <p>

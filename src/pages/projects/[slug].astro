@@ -33,7 +33,7 @@ export async function getStaticPaths() {
 }
 
 const { project, images } = Astro.props;
-const { title, client, year, coverImage, videoSrc, role, tech } = project.data;
+const { title, client, year, coverImage, videoSrc, role, tech, videos } = project.data;
 const { Content } = await render(project);
 
 const hasVideo = !!videoSrc;
@@ -56,8 +56,8 @@ const pageDescription = [client, year, role].filter(Boolean).join(' · ')
 <Base title={`${title} — See Through Lab`} description={pageDescription} ogImage={ogImage}>
   <article class="py-12">
     {/* Hero: video+carousel unified > video only > carousel > cover image */}
-    {hasVideo && carouselImages.length > 0 ? (
-      <ImageCarousel images={carouselImages} title={title} videoSrc={videoSrc} videoPoster={videoPoster} />
+    {(hasVideo || videos.length > 0) && (carouselImages.length > 0 || videos.length > 0) ? (
+      <ImageCarousel images={carouselImages} title={title} videoSrc={videoSrc} videoPoster={videoPoster} additionalVideos={videos} />
     ) : hasVideo ? (
       <div class="max-w-5xl mx-auto mb-12">
         <VideoPlayer src={videoSrc} poster={videoPoster} />

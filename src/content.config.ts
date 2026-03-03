@@ -16,6 +16,7 @@ const projects = defineCollection({
     order: z.number().default(99),
     role: z.string().default(''),
     tech: z.array(z.string()).default([]),
+    videos: z.array(z.string()).default([]),
   }),
 });
 

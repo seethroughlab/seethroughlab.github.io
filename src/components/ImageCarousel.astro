@@ -4,11 +4,12 @@ interface Props {
   title: string;
   videoSrc?: string;
   videoPoster?: string;
+  additionalVideos?: string[];
 }
 
-const { images, title, videoSrc, videoPoster } = Astro.props;
+const { images, title, videoSrc, videoPoster, additionalVideos = [] } = Astro.props;
 const hasHlsVideo = !!videoSrc;
-const totalSlides = images.length + (hasHlsVideo ? 1 : 0);
+const totalSlides = images.length + (hasHlsVideo ? 1 : 0) + additionalVideos.length;
 const single = totalSlides === 1;
 const isVideo = (src: string) => /\.mp4$/i.test(src);
 const isHLS = videoSrc?.endsWith('.m3u8');
@@ -28,6 +29,18 @@ const isHLS = videoSrc?.endsWith('.m3u8');
         />
       </div>
     )}
+    {additionalVideos.map((url) => (
+      <div class="carousel-slide carousel-slide-hls">
+        <video
+          controls
+          playsinline
+          preload="metadata"
+          poster={url.replace('index.m3u8', 'poster.jpg')}
+          data-hls-src={url.endsWith('.m3u8') ? url : undefined}
+          src={url.endsWith('.m3u8') ? undefined : url}
+        />
+      </div>
+    ))}
     {images.map((src, i) => (
       <div class="carousel-slide">
         {isVideo(src) ? (

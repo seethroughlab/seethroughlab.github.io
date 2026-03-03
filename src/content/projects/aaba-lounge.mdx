@@ -1,7 +1,7 @@
 ---
 title: "AABA Lounge"
 slug: "aaba-lounge"
-client: ""
+client: "Gensler DXD"
 year: 2022
 tags: []
 coverImage: "/images/projects/aaba-lounge/aaba-lounge-01.jpeg"
@@ -34,4 +34,8 @@ tech:
   - "Unreal Engine"
 ---
 
-American Airlines and British Airways are opening a new lounge at JFK airport in New York.
+Gensler's Digital Experience Design ([DXD](https://www.gensler.com/expertise/digital-experience-design)) team commissioned ambient video content for large-format screens throughout the new American Airlines / British Airways lounge at JFK. The brief was nature-driven visuals that would shift with the time of day — calm enough for a premium lounge, but rich enough to hold attention on screens spanning entire walls.
+
+I built a parametric rendering framework in Unreal Engine that could batch-produce every combination of vegetation biome — dunes, ferns, garden, and mountain — across five time-of-day lighting presets: morning, sunrise, afternoon, sunset, and midnight. Rather than hand-animate twenty separate scenes, I set up swappable biome modules and a lighting rig that could be driven by parameters, then let the engine render all twenty combinations as final-frame video output.
+
+Most of the creative work went into dialing in fog density, cinematic camera settings, and time-of-day color grading so that each biome felt cohesive across every lighting condition. The delivered content is time-synced to real time at the airport, so the screens reflect the actual time of day outside.

@@ -41,6 +41,9 @@ const hasCarousel = images.length > 0;
 const carouselImages = hasVideo && coverImage
   ? images.filter((img) => img !== coverImage)
   : images;
+const videoPoster = coverImage || (videoSrc
+  ? videoSrc.replace('index.m3u8', 'poster.jpg')
+  : undefined);
 
 const ogImage = coverImage || images[0] || (videoSrc
   ? videoSrc.replace('index.m3u8', 'poster.jpg')
@@ -52,10 +55,12 @@ const pageDescription = [client, year, role].filter(Boolean).join(' · ')
 
 <Base title={`${title} — See Through Lab`} description={pageDescription} ogImage={ogImage}>
   <article class="py-12">
-    {/* Hero: video > carousel > cover image */}
-    {hasVideo ? (
+    {/* Hero: video+carousel unified > video only > carousel > cover image */}
+    {hasVideo && carouselImages.length > 0 ? (
+      <ImageCarousel images={carouselImages} title={title} videoSrc={videoSrc} videoPoster={videoPoster} />
+    ) : hasVideo ? (
       <div class="max-w-5xl mx-auto mb-12">
-        <VideoPlayer src={videoSrc} poster={coverImage || undefined} />
+        <VideoPlayer src={videoSrc} poster={videoPoster} />
       </div>
     ) : hasCarousel ? (
       <ImageCarousel images={images} title={title} />
@@ -68,11 +73,6 @@ const pageDescription = [client, year, role].filter(Boolean).join(' · ')
         />
       </div>
     ) : null}
-
-    {/* Video projects with extra images: show carousel below video */}
-    {hasVideo && carouselImages.length > 0 && (
-      <ImageCarousel images={carouselImages} title={title} />
-    )}
 
     {/* Metadata header */}
     <div class="max-w-3xl mx-auto">

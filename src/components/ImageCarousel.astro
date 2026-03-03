@@ -2,15 +2,32 @@
 interface Props {
   images: string[];
   title: string;
+  videoSrc?: string;
+  videoPoster?: string;
 }
 
-const { images, title } = Astro.props;
-const single = images.length === 1;
+const { images, title, videoSrc, videoPoster } = Astro.props;
+const hasHlsVideo = !!videoSrc;
+const totalSlides = images.length + (hasHlsVideo ? 1 : 0);
+const single = totalSlides === 1;
 const isVideo = (src: string) => /\.mp4$/i.test(src);
+const isHLS = videoSrc?.endsWith('.m3u8');
 ---
 
 <div class="carousel" role="region" aria-label={`${title} media`} tabindex="0">
   <div class="carousel-track">
+    {hasHlsVideo && (
+      <div class="carousel-slide carousel-slide-hls">
+        <video
+          controls
+          playsinline
+          preload="metadata"
+          poster={videoPoster}
+          data-hls-src={isHLS ? videoSrc : undefined}
+          src={isHLS ? undefined : videoSrc}
+        />
+      </div>
+    )}
     {images.map((src, i) => (
       <div class="carousel-slide">
         {isVideo(src) ? (
@@ -19,14 +36,14 @@ const isVideo = (src: string) => /\.mp4$/i.test(src);
             muted
             loop
             playsinline
-            preload={i === 0 ? "auto" : "none"}
+            preload={i === 0 && !hasHlsVideo ? "auto" : "none"}
           />
         ) : (
           <img
             src={src}
             alt={`${title} — image ${i + 1}`}
-            loading={i === 0 ? "eager" : "lazy"}
-            decoding={i === 0 ? "sync" : "async"}
+            loading={i === 0 && !hasHlsVideo ? "eager" : "lazy"}
+            decoding={i === 0 && !hasHlsVideo ? "sync" : "async"}
           />
         )}
       </div>
@@ -36,7 +53,7 @@ const isVideo = (src: string) => /\.mp4$/i.test(src);
     <button class="carousel-btn carousel-prev" aria-label="Previous image">&lsaquo;</button>
     <button class="carousel-btn carousel-next" aria-label="Next image">&rsaquo;</button>
     <div class="carousel-counter">
-      <span class="carousel-current">1</span> / {images.length}
+      <span class="carousel-current">1</span> / {totalSlides}
     </div>
   )}
 </div>
@@ -76,8 +93,8 @@ const isVideo = (src: string) => /\.mp4$/i.test(src);
   }
   .carousel-slide img,
   .carousel-slide video {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
   }
   .carousel-btn {
@@ -156,8 +173,10 @@ const isVideo = (src: string) => /\.mp4$/i.test(src);
             const idx = Array.from(slides).indexOf(entry.target as HTMLDivElement);
             if (idx !== -1 && counter) counter.textContent = String(idx + 1);
           }
-          // Play/pause videos based on visibility
-          const video = (entry.target as HTMLDivElement).querySelector('video');
+          // Play/pause videos based on visibility (skip HLS — user-controlled)
+          const slide = entry.target as HTMLDivElement;
+          if (slide.classList.contains('carousel-slide-hls')) continue;
+          const video = slide.querySelector('video');
           if (video) {
             if (entry.isIntersecting) {
               video.play().catch(() => {});
@@ -171,4 +190,33 @@ const isVideo = (src: string) => /\.mp4$/i.test(src);
     );
     slides.forEach((slide) => observer.observe(slide));
   });
+
+  // HLS initialization for carousel videos
+  function initCarouselHLS() {
+    document.querySelectorAll<HTMLVideoElement>('.carousel-slide-hls video[data-hls-src]').forEach((video) => {
+      const src = video.dataset.hlsSrc;
+      if (!src || video.dataset.hlsInit) return;
+      video.dataset.hlsInit = 'true';
+
+      if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = src;
+      } else if ((window as any).Hls?.isSupported()) {
+        const hls = new (window as any).Hls();
+        hls.loadSource(src);
+        hls.attachMedia(video);
+      }
+    });
+  }
+
+  if (document.querySelector('.carousel-slide-hls video[data-hls-src]')) {
+    const testVideo = document.createElement('video');
+    if (!testVideo.canPlayType('application/vnd.apple.mpegurl')) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js';
+      script.onload = initCarouselHLS;
+      document.head.appendChild(script);
+    } else {
+      initCarouselHLS();
+    }
+  }
 </script>

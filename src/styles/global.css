@@ -121,6 +121,14 @@
     opacity: 0.4;
   }
 
+  /* Background effect layer */
+  #bg-effect {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
   /* Chromatic aberration logo class */
   .logo-text {
     font-size: clamp(3rem, 10vw, 7rem);

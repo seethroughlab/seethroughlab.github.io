@@ -115,12 +115,12 @@
     resize();
     window.addEventListener('resize', resize);
 
-    const count = 40;
+    const count = 60;
     const particles = Array.from({ length: count }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      r: 1 + Math.random(),
-      alpha: 0.08 + Math.random() * 0.07,
+      r: 1.5 + Math.random() * 1.5,
+      alpha: 0.15 + Math.random() * 0.1,
       vx: (Math.random() - 0.5) * 0.3,
       vy: (Math.random() - 0.5) * 0.3,
       phase: Math.random() * Math.PI * 2,

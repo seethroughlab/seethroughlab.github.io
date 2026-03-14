@@ -4,7 +4,9 @@
   if (!el) return;
 
   const effects = [staticNoise, filmGrain, gradientDrift, particleField];
+  const names = ['staticNoise', 'filmGrain', 'gradientDrift', 'particleField'];
   const pick = Math.floor(Math.random() * effects.length);
+  console.log('bg effect:', names[pick]);
   effects[pick](el);
 
   // 1. Static noise texture (SVG feTurbulence + vignette, no JS animation)

@@ -54,7 +54,7 @@ const isHLS = videoSrc?.endsWith('.m3u8');
         ) : (
           <img
             src={src}
-            alt={`${title} — image ${i + 1}`}
+            alt={`${title}, image ${i + 1}`}
             loading={i === 0 && !hasHlsVideo ? "eager" : "lazy"}
             decoding={i === 0 && !hasHlsVideo ? "sync" : "async"}
           />

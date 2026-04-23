@@ -13,7 +13,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { title, subtitle, status, coverImage, githubUrl, labUrl, instagramPosts, videos } = entry.data;
+const { title, subtitle, status, coverImage, githubUrl, labUrl, appStoreUrl, instagramPosts, videos } = entry.data;
 const { Content } = await render(entry);
 
 const statusStyles: Record<string, string> = {
@@ -49,8 +49,8 @@ const statusStyles: Record<string, string> = {
       )}
 
       {/* Action links */}
-      {(githubUrl || labUrl) && (
-        <div class="flex flex-wrap gap-3 mb-12">
+      {(githubUrl || labUrl || appStoreUrl) && (
+        <div class="flex flex-wrap items-center gap-3 mb-12">
           {githubUrl && (
             <a
               href={githubUrl}
@@ -69,11 +69,27 @@ const statusStyles: Record<string, string> = {
               Launch
             </a>
           )}
+          {appStoreUrl && (
+            <a
+              href={appStoreUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Download ${title} on the App Store`}
+              class="inline-block transition-opacity duration-200 hover:opacity-80"
+            >
+              <img
+                src="/images/app-store-badge.svg"
+                alt="Download on the App Store"
+                height="40"
+                class="h-10 w-auto"
+              />
+            </a>
+          )}
         </div>
       )}
 
       {/* Spacing when no action links */}
-      {!githubUrl && !labUrl && <div class="mb-12" />}
+      {!githubUrl && !labUrl && !appStoreUrl && <div class="mb-12" />}
 
       {/* MDX body */}
       <div class="prose">

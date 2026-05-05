@@ -1,0 +1,22 @@
+---
+import '../styles/global.css';
+import BTSStream from '../components/BTSStream.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="An endless stream of behind-the-scenes video fragments from See Through Lab."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>BTS | See Through Lab</title>
+  </head>
+  <body class="m-0 overflow-hidden bg-bg text-text-primary">
+    <BTSStream manifestUrl="/bts/manifest.json" />
+  </body>
+</html>

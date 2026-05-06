@@ -1,6 +1,6 @@
 const config = {
-  snippetMin: 10,
-  snippetMax: 25,
+  snippetMin: 4,
+  snippetMax: 10,
 };
 const CROSSFADE_DURATION = 1500;
 const MOSH_DECAY = 3000;
@@ -514,6 +514,7 @@ async function initGui() {
   try {
     const { GUI } = await import("https://cdn.jsdelivr.net/npm/lil-gui@0.20/+esm");
     const gui = new GUI({ title: "BTS Controls", width: 220 });
+    gui.close();
     gui.add(config, "snippetMin", 1, 120, 1).name("Min clip (s)").onChange((v) => {
       if (v > config.snippetMax) config.snippetMax = v;
     });

@@ -33,7 +33,10 @@ export async function getStaticPaths() {
 }
 
 const { project, images } = Astro.props;
-const { title, client, year, coverImage, videoSrc, role, tech, tags, videos } = project.data;
+const { title, client, year, coverImage, videoSrc, role, tech, tags, videos, credits, links } = project.data;
+
+const tagToSlug = (t: string) =>
+  t.toLowerCase().replace(/ \/ /g, '-').replace(/ /g, '-');
 const { Content } = await render(project);
 
 const hasVideo = !!videoSrc;
@@ -76,38 +79,99 @@ const pageDescription = [client, year, role].filter(Boolean).join(' · ')
 
     {/* Metadata header */}
     <div class="max-w-3xl mx-auto">
-      <h1 class="font-serif text-4xl md:text-5xl mb-4">{title}</h1>
+      <h1 class="font-serif text-4xl md:text-5xl mb-8">{title}</h1>
 
-      {(client || year) && (
-        <p class="text-text-muted uppercase tracking-widest text-sm mb-2">
-          {[client, year].filter(Boolean).join(' · ')}
-        </p>
-      )}
+      <dl class="mb-12 space-y-5 text-sm">
+        {(client || year) && (
+          <div class="grid grid-cols-[7rem_1fr] gap-2">
+            <dt class="text-[0.65rem] uppercase tracking-widest text-text-muted pt-0.5">
+              {client && year ? 'Client · Year' : client ? 'Client' : 'Year'}
+            </dt>
+            <dd class="text-text-primary">
+              {[client, year].filter(Boolean).join(' · ')}
+            </dd>
+          </div>
+        )}
 
-      {role && (
-        <p class="text-text-muted text-sm mb-4">{role}</p>
-      )}
+        {role && (
+          <div class="grid grid-cols-[7rem_1fr] gap-2">
+            <dt class="text-[0.65rem] uppercase tracking-widest text-text-muted pt-0.5">Role</dt>
+            <dd class="text-text-primary">{role}</dd>
+          </div>
+        )}
 
-      {tags.length > 0 && (
-        <div class="flex flex-wrap gap-3 mb-4">
-          {tags.map((t) => (
-            <span class="text-xs uppercase tracking-wider text-text-muted">{t}</span>
-          ))}
-        </div>
-      )}
+        {tags.length > 0 && (
+          <div class="grid grid-cols-[7rem_1fr] gap-2">
+            <dt class="text-[0.65rem] uppercase tracking-widest text-text-muted pt-0.5">Tags</dt>
+            <dd class="flex flex-wrap gap-x-3 gap-y-1">
+              {tags.map((t) => (
+                <a
+                  href={`/projects/tag/${tagToSlug(t)}`}
+                  class="text-text-muted hover:text-text-primary transition-colors duration-200 uppercase tracking-wider text-xs"
+                >
+                  {t}
+                </a>
+              ))}
+            </dd>
+          </div>
+        )}
 
-      {tech.length > 0 && (
-        <div class="flex flex-wrap gap-2 mb-12">
-          {tech.map((t) => (
-            <span class="text-xs uppercase tracking-wider text-text-muted border border-border px-3 py-1 rounded-full">
-              {t}
-            </span>
-          ))}
-        </div>
-      )}
+        {credits.length > 0 && (
+          <div class="grid grid-cols-[7rem_1fr] gap-2">
+            <dt class="text-[0.65rem] uppercase tracking-widest text-text-muted pt-0.5">Team</dt>
+            <dd>
+              <dl class="space-y-1">
+                {credits.map(({ role: r, name, url }) => (
+                  <div class="grid grid-cols-[10rem_1fr] gap-2">
+                    <dt class="text-text-muted">{r}</dt>
+                    <dd>
+                      {url
+                        ? <a href={url} target="_blank" rel="noopener noreferrer" class="text-text-primary hover:underline">{name}</a>
+                        : <span class="text-text-primary">{name}</span>
+                      }
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </dd>
+          </div>
+        )}
 
-      {/* If no tech but we still need spacing before body */}
-      {tech.length === 0 && <div class="mb-12" />}
+        {tech.length > 0 && (
+          <div class="grid grid-cols-[7rem_1fr] gap-2">
+            <dt class="text-[0.65rem] uppercase tracking-widest text-text-muted pt-0.5">Tech</dt>
+            <dd class="flex flex-wrap gap-2">
+              {tech.map((t) => (
+                <span class="text-xs uppercase tracking-wider text-text-muted border border-border px-3 py-1 rounded-full">
+                  {t}
+                </span>
+              ))}
+            </dd>
+          </div>
+        )}
+
+        {links.length > 0 && (
+          <div class="grid grid-cols-[7rem_1fr] gap-2">
+            <dt class="text-[0.65rem] uppercase tracking-widest text-text-muted pt-0.5">Press</dt>
+            <dd>
+              <ul class="space-y-1">
+                {links.map(({ label, url }) => (
+                  <li>
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-text-primary hover:underline"
+                    >
+                      {label} &rarr;
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        )}
+      </dl>
 
       {/* MDX body */}
       <div class={`prose${hasCarousel ? ' prose-no-images' : ''}`}>

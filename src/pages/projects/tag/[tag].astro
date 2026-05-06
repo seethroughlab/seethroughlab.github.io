@@ -1,0 +1,58 @@
+---
+import Base from '../../../layouts/Base.astro';
+import ProjectCard from '../../../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+
+  const tagToSlug = (t: string) =>
+    t.toLowerCase().replace(/ \/ /g, '-').replace(/ /g, '-');
+
+  const tagMap = new Map<string, string>();
+  for (const p of projects) {
+    for (const t of p.data.tags) {
+      tagMap.set(tagToSlug(t), t);
+    }
+  }
+
+  return Array.from(tagMap.entries()).map(([tagSlug, tagLabel]) => ({
+    params: { tag: tagSlug },
+    props: {
+      tagLabel,
+      projects: projects
+        .filter((p) => p.data.tags.some((t) => tagToSlug(t) === tagSlug))
+        .sort((a, b) => a.data.order - b.data.order),
+    },
+  }));
+}
+
+const { tagLabel, projects } = Astro.props;
+---
+
+<Base
+  title={`${tagLabel} Projects | See Through Lab`}
+  description={`See Through Lab projects tagged ${tagLabel}.`}
+>
+  <div class="py-12 max-w-3xl mx-auto px-6 mb-8">
+    <p class="text-xs uppercase tracking-widest text-text-muted mb-1">
+      <a href="/" class="hover:text-text-primary transition-colors duration-200">&larr; All Work</a>
+    </p>
+    <h1 class="font-serif text-4xl md:text-5xl">{tagLabel}</h1>
+  </div>
+
+  <div class="divide-y divide-border">
+    {projects.map((project, i) => (
+      <ProjectCard
+        title={project.data.title}
+        slug={project.data.slug}
+        client={project.data.client}
+        year={project.data.year}
+        coverImage={project.data.coverImage}
+        videoSrc={project.data.videoSrc || undefined}
+        videoStartTime={project.data.videoStartTime}
+        index={i}
+      />
+    ))}
+  </div>
+</Base>

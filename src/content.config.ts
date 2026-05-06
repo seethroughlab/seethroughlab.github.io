@@ -17,6 +17,12 @@ const projects = defineCollection({
     role: z.string().default(''),
     tech: z.array(z.string()).default([]),
     videos: z.array(z.string()).default([]),
+    credits: z.array(
+      z.object({ role: z.string(), name: z.string(), url: z.string().optional() })
+    ).default([]),
+    links: z.array(
+      z.object({ label: z.string(), url: z.string() })
+    ).default([]),
   }),
 });
 

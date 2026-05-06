@@ -352,6 +352,8 @@ function createRenderer(canvasEl) {
     uniform sampler2D uPrevFrame;
     uniform float uBlendFactor;
     uniform float uTime;
+    uniform float uVideoAspect;
+    uniform float uCanvasAspect;
     varying vec2 vUv;
 
     float rand(vec2 co) {
@@ -360,6 +362,13 @@ function createRenderer(canvasEl) {
 
     void main() {
       vec2 uv = vec2(vUv.x, 1.0 - vUv.y);
+
+      // Replicate object-fit: cover so the overlay aligns with the video element
+      vec2 coverScale = uCanvasAspect > uVideoAspect
+        ? vec2(1.0, uVideoAspect / uCanvasAspect)
+        : vec2(uCanvasAspect / uVideoAspect, 1.0);
+      uv = (uv - 0.5) * coverScale + 0.5;
+
       vec2 disp = vec2(
         sin(uTime * 0.7 + uv.y * 11.0) * 0.006,
         cos(uTime * 0.5 + uv.x * 8.0) * 0.003
@@ -452,6 +461,8 @@ function createRenderer(canvasEl) {
   const prevLocation = gl.getUniformLocation(program, "uPrevFrame");
   const blendLocation = gl.getUniformLocation(program, "uBlendFactor");
   const timeLocation = gl.getUniformLocation(program, "uTime");
+  const videoAspectLocation = gl.getUniformLocation(program, "uVideoAspect");
+  const canvasAspectLocation = gl.getUniformLocation(program, "uCanvasAspect");
 
   function disableRenderer(error) {
     failed = true;
@@ -518,6 +529,12 @@ function createRenderer(canvasEl) {
 
     gl.uniform1f(blendLocation, blend);
     gl.uniform1f(timeLocation, now * 0.001);
+
+    const videoAspect = (currentVideo && currentVideo.videoWidth && currentVideo.videoHeight)
+      ? currentVideo.videoWidth / currentVideo.videoHeight
+      : 16 / 9;
+    gl.uniform1f(videoAspectLocation, videoAspect);
+    gl.uniform1f(canvasAspectLocation, canvasEl.clientWidth / canvasEl.clientHeight);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);

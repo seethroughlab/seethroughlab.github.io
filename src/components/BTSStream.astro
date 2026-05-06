@@ -34,6 +34,16 @@ const { manifestUrl } = Astro.props;
     aria-hidden="true"
   ></canvas>
 
+  <div class="absolute left-0 top-0 z-20 p-5 md:p-6">
+    <a
+      href="/"
+      class="text-white/35 transition-colors duration-200 hover:text-white/80"
+      aria-label="Back to home"
+    >
+      ←
+    </a>
+  </div>
+
   <div class="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between p-5 md:p-6">
     <p class="max-w-[60vw] text-[0.65rem] uppercase tracking-[0.28em] text-white/35">
       See Through Lab Behind The Scenes

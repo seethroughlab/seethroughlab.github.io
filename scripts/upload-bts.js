@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { HeadObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { execFileSync, spawn } from "child_process";
 import { createReadStream, mkdirSync, readdirSync, statSync as fsStatSync, writeFileSync } from "fs";
 import { basename, extname, join, resolve } from "path";
@@ -19,6 +19,7 @@ const DEFAULT_MATCHER = "(^|[\\/_\\-\\s])bts([\\/_\\-\\s]|$)|behind[\\s_-]*the[\
 function parseArgs(argv) {
   const options = {
     dryRun: false,
+    skipExisting: false,
     jsonTags: undefined,
     limit: undefined,
     match: process.env.BTS_MATCH || DEFAULT_MATCHER,
@@ -29,6 +30,7 @@ function parseArgs(argv) {
     const arg = argv[i];
 
     if (arg === "--dry-run") { options.dryRun = true; continue; }
+    if (arg === "--skip-existing") { options.skipExisting = true; continue; }
     if (arg === "--all-mp4s") { options.match = ""; continue; }
 
     if (arg === "--match") {
@@ -65,7 +67,7 @@ function parseArgs(argv) {
 }
 
 function printUsage() {
-  console.error("Usage: node scripts/upload-bts.js [source] [--dry-run] [--match <regex>] [--all-mp4s] [--json-tags <tag>] [--limit <n>]");
+  console.error("Usage: node scripts/upload-bts.js [source] [--dry-run] [--skip-existing] [--match <regex>] [--all-mp4s] [--json-tags <tag>] [--limit <n>]");
   console.error(`Default source: ${DEFAULT_SOURCE}`);
 }
 
@@ -254,10 +256,29 @@ function writeManifest(entries) {
   return manifest;
 }
 
+async function existsInS3(client, key) {
+  try {
+    await client.send(new HeadObjectCommand({ Bucket: BUCKET, Key: key }));
+    return true;
+  } catch (error) {
+    if (error.$metadata?.httpStatusCode === 404 || error.name === "NotFound") return false;
+    throw error;
+  }
+}
+
 async function uploadEntries(entries, manifest) {
   const client = new S3Client({ region: REGION });
+  let skipped = 0;
 
   for (const entry of entries) {
+    const key = `bts/${entry.filename}`;
+
+    if (options.skipExisting && await existsInS3(client, key)) {
+      console.log(`Skipped  ${key} (already exists)`);
+      skipped += 1;
+      continue;
+    }
+
     const body = entry.remote
       ? createRemoteReadStream(entry.remote, entry.absolutePath)
       : createReadStream(entry.filePath);
@@ -265,15 +286,17 @@ async function uploadEntries(entries, manifest) {
     await client.send(
       new PutObjectCommand({
         Bucket: BUCKET,
-        Key: `bts/${entry.filename}`,
+        Key: key,
         Body: body,
         ContentLength: entry.size,
         ContentType: "video/mp4",
         CacheControl: "public, max-age=31536000, immutable",
       }),
     );
-    console.log(`Uploaded bts/${entry.filename}`);
+    console.log(`Uploaded ${key}`);
   }
+
+  if (skipped > 0) console.log(`Skipped ${skipped} already-uploaded file(s).`);
 
   await client.send(
     new PutObjectCommand({

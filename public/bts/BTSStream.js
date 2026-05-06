@@ -295,7 +295,7 @@ async function playNext(immediate = false) {
   state.hasStarted = true;
 
   if (clipInfoEl) {
-    clipInfoEl.textContent = [clip.title, clip.year].filter(Boolean).join(' · ');
+    clipInfoEl.textContent = [clip.project, clip.year].filter(Boolean).join(' · ');
   }
 
   state.renderer?.setSources(incoming);
@@ -315,6 +315,7 @@ function validateManifest(payload) {
       url: String(item.url || "").trim(),
       title: typeof item.title === "string" ? item.title : undefined,
       year: Number.isFinite(Number(item.year)) ? Number(item.year) : undefined,
+      project: typeof item.project === "string" ? item.project : undefined,
     }))
     .filter((item) => item.id && item.url);
 }

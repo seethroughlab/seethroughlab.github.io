@@ -126,16 +126,22 @@ async function ensureVideoReady(video, clip) {
   video.src = clip.url;
   video.load();
 
-  if (video.readyState < 1) {
-    await waitForEvent(video, "loadedmetadata", CANPLAY_TIMEOUT);
+  await waitForEvent(video, "loadedmetadata", CANPLAY_TIMEOUT);
+
+  const dur = video.duration;
+  let snippetLen, startTime;
+  if (Number.isFinite(dur) && dur > 0) {
+    snippetLen = Math.min(dur, config.snippetMin + Math.random() * (config.snippetMax - config.snippetMin));
+    const maxStart = Math.max(0, dur - snippetLen - 0.25);
+    startTime = maxStart > 0 ? Math.random() * maxStart : 0;
+  } else {
+    snippetLen = config.snippetMin;
+    startTime = 0;
   }
 
-  const maxStart = Math.max(0, clip.duration - clip.snippetLen - 0.25);
-  const safeStart = Math.min(clip.startTime, maxStart);
-
-  if (safeStart > 0) {
+  if (startTime > 0) {
     const seekPromise = waitForEvent(video, "seeked", SEEK_TIMEOUT);
-    video.currentTime = safeStart;
+    video.currentTime = startTime;
     await seekPromise;
   } else {
     video.currentTime = 0;
@@ -144,6 +150,8 @@ async function ensureVideoReady(video, clip) {
   if (video.readyState < 3) {
     await waitForEvent(video, "canplay", CANPLAY_TIMEOUT);
   }
+
+  return snippetLen;
 }
 
 async function ensurePlayback(video) {
@@ -189,15 +197,8 @@ function pickClip() {
     state.manifest.length > 1
       ? state.manifest.filter((clip) => clip.id !== state.lastClipId)
       : state.manifest;
-  const clip = pool[Math.floor(Math.random() * pool.length)];
-  const snippetLen = Math.min(
-    clip.duration,
-    config.snippetMin + Math.random() * (config.snippetMax - config.snippetMin),
-  );
-  const maxStart = Math.max(0, clip.duration - snippetLen - 0.25);
-  const startTime = maxStart > 0 ? Math.random() * maxStart : 0;
 
-  return { ...clip, snippetLen, startTime };
+  return { ...pool[Math.floor(Math.random() * pool.length)] };
 }
 
 function stopTransitionTimer() {
@@ -255,9 +256,9 @@ async function playNextWithRetry(immediate = false, maxRetries = 4) {
   setStatus("Unable to continue playback.", true);
 }
 
-function scheduleNext(clip) {
+function scheduleNext(snippetLen) {
   stopTransitionTimer();
-  const delay = Math.max(1000, clip.snippetLen * 1000 - CROSSFADE_DURATION);
+  const delay = Math.max(1000, snippetLen * 1000 - CROSSFADE_DURATION);
   state.transitionTimer = window.setTimeout(() => {
     playNextWithRetry(false);
   }, delay);
@@ -272,7 +273,7 @@ async function playNext(immediate = false) {
   state.lastClipId = clip.id;
 
   setStatus("Loading stream...", !state.hasStarted);
-  await ensureVideoReady(incoming, clip);
+  const snippetLen = await ensureVideoReady(incoming, clip);
   syncVideoAudio(incomingKey);
   await ensurePlayback(incoming);
 
@@ -302,7 +303,7 @@ async function playNext(immediate = false) {
   state.renderer?.setSources(incoming, state.previousVideoForEffect);
 
   setStatus("", false);
-  scheduleNext(clip);
+  scheduleNext(snippetLen);
 }
 
 function validateManifest(payload) {
@@ -314,11 +315,10 @@ function validateManifest(payload) {
     .map((item) => ({
       id: String(item.id || "").trim(),
       url: String(item.url || "").trim(),
-      duration: Number(item.duration),
       title: typeof item.title === "string" ? item.title : undefined,
       year: Number.isFinite(Number(item.year)) ? Number(item.year) : undefined,
     }))
-    .filter((item) => item.id && item.url && Number.isFinite(item.duration) && item.duration > 0);
+    .filter((item) => item.id && item.url);
 }
 
 function createRenderer(canvasEl) {

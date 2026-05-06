@@ -2,16 +2,16 @@
 
 import { HeadObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { execFileSync, spawn } from "child_process";
-import { createReadStream, mkdirSync, readdirSync, statSync as fsStatSync, writeFileSync } from "fs";
+import { createReadStream, readdirSync, statSync as fsStatSync } from "fs";
 import { basename, extname, join, resolve } from "path";
 import slugify from "slugify";
+import { rebuildManifest } from "./rebuild-manifest.js";
 
 const BUCKET = "seethroughlab-media";
 const REGION = "us-east-1";
 const CF_DOMAIN = process.env.CF_DOMAIN || "d13tobysqmg65w.cloudfront.net";
 const DEFAULT_SOURCE =
   process.env.BTS_SOURCE || "root@openmediavault:/srv/dev-disk-by-uuid-8dfd5250-f9f8-470e-b821-820ea31be6e6/Vimeo";
-const MANIFEST_PATH = resolve("public/bts/manifest.json");
 const DEFAULT_MATCHER = "(^|[\\/_\\-\\s])bts([\\/_\\-\\s]|$)|behind[\\s_-]*the[\\s_-]*scenes";
 
 // --- arg parsing ---
@@ -108,22 +108,15 @@ function walkMp4Files(dir) {
   const entries = [];
   for (const name of readdirSync(dir)) {
     const fullPath = join(dir, name);
-    const stats = statSync(fullPath);
+    const stats = fsStatSync(fullPath);
     if (stats.isDirectory()) { entries.push(...walkMp4Files(fullPath)); continue; }
     if (stats.isFile() && extname(name).toLowerCase() === ".mp4") entries.push(fullPath);
   }
   return entries.sort((a, b) => a.localeCompare(b));
 }
 
-function getDurationAndSize(filePath) {
-  const output = execFileSync(
-    "ffprobe",
-    ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", filePath],
-    { encoding: "utf8" },
-  ).trim();
-  const duration = Number(output);
-  if (!Number.isFinite(duration) || duration <= 0) throw new Error(`Invalid duration for ${filePath}`);
-  return { duration: Number(duration.toFixed(2)), size: fsStatSync(filePath).size };
+function getSize(filePath) {
+  return fsStatSync(filePath).size;
 }
 
 // --- remote file utilities ---
@@ -167,14 +160,11 @@ function listRemoteTaggedMp4Files(source, tag) {
   return { remote, remotePath, files };
 }
 
-function getDurationAndSizeRemote(remote, absolutePath) {
-  const command = `ffprobe -v error -show_entries format=duration -of csv=p=0 ${shellQuote(absolutePath)} && stat -c %s ${shellQuote(absolutePath)}`;
-  const lines = execFileSync("ssh", [remote, command], { encoding: "utf8" }).trim().split("\n");
-  const duration = Number(lines[0]);
-  const size = Number(lines[1]);
-  if (!Number.isFinite(duration) || duration <= 0) throw new Error(`Invalid duration for ${absolutePath}`);
+function getSizeRemote(remote, absolutePath) {
+  const output = execFileSync("ssh", [remote, `stat -c %s ${shellQuote(absolutePath)}`], { encoding: "utf8" }).trim();
+  const size = Number(output);
   if (!Number.isInteger(size) || size <= 0) throw new Error(`Invalid size for ${absolutePath}`);
-  return { duration: Number(duration.toFixed(2)), size };
+  return size;
 }
 
 function createRemoteReadStream(remote, absolutePath) {
@@ -221,9 +211,9 @@ function buildEntries(files, remote, remotePath) {
       ? `${remotePath.replace(/\/+$/, "")}/${filePath}`
       : filePath;
 
-    const { duration, size } = remote
-      ? getDurationAndSizeRemote(remote, absolutePath)
-      : getDurationAndSize(filePath);
+    const size = remote
+      ? getSizeRemote(remote, absolutePath)
+      : getSize(filePath);
 
     const title = titleFromFilename(filename);
     const year = yearFromFilename(filename);
@@ -233,7 +223,6 @@ function buildEntries(files, remote, remotePath) {
       filename,
       ...(remote ? { remote, absolutePath } : { filePath }),
       url: `https://${CF_DOMAIN}/bts/${encodeURIComponent(filename)}`,
-      duration,
       size,
       title,
       ...(year ? { year } : {}),
@@ -241,20 +230,7 @@ function buildEntries(files, remote, remotePath) {
   });
 }
 
-// --- manifest / upload ---
-
-function writeManifest(entries) {
-  mkdirSync(resolve("public/bts"), { recursive: true });
-  const manifest = entries.map(({ id, url, duration, title, year }) => ({
-    id,
-    url,
-    duration,
-    title,
-    ...(year ? { year } : {}),
-  }));
-  writeFileSync(MANIFEST_PATH, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
-  return manifest;
-}
+// --- upload ---
 
 async function existsInS3(client, key) {
   try {
@@ -266,7 +242,7 @@ async function existsInS3(client, key) {
   }
 }
 
-async function uploadEntries(entries, manifest) {
+async function uploadEntries(entries) {
   const client = new S3Client({ region: REGION });
   let skipped = 0;
 
@@ -297,17 +273,6 @@ async function uploadEntries(entries, manifest) {
   }
 
   if (skipped > 0) console.log(`Skipped ${skipped} already-uploaded file(s).`);
-
-  await client.send(
-    new PutObjectCommand({
-      Bucket: BUCKET,
-      Key: "bts/manifest.json",
-      Body: Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`),
-      ContentType: "application/json",
-      CacheControl: "public, max-age=3600",
-    }),
-  );
-  console.log("Uploaded bts/manifest.json");
 }
 
 // --- main ---
@@ -340,20 +305,15 @@ async function main() {
     (options.limit ? ` (uploading first ${files.length})` : ""),
   );
 
-  if (remote) {
-    console.log("Reading durations from NAS via ffprobe...");
-  }
-
   const entries = buildEntries(files, remote, remotePath);
-  const manifest = writeManifest(entries);
-  console.log(`Wrote ${MANIFEST_PATH}`);
 
   if (options.dryRun) {
     console.log("Dry run enabled; skipped S3 upload.");
     return;
   }
 
-  await uploadEntries(entries, manifest);
+  await uploadEntries(entries);
+  await rebuildManifest();
 }
 
 main().catch((error) => {

@@ -4,8 +4,8 @@ const config = {
 };
 const CROSSFADE_DURATION = 1500;
 const MOSH_DECAY = 3000;
-const SEEK_TIMEOUT = 8000;
-const CANPLAY_TIMEOUT = 12000;
+const SEEK_TIMEOUT = 15000;
+const CANPLAY_TIMEOUT = 20000;
 
 const root = document.querySelector("[data-bts-root]");
 const script = document.querySelector("script[data-bts-manifest]");
@@ -53,6 +53,20 @@ const state = {
   previousVideoForEffect: null,
   renderer: null,
 };
+
+const pendingClears = new WeakMap();
+
+function scheduleClear(video) {
+  const existing = pendingClears.get(video);
+  if (existing !== undefined) window.clearTimeout(existing);
+  const id = window.setTimeout(() => {
+    pendingClears.delete(video);
+    video.pause();
+    video.removeAttribute("src");
+    video.load();
+  }, CROSSFADE_DURATION + 120);
+  pendingClears.set(video, id);
+}
 
 function syncVideoAudio(activeKey = state.activeKey) {
   const activeVideo = videos[activeKey];
@@ -103,6 +117,11 @@ function waitForEvent(target, eventName, timeoutMs) {
 }
 
 async function ensureVideoReady(video, clip) {
+  const pendingClear = pendingClears.get(video);
+  if (pendingClear !== undefined) {
+    window.clearTimeout(pendingClear);
+    pendingClears.delete(video);
+  }
   video.pause();
   video.src = clip.url;
   video.load();
@@ -221,14 +240,26 @@ function fadeAudio(incoming, outgoing) {
   window.requestAnimationFrame(step);
 }
 
+async function playNextWithRetry(immediate = false, maxRetries = 4) {
+  let lastError;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      await playNext(attempt === 0 ? immediate : false);
+      return;
+    } catch (error) {
+      lastError = error;
+      console.warn(`BTS clip failed (attempt ${attempt + 1}/${maxRetries + 1}):`, error.message);
+    }
+  }
+  console.error(lastError);
+  setStatus("Unable to continue playback.", true);
+}
+
 function scheduleNext(clip) {
   stopTransitionTimer();
   const delay = Math.max(1000, clip.snippetLen * 1000 - CROSSFADE_DURATION);
   state.transitionTimer = window.setTimeout(() => {
-    playNext(false).catch((error) => {
-      console.error(error);
-      setStatus("Unable to continue playback.", true);
-    });
+    playNextWithRetry(false);
   }, delay);
 }
 
@@ -238,6 +269,7 @@ async function playNext(immediate = false) {
   const incoming = videos[incomingKey];
   const outgoing = videos[outgoingKey];
   const clip = pickClip();
+  state.lastClipId = clip.id;
 
   setStatus("Loading stream...", !state.hasStarted);
   await ensureVideoReady(incoming, clip);
@@ -251,11 +283,7 @@ async function playNext(immediate = false) {
     state.lastCutTime = performance.now();
     outgoing.style.opacity = "0";
     fadeAudio(incoming, outgoing);
-    window.setTimeout(() => {
-      outgoing.pause();
-      outgoing.removeAttribute("src");
-      outgoing.load();
-    }, CROSSFADE_DURATION + 120);
+    scheduleClear(outgoing);
   } else {
     state.previousVideoForEffect = null;
     outgoing.style.opacity = "0";
@@ -269,7 +297,6 @@ async function playNext(immediate = false) {
   state.previousClip = state.activeClip;
   state.activeClip = clip;
   state.activeKey = incomingKey;
-  state.lastClipId = clip.id;
   state.hasStarted = true;
 
   state.renderer?.setSources(incoming, state.previousVideoForEffect);
@@ -532,10 +559,7 @@ async function init() {
   skipButton?.addEventListener("click", () => {
     if (!state.hasStarted) return;
     stopTransitionTimer();
-    playNext(false).catch((error) => {
-      console.error(error);
-      setStatus("Unable to continue playback.", true);
-    });
+    playNextWithRetry(false);
   });
 
   volumeSlider.addEventListener("input", async () => {
@@ -569,7 +593,7 @@ async function init() {
   }
 
   initGui();
-  await playNext(true);
+  await playNextWithRetry(true);
 }
 
 init().catch((error) => {

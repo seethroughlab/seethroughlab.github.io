@@ -45,9 +45,15 @@ const { manifestUrl } = Astro.props;
   </div>
 
   <div class="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between p-5 md:p-6">
-    <p class="max-w-[60vw] text-[0.65rem] uppercase tracking-[0.28em] text-white/35">
-      See Through Lab Behind The Scenes
-    </p>
+    <div class="flex flex-col gap-0.5">
+      <p class="max-w-[60vw] text-[0.65rem] uppercase tracking-[0.28em] text-white/35">
+        See Through Lab Behind The Scenes
+      </p>
+      <p
+        data-bts-clip-info
+        class="max-w-[60vw] truncate text-[0.65rem] tracking-wide text-white/40"
+      ></p>
+    </div>
   </div>
 
   <div class="absolute inset-x-0 bottom-0 z-20 flex items-end justify-end gap-2 p-5 md:p-6">

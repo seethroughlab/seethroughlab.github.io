@@ -1,7 +1,7 @@
 const config = {
   snippetMin: 4,
   snippetMax: 10,
-  filmIntensity: 1,
+  filmIntensity: 1.5,
 };
 const CROSSFADE_DURATION = 1500;
 const SEEK_TIMEOUT = 15000;
@@ -27,6 +27,7 @@ const volumeSlider = root.querySelector("[data-bts-volume]");
 const startOverlay = root.querySelector("[data-bts-start-overlay]");
 const startButton = root.querySelector("[data-bts-start-button]");
 const statusEl = root.querySelector("[data-bts-status]");
+const clipInfoEl = root.querySelector("[data-bts-clip-info]");
 
 if (
   !(videos.A instanceof HTMLVideoElement) ||
@@ -293,6 +294,10 @@ async function playNext(immediate = false) {
   state.activeKey = incomingKey;
   state.hasStarted = true;
 
+  if (clipInfoEl) {
+    clipInfoEl.textContent = [clip.title, clip.year].filter(Boolean).join(' · ');
+  }
+
   state.renderer?.setSources(incoming);
 
   setStatus("", false);
@@ -409,7 +414,7 @@ function createRenderer(canvasEl) {
   }
 
   let currentVideo = null;
-  let filmIntensity = 1.0;
+  let filmIntensity = 1.5;
   let failed = false;
 
   const program = createProgram();
@@ -521,6 +526,7 @@ function createRenderer(canvasEl) {
 }
 
 async function initGui() {
+  if (window.innerWidth < 768) return;
   try {
     const { GUI } = await import("https://cdn.jsdelivr.net/npm/lil-gui@0.20/+esm");
     const gui = new GUI({ title: "BTS Controls", width: 220 });

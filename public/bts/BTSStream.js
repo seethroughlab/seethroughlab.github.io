@@ -3,7 +3,6 @@ const config = {
   snippetMax: 10,
 };
 const CROSSFADE_DURATION = 1500;
-const MOSH_DECAY = 3000;
 const SEEK_TIMEOUT = 15000;
 const CANPLAY_TIMEOUT = 20000;
 
@@ -44,13 +43,10 @@ const state = {
   manifest: [],
   activeKey: "A",
   activeClip: null,
-  previousClip: null,
   volume: 0,
   hasStarted: false,
   transitionTimer: null,
-  lastCutTime: 0,
   lastClipId: null,
-  previousVideoForEffect: null,
   renderer: null,
 };
 
@@ -280,13 +276,10 @@ async function playNext(immediate = false) {
   incoming.style.opacity = "1";
 
   if (state.activeClip && !immediate) {
-    state.previousVideoForEffect = outgoing;
-    state.lastCutTime = performance.now();
     outgoing.style.opacity = "0";
     fadeAudio(incoming, outgoing);
     scheduleClear(outgoing);
   } else {
-    state.previousVideoForEffect = null;
     outgoing.style.opacity = "0";
     outgoing.pause();
     outgoing.removeAttribute("src");
@@ -295,12 +288,11 @@ async function playNext(immediate = false) {
     incoming.volume = state.volume;
   }
 
-  state.previousClip = state.activeClip;
   state.activeClip = clip;
   state.activeKey = incomingKey;
   state.hasStarted = true;
 
-  state.renderer?.setSources(incoming, state.previousVideoForEffect);
+  state.renderer?.setSources(incoming);
 
   setStatus("", false);
   scheduleNext(snippetLen);
@@ -349,8 +341,6 @@ function createRenderer(canvasEl) {
     precision mediump float;
 
     uniform sampler2D uCurrentFrame;
-    uniform sampler2D uPrevFrame;
-    uniform float uBlendFactor;
     uniform float uTime;
     uniform float uVideoAspect;
     uniform float uCanvasAspect;
@@ -369,14 +359,7 @@ function createRenderer(canvasEl) {
         : vec2(uCanvasAspect / uVideoAspect, 1.0);
       uv = (uv - 0.5) * coverScale + 0.5;
 
-      vec2 disp = vec2(
-        sin(uTime * 0.7 + uv.y * 11.0) * 0.006,
-        cos(uTime * 0.5 + uv.x * 8.0) * 0.003
-      ) * uBlendFactor;
-
-      vec4 curr = texture2D(uCurrentFrame, uv + disp);
-      vec4 prev = texture2D(uPrevFrame, uv);
-      vec4 color = mix(curr, prev, uBlendFactor * 0.7);
+      vec4 color = texture2D(uCurrentFrame, uv);
 
       float ca = 0.002;
       color.r = texture2D(uCurrentFrame, uv + vec2(ca, 0.0)).r;
@@ -422,7 +405,6 @@ function createRenderer(canvasEl) {
   }
 
   let currentVideo = null;
-  let previousVideo = null;
   let failed = false;
 
   const program = createProgram();
@@ -435,31 +417,15 @@ function createRenderer(canvasEl) {
   );
 
   const currentTexture = gl.createTexture();
-  const prevTexture = gl.createTexture();
-
-  [currentTexture, prevTexture].forEach((texture) => {
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texImage2D(
-      gl.TEXTURE_2D,
-      0,
-      gl.RGBA,
-      1,
-      1,
-      0,
-      gl.RGBA,
-      gl.UNSIGNED_BYTE,
-      new Uint8Array([0, 0, 0, 0]),
-    );
-  });
+  gl.bindTexture(gl.TEXTURE_2D, currentTexture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 0]));
 
   const positionLocation = gl.getAttribLocation(program, "aPosition");
   const currentLocation = gl.getUniformLocation(program, "uCurrentFrame");
-  const prevLocation = gl.getUniformLocation(program, "uPrevFrame");
-  const blendLocation = gl.getUniformLocation(program, "uBlendFactor");
   const timeLocation = gl.getUniformLocation(program, "uTime");
   const videoAspectLocation = gl.getUniformLocation(program, "uVideoAspect");
   const canvasAspectLocation = gl.getUniformLocation(program, "uCanvasAspect");
@@ -500,9 +466,8 @@ function createRenderer(canvasEl) {
 
     try {
       const hasCurrent = uploadTexture(currentTexture, currentVideo);
-      const hasPrev = uploadTexture(prevTexture, previousVideo) || uploadTexture(prevTexture, currentVideo);
 
-      if (!hasCurrent || !hasPrev) {
+      if (!hasCurrent) {
         window.requestAnimationFrame(render);
         return;
       }
@@ -520,14 +485,6 @@ function createRenderer(canvasEl) {
     gl.bindTexture(gl.TEXTURE_2D, currentTexture);
     gl.uniform1i(currentLocation, 0);
 
-    gl.activeTexture(gl.TEXTURE1);
-    gl.bindTexture(gl.TEXTURE_2D, prevTexture);
-    gl.uniform1i(prevLocation, 1);
-
-    const elapsed = Math.max(0, now - state.lastCutTime);
-    const blend = state.lastCutTime ? Math.max(0, 1 - elapsed / MOSH_DECAY) : 0;
-
-    gl.uniform1f(blendLocation, blend);
     gl.uniform1f(timeLocation, now * 0.001);
 
     const videoAspect = (currentVideo && currentVideo.videoWidth && currentVideo.videoHeight)
@@ -547,9 +504,8 @@ function createRenderer(canvasEl) {
   window.requestAnimationFrame(render);
 
   return {
-    setSources(nextCurrent, nextPrevious) {
+    setSources(nextCurrent) {
       currentVideo = nextCurrent;
-      previousVideo = nextPrevious;
     },
   };
 }

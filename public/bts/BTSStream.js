@@ -1,6 +1,7 @@
 const config = {
   snippetMin: 4,
   snippetMax: 10,
+  filmIntensity: 1,
 };
 const CROSSFADE_DURATION = 1500;
 const SEEK_TIMEOUT = 15000;
@@ -362,17 +363,19 @@ function createRenderer(canvasEl) {
 
       vec4 color = texture2D(uCurrentFrame, uv);
 
-      float ca = 0.002 * uFilmIntensity;
+      float ca = 0.003 * uFilmIntensity;
       color.r = texture2D(uCurrentFrame, uv + vec2(ca, 0.0)).r;
       color.b = texture2D(uCurrentFrame, uv - vec2(ca, 0.0)).b;
 
-      float scan = sin(gl_FragCoord.y * 1.8) * 0.025 * uFilmIntensity;
+      float scan = sin(gl_FragCoord.y * 1.8) * 0.04 * uFilmIntensity;
       color.rgb -= scan;
 
       float grain = rand(gl_FragCoord.xy + uTime) - 0.5;
-      color.rgb += grain * 0.035 * uFilmIntensity;
+      color.rgb += grain * 0.08 * uFilmIntensity;
 
-      gl_FragColor = vec4(color.rgb, 0.45);
+      // Alpha scales with intensity so effects have real presence at higher values
+      float alpha = clamp(uFilmIntensity * 0.4, 0.0, 0.85);
+      gl_FragColor = vec4(color.rgb, alpha);
     }
   `;
 
@@ -528,6 +531,9 @@ async function initGui() {
     gui.add(config, "snippetMax", 1, 120, 1).name("Max clip (s)").onChange((v) => {
       if (v < config.snippetMin) config.snippetMin = v;
     });
+    gui.add(config, "filmIntensity", 0, 5, 0.01).name("Film").onChange((v) => {
+      state.renderer?.setFilmIntensity(v);
+    });
   } catch {
     // lil-gui unavailable (offline, CSP, etc.) — skip silently
   }
@@ -535,11 +541,6 @@ async function initGui() {
 
 async function init() {
   setStatus("Loading stream...", true);
-
-  const filmSlider = root.querySelector("[data-bts-film]");
-  filmSlider?.addEventListener("input", () => {
-    state.renderer?.setFilmIntensity(Number(filmSlider.value));
-  });
 
   skipButton?.addEventListener("click", () => {
     if (!state.hasStarted) return;

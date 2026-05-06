@@ -500,7 +500,7 @@ function createRenderer(canvasEl) {
 
     try {
       const hasCurrent = uploadTexture(currentTexture, currentVideo);
-      const hasPrev = uploadTexture(prevTexture, previousVideo || currentVideo);
+      const hasPrev = uploadTexture(prevTexture, previousVideo) || uploadTexture(prevTexture, currentVideo);
 
       if (!hasCurrent || !hasPrev) {
         window.requestAnimationFrame(render);

@@ -344,6 +344,7 @@ function createRenderer(canvasEl) {
     uniform float uTime;
     uniform float uVideoAspect;
     uniform float uCanvasAspect;
+    uniform float uFilmIntensity;
     varying vec2 vUv;
 
     float rand(vec2 co) {
@@ -361,15 +362,15 @@ function createRenderer(canvasEl) {
 
       vec4 color = texture2D(uCurrentFrame, uv);
 
-      float ca = 0.002;
+      float ca = 0.002 * uFilmIntensity;
       color.r = texture2D(uCurrentFrame, uv + vec2(ca, 0.0)).r;
       color.b = texture2D(uCurrentFrame, uv - vec2(ca, 0.0)).b;
 
-      float scan = sin(gl_FragCoord.y * 1.8) * 0.025;
+      float scan = sin(gl_FragCoord.y * 1.8) * 0.025 * uFilmIntensity;
       color.rgb -= scan;
 
       float grain = rand(gl_FragCoord.xy + uTime) - 0.5;
-      color.rgb += grain * 0.035;
+      color.rgb += grain * 0.035 * uFilmIntensity;
 
       gl_FragColor = vec4(color.rgb, 0.45);
     }
@@ -405,6 +406,7 @@ function createRenderer(canvasEl) {
   }
 
   let currentVideo = null;
+  let filmIntensity = 1.0;
   let failed = false;
 
   const program = createProgram();
@@ -429,6 +431,7 @@ function createRenderer(canvasEl) {
   const timeLocation = gl.getUniformLocation(program, "uTime");
   const videoAspectLocation = gl.getUniformLocation(program, "uVideoAspect");
   const canvasAspectLocation = gl.getUniformLocation(program, "uCanvasAspect");
+  const filmIntensityLocation = gl.getUniformLocation(program, "uFilmIntensity");
 
   function disableRenderer(error) {
     failed = true;
@@ -486,6 +489,7 @@ function createRenderer(canvasEl) {
     gl.uniform1i(currentLocation, 0);
 
     gl.uniform1f(timeLocation, now * 0.001);
+    gl.uniform1f(filmIntensityLocation, filmIntensity);
 
     const videoAspect = (currentVideo && currentVideo.videoWidth && currentVideo.videoHeight)
       ? currentVideo.videoWidth / currentVideo.videoHeight
@@ -506,6 +510,9 @@ function createRenderer(canvasEl) {
   return {
     setSources(nextCurrent) {
       currentVideo = nextCurrent;
+    },
+    setFilmIntensity(v) {
+      filmIntensity = v;
     },
   };
 }
@@ -528,6 +535,11 @@ async function initGui() {
 
 async function init() {
   setStatus("Loading stream...", true);
+
+  const filmSlider = root.querySelector("[data-bts-film]");
+  filmSlider?.addEventListener("input", () => {
+    state.renderer?.setFilmIntensity(Number(filmSlider.value));
+  });
 
   skipButton?.addEventListener("click", () => {
     if (!state.hasStarted) return;

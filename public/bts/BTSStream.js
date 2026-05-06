@@ -526,6 +526,37 @@ function createRenderer(canvasEl) {
   };
 }
 
+function initPortraitModal(root) {
+  const modal = root.querySelector("[data-bts-portrait-modal]");
+  if (!modal) return;
+
+  let dismissTimer = null;
+
+  function show() {
+    modal.classList.add("opacity-100");
+    dismissTimer = setTimeout(hide, 3500);
+  }
+
+  function hide() {
+    clearTimeout(dismissTimer);
+    modal.classList.remove("opacity-100");
+  }
+
+  function isPortraitMobile() {
+    return window.innerWidth < 768 && window.innerHeight > window.innerWidth;
+  }
+
+  if (isPortraitMobile()) show();
+
+  window.matchMedia("(orientation: portrait)").addEventListener("change", (e) => {
+    if (e.matches) {
+      show();
+    } else {
+      hide();
+    }
+  });
+}
+
 async function initGui() {
   if (window.innerWidth < 768) return;
   try {
@@ -586,6 +617,7 @@ async function init() {
   }
 
   initGui();
+  initPortraitModal(root);
   await playNextWithRetry(true);
 }
 

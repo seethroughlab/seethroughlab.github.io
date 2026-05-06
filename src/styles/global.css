@@ -129,6 +129,16 @@
     pointer-events: none;
   }
 
+  /* BTS portrait-orientation modal phone icon */
+  @keyframes phone-rotate {
+    0%, 25%  { transform: rotate(0deg); }
+    50%, 75% { transform: rotate(-90deg); }
+    100%     { transform: rotate(0deg); }
+  }
+  .phone-rotate-icon svg {
+    animation: phone-rotate 3s ease-in-out infinite;
+  }
+
   /* Chromatic aberration logo class */
   .logo-text {
     font-size: clamp(3rem, 10vw, 7rem);

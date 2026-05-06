@@ -80,6 +80,24 @@ const { manifestUrl } = Astro.props;
   </div>
 
   <div
+    data-bts-portrait-modal
+    class="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center bg-black/50 opacity-0 transition-opacity duration-500"
+    aria-hidden="true"
+  >
+    <div class="phone-rotate-icon mb-5 text-white/55">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <!-- Phone body (portrait) -->
+        <rect x="15" y="6" width="18" height="30" rx="3" />
+        <circle cx="24" cy="32" r="1.5" fill="currentColor" stroke="none" />
+        <!-- Rotation arrow -->
+        <path d="M38 10 A16 16 0 0 1 38 38" stroke-dasharray="4 3" />
+        <polyline points="38,10 34,10 34,14" />
+      </svg>
+    </div>
+    <p class="text-[0.65rem] uppercase tracking-[0.28em] text-white/45">Rotate for the full experience</p>
+  </div>
+
+  <div
     data-bts-start-overlay
     class="absolute inset-0 z-30 hidden items-center justify-center bg-black/80 p-6"
   >

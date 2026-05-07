@@ -6,6 +6,7 @@ const config = {
 const CROSSFADE_DURATION = 1500;
 const SEEK_TIMEOUT = 15000;
 const CANPLAY_TIMEOUT = 20000;
+const LETTERBOX_THRESHOLD = 0.4;
 
 const root = document.querySelector("[data-bts-root]");
 const script = document.querySelector("script[data-bts-manifest]");
@@ -125,6 +126,7 @@ async function ensureVideoReady(video, clip) {
   video.load();
 
   await waitForEvent(video, "loadedmetadata", CANPLAY_TIMEOUT);
+  applyObjectFit(video);
 
   const dur = video.duration;
   let snippetLen, startTime;
@@ -526,6 +528,15 @@ function createRenderer(canvasEl) {
   };
 }
 
+function applyObjectFit(videoEl) {
+  const { videoWidth, videoHeight } = videoEl;
+  if (!videoWidth || !videoHeight) return;
+  const Rv = videoWidth / videoHeight;
+  const Rc = window.innerWidth / window.innerHeight;
+  const cropFraction = 1 - Math.min(Rv, Rc) / Math.max(Rv, Rc);
+  videoEl.style.objectFit = cropFraction > LETTERBOX_THRESHOLD ? "contain" : "cover";
+}
+
 function initPortraitModal(root) {
   const modal = root.querySelector("[data-bts-portrait-modal]");
   if (!modal) return;
@@ -615,6 +626,12 @@ async function init() {
     setStatus("No BTS clips available yet.", true);
     return;
   }
+
+  window.addEventListener("resize", () => {
+    for (const video of Object.values(videos)) {
+      if (video.videoWidth) applyObjectFit(video);
+    }
+  });
 
   initGui();
   initPortraitModal(root);

@@ -6,7 +6,7 @@ const config = {
 const CROSSFADE_DURATION = 1500;
 const SEEK_TIMEOUT = 15000;
 const CANPLAY_TIMEOUT = 20000;
-const LETTERBOX_THRESHOLD = 0.4;
+const LETTERBOX_STRETCH = 1.1; // letterbox when aspect ratios diverge by more than 10%
 
 const root = document.querySelector("[data-bts-root]");
 const script = document.querySelector("script[data-bts-manifest]");
@@ -603,8 +603,8 @@ function applyObjectFit(videoEl) {
   if (!videoWidth || !videoHeight) return;
   const Rv = videoWidth / videoHeight;
   const Rc = window.innerWidth / window.innerHeight;
-  const cropFraction = 1 - Math.min(Rv, Rc) / Math.max(Rv, Rc);
-  videoEl.style.objectFit = cropFraction > LETTERBOX_THRESHOLD ? "contain" : "cover";
+  const stretch = Math.max(Rv / Rc, Rc / Rv);
+  videoEl.style.objectFit = stretch > LETTERBOX_STRETCH ? "contain" : "cover";
 }
 
 function initPortraitModal(root) {

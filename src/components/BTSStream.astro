@@ -33,6 +33,25 @@ for (const [btsName, slug] of Object.entries(BTS_TO_SLUG)) {
   aria-label="Behind the scenes stream"
 >
   <video
+    data-bts-bg="A"
+    class="absolute inset-0 h-full w-full object-cover opacity-0 pointer-events-none scale-110 transition-opacity duration-[1500ms] ease-linear"
+    style="filter: blur(40px) brightness(0.35);"
+    muted
+    playsinline
+    preload="none"
+    aria-hidden="true"
+  ></video>
+  <video
+    data-bts-bg="B"
+    class="absolute inset-0 h-full w-full object-cover opacity-0 pointer-events-none scale-110 transition-opacity duration-[1500ms] ease-linear"
+    style="filter: blur(40px) brightness(0.35);"
+    muted
+    playsinline
+    preload="none"
+    aria-hidden="true"
+  ></video>
+
+  <video
     data-bts-video="A"
     class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-[1500ms] ease-linear"
     muted

@@ -6,7 +6,7 @@ const config = {
 const CROSSFADE_DURATION = 1500;
 const SEEK_TIMEOUT = 15000;
 const CANPLAY_TIMEOUT = 20000;
-const LETTERBOX_STRETCH = 1.1; // letterbox when aspect ratios diverge by more than 10%
+const LETTERBOX_STRETCH = 1.05; // letterbox when aspect ratios diverge by more than 5%
 
 const root = document.querySelector("[data-bts-root]");
 const script = document.querySelector("script[data-bts-manifest]");
@@ -29,6 +29,10 @@ const startOverlay = root.querySelector("[data-bts-start-overlay]");
 const startButton = root.querySelector("[data-bts-start-button]");
 const statusEl = root.querySelector("[data-bts-status]");
 const clipInfoEl   = root.querySelector("[data-bts-clip-info]");
+const bgVideos = {
+  A: root.querySelector('[data-bts-bg="A"]'),
+  B: root.querySelector('[data-bts-bg="B"]'),
+};
 const infoGroupEl  = root.querySelector("[data-bts-info-group]");
 const miniCard     = root.querySelector("[data-bts-mini-card]");
 const miniCardImg  = root.querySelector("[data-bts-mini-card-img]");
@@ -71,6 +75,12 @@ function scheduleClear(video) {
     video.pause();
     video.removeAttribute("src");
     video.load();
+    const key = Object.entries(videos).find(([, v]) => v === video)?.[0];
+    if (key) {
+      bgVideos[key].pause();
+      bgVideos[key].removeAttribute("src");
+      bgVideos[key].load();
+    }
   }, CROSSFADE_DURATION + 120);
   pendingClears.set(video, id);
 }
@@ -298,10 +308,22 @@ async function playNext(immediate = false) {
   syncVideoAudio(incomingKey);
   await ensurePlayback(incoming);
 
+  const isContain = incoming.style.objectFit === "contain";
+  const bgIncoming = bgVideos[incomingKey];
+  const bgOutgoing  = bgVideos[outgoingKey];
+
+  if (isContain && bgIncoming) {
+    bgIncoming.src = clip.url;
+    bgIncoming.load();
+    bgIncoming.play().catch(() => {});
+  }
+
   incoming.style.opacity = "1";
+  if (bgIncoming) bgIncoming.style.opacity = isContain ? "1" : "0";
 
   if (state.activeClip && !immediate) {
     outgoing.style.opacity = "0";
+    if (bgOutgoing) bgOutgoing.style.opacity = "0";
     fadeAudio(incoming, outgoing);
     scheduleClear(outgoing);
   } else {
@@ -309,6 +331,12 @@ async function playNext(immediate = false) {
     outgoing.pause();
     outgoing.removeAttribute("src");
     outgoing.load();
+    if (bgOutgoing) {
+      bgOutgoing.style.opacity = "0";
+      bgOutgoing.pause();
+      bgOutgoing.removeAttribute("src");
+      bgOutgoing.load();
+    }
     incoming.muted = state.volume === 0;
     incoming.volume = state.volume;
   }
@@ -600,11 +628,12 @@ function hideMiniCard() {
 
 function applyObjectFit(videoEl) {
   const { videoWidth, videoHeight } = videoEl;
-  if (!videoWidth || !videoHeight) return;
+  if (!videoWidth || !videoHeight) return false;
   const Rv = videoWidth / videoHeight;
   const Rc = window.innerWidth / window.innerHeight;
-  const stretch = Math.max(Rv / Rc, Rc / Rv);
-  videoEl.style.objectFit = stretch > LETTERBOX_STRETCH ? "contain" : "cover";
+  const contain = Math.max(Rv / Rc, Rc / Rv) > LETTERBOX_STRETCH;
+  videoEl.style.objectFit = contain ? "contain" : "cover";
+  return contain;
 }
 
 function initPortraitModal(root) {
@@ -732,8 +761,19 @@ async function init() {
   }, { passive: true });
 
   window.addEventListener("resize", () => {
-    for (const video of Object.values(videos)) {
-      if (video.videoWidth) applyObjectFit(video);
+    for (const [key, video] of Object.entries(videos)) {
+      if (!video.videoWidth) continue;
+      const wasContain = video.style.objectFit === "contain";
+      applyObjectFit(video);
+      const isContain = video.style.objectFit === "contain";
+      if (isContain && !wasContain) {
+        bgVideos[key].src = video.src;
+        bgVideos[key].load();
+        bgVideos[key].play().catch(() => {});
+        bgVideos[key].style.opacity = video.style.opacity;
+      } else if (!isContain && wasContain) {
+        bgVideos[key].style.opacity = "0";
+      }
     }
   });
 

@@ -1,7 +1,7 @@
 const config = {
   snippetMin: 4,
   snippetMax: 10,
-  filmIntensity: 1.5,
+  filmIntensity: 0.5,
 };
 const CROSSFADE_DURATION = 1500;
 const SEEK_TIMEOUT = 15000;
@@ -497,7 +497,7 @@ function createRenderer(canvasEl) {
   let outgoingVideo = null;
   let blendFactor   = 1.0;
   let crossfadeStart = null;
-  let filmIntensity = 1.5;
+  let filmIntensity = 0.5;
   let failed = false;
 
   const program = createProgram();

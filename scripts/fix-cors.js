@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Usage: node scripts/fix-cors.js [--dry-run]
-// Configures S3 CORS and CloudFront response headers for cross-origin HLS playback.
+// Configures S3 CORS and CloudFront response headers for cross-origin video playback.
 
 import { S3Client, PutBucketCorsCommand } from "@aws-sdk/client-s3";
 import {
@@ -90,7 +90,7 @@ async function createOrGetResponseHeadersPolicy() {
 
   const policyConfig = {
     Name: POLICY_NAME,
-    Comment: "CORS headers for HLS video playback on seethroughlab.com",
+    Comment: "CORS headers for video playback on seethroughlab.com",
     CorsConfig: {
       AccessControlAllowOrigins: {
         Quantity: ALLOWED_ORIGINS.length,
@@ -183,10 +183,10 @@ async function updateDistribution(responseHeadersPolicyId) {
 async function invalidateCache() {
   console.log("\n── Cache Invalidation ──");
   console.log(`Distribution: ${DISTRIBUTION_ID}`);
-  console.log("Path: /videos/*");
+  console.log("Paths: /videos/*, /bts/*");
 
   if (dryRun) {
-    console.log("[dry-run] Would create invalidation for /videos/*");
+    console.log("[dry-run] Would create invalidation for /videos/* and /bts/*");
     return;
   }
 
@@ -196,8 +196,8 @@ async function invalidateCache() {
       InvalidationBatch: {
         CallerReference: `fix-cors-${Date.now()}`,
         Paths: {
-          Quantity: 1,
-          Items: ["/videos/*"],
+          Quantity: 2,
+          Items: ["/videos/*", "/bts/*"],
         },
       },
     })
@@ -224,7 +224,7 @@ async function main() {
     console.log("CORS configuration complete.");
     console.log("\nVerify with:");
     console.log(
-      '  curl -I -H "Origin: https://seethroughlab.github.io" https://d13tobysqmg65w.cloudfront.net/videos/cosmic-crisis/index.m3u8'
+      '  curl -I -H "Origin: https://seethroughlab.github.io" https://d13tobysqmg65w.cloudfront.net/bts/sample.mp4'
     );
   }
 }

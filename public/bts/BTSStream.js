@@ -50,7 +50,6 @@ const state = {
   hasStarted: false,
   transitionTimer: null,
   lastClipId: null,
-  clipCount: 0,
   renderer: null,
 };
 
@@ -296,11 +295,10 @@ async function playNext(immediate = false) {
   state.activeClip = clip;
   state.activeKey = incomingKey;
   state.hasStarted = true;
-  state.clipCount += 1;
-
   if (clipInfoEl) {
     const meta = [clip.project, clip.year].filter(Boolean).join(' · ');
-    const counter = `(${state.clipCount}/${state.manifest.length})`;
+    const idx = state.manifest.findIndex((c) => c.id === clip.id);
+    const counter = idx !== -1 ? `(${idx + 1}/${state.manifest.length})` : '';
     clipInfoEl.textContent = [meta, counter].filter(Boolean).join(' ');
   }
 

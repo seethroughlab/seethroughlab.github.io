@@ -6,7 +6,7 @@ const config = {
 const CROSSFADE_DURATION = 1500;
 const SEEK_TIMEOUT = 15000;
 const CANPLAY_TIMEOUT = 20000;
-const LETTERBOX_STRETCH = 1.1; // letterbox when aspect ratios diverge by more than 10%
+const LETTERBOX_STRETCH = 1.5; // letterbox when aspect ratios diverge by more than 50%
 
 const root = document.querySelector("[data-bts-root]");
 const script = document.querySelector("script[data-bts-manifest]");

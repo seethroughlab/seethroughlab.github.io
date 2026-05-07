@@ -50,6 +50,7 @@ const state = {
   hasStarted: false,
   transitionTimer: null,
   lastClipId: null,
+  playedIds: new Set(),
   renderer: null,
 };
 
@@ -193,12 +194,19 @@ function pickClip() {
     throw new Error("No clips available.");
   }
 
-  const pool =
-    state.manifest.length > 1
-      ? state.manifest.filter((clip) => clip.id !== state.lastClipId)
-      : state.manifest;
+  let pool = state.manifest.filter((c) => !state.playedIds.has(c.id));
+  if (pool.length === 0) {
+    state.playedIds.clear();
+    pool = state.manifest.slice();
+  }
 
-  return { ...pool[Math.floor(Math.random() * pool.length)] };
+  const smoothPool = pool.length > 1
+    ? pool.filter((c) => c.id !== state.lastClipId)
+    : pool;
+
+  const clip = { ...smoothPool[Math.floor(Math.random() * smoothPool.length)] };
+  state.playedIds.add(clip.id);
+  return clip;
 }
 
 function stopTransitionTimer() {

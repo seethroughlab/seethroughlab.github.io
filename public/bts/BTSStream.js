@@ -391,6 +391,7 @@ function createRenderer(canvasEl) {
     uniform float uVideoAspect;
     uniform float uCanvasAspect;
     uniform float uFilmIntensity;
+    uniform int uIsContain;
     varying vec2 vUv;
 
     float rand(vec2 co) {
@@ -400,17 +401,29 @@ function createRenderer(canvasEl) {
     void main() {
       vec2 uv = vec2(vUv.x, 1.0 - vUv.y);
 
-      // Replicate object-fit: cover so the overlay aligns with the video element
-      vec2 coverScale = uCanvasAspect > uVideoAspect
-        ? vec2(1.0, uVideoAspect / uCanvasAspect)
-        : vec2(uCanvasAspect / uVideoAspect, 1.0);
-      uv = (uv - 0.5) * coverScale + 0.5;
+      vec2 uv_tex;
+      bool inVideoArea;
 
-      vec4 color = texture2D(uCurrentFrame, uv);
+      if (uIsContain == 1) {
+        vec2 containScale = uCanvasAspect > uVideoAspect
+          ? vec2(uVideoAspect / uCanvasAspect, 1.0)
+          : vec2(1.0, uCanvasAspect / uVideoAspect);
+        uv_tex = (uv - 0.5) / containScale + 0.5;
+        inVideoArea = uv_tex.x >= 0.0 && uv_tex.x <= 1.0
+                   && uv_tex.y >= 0.0 && uv_tex.y <= 1.0;
+      } else {
+        vec2 coverScale = uCanvasAspect > uVideoAspect
+          ? vec2(1.0, uVideoAspect / uCanvasAspect)
+          : vec2(uCanvasAspect / uVideoAspect, 1.0);
+        uv_tex = (uv - 0.5) * coverScale + 0.5;
+        inVideoArea = true;
+      }
+
+      vec4 color = texture2D(uCurrentFrame, uv_tex);
 
       float ca = 0.003 * uFilmIntensity;
-      color.r = texture2D(uCurrentFrame, uv + vec2(ca, 0.0)).r;
-      color.b = texture2D(uCurrentFrame, uv - vec2(ca, 0.0)).b;
+      color.r = texture2D(uCurrentFrame, uv_tex + vec2(ca, 0.0)).r;
+      color.b = texture2D(uCurrentFrame, uv_tex - vec2(ca, 0.0)).b;
 
       float scan = sin(gl_FragCoord.y * 1.8) * 0.04 * uFilmIntensity;
       color.rgb -= scan;
@@ -418,8 +431,7 @@ function createRenderer(canvasEl) {
       float grain = rand(gl_FragCoord.xy + uTime) - 0.5;
       color.rgb += grain * 0.08 * uFilmIntensity;
 
-      // Alpha scales with intensity so effects have real presence at higher values
-      float alpha = clamp(uFilmIntensity * 0.4, 0.0, 0.85);
+      float alpha = inVideoArea ? clamp(uFilmIntensity * 0.4, 0.0, 0.85) : 0.0;
       gl_FragColor = vec4(color.rgb, alpha);
     }
   `;
@@ -480,6 +492,7 @@ function createRenderer(canvasEl) {
   const videoAspectLocation = gl.getUniformLocation(program, "uVideoAspect");
   const canvasAspectLocation = gl.getUniformLocation(program, "uCanvasAspect");
   const filmIntensityLocation = gl.getUniformLocation(program, "uFilmIntensity");
+  const isContainLocation = gl.getUniformLocation(program, "uIsContain");
 
   function disableRenderer(error) {
     failed = true;
@@ -538,6 +551,8 @@ function createRenderer(canvasEl) {
 
     gl.uniform1f(timeLocation, now * 0.001);
     gl.uniform1f(filmIntensityLocation, filmIntensity);
+    const isContain = currentVideo != null && currentVideo.style.objectFit === "contain";
+    gl.uniform1i(isContainLocation, isContain ? 1 : 0);
 
     const videoAspect = (currentVideo && currentVideo.videoWidth && currentVideo.videoHeight)
       ? currentVideo.videoWidth / currentVideo.videoHeight

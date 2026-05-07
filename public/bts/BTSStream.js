@@ -28,7 +28,13 @@ const volumeSlider = root.querySelector("[data-bts-volume]");
 const startOverlay = root.querySelector("[data-bts-start-overlay]");
 const startButton = root.querySelector("[data-bts-start-button]");
 const statusEl = root.querySelector("[data-bts-status]");
-const clipInfoEl = root.querySelector("[data-bts-clip-info]");
+const clipInfoEl   = root.querySelector("[data-bts-clip-info]");
+const infoGroupEl  = root.querySelector("[data-bts-info-group]");
+const miniCard     = root.querySelector("[data-bts-mini-card]");
+const miniCardImg  = root.querySelector("[data-bts-mini-card-img]");
+const miniCardTitle = root.querySelector("[data-bts-mini-card-title]");
+const miniCardLink = root.querySelector("[data-bts-mini-card-link]");
+const projectMap   = JSON.parse(root.dataset.btsProjects || "{}");
 
 if (
   !(videos.A instanceof HTMLVideoElement) ||
@@ -50,6 +56,7 @@ const state = {
   hasStarted: false,
   transitionTimer: null,
   lastClipId: null,
+  forcedClipId: null,
   playedIds: new Set(),
   renderer: null,
 };
@@ -194,6 +201,12 @@ function pickClip() {
     throw new Error("No clips available.");
   }
 
+  if (state.forcedClipId) {
+    const forced = state.manifest.find((c) => c.id === state.forcedClipId);
+    state.forcedClipId = null;
+    if (forced) { state.playedIds.add(forced.id); return { ...forced }; }
+  }
+
   let pool = state.manifest.filter((c) => !state.playedIds.has(c.id));
   if (pool.length === 0) {
     state.playedIds.clear();
@@ -300,15 +313,29 @@ async function playNext(immediate = false) {
     incoming.volume = state.volume;
   }
 
+  hideMiniCard();
+
   state.activeClip = clip;
   state.activeKey = incomingKey;
   state.hasStarted = true;
+
+  const idx = state.manifest.findIndex((c) => c.id === clip.id);
+  if (idx !== -1) history.replaceState(null, "", `?clip=${idx + 1}`);
+
   if (clipInfoEl) {
-    const meta = [clip.project, clip.year].filter(Boolean).join(' · ');
-    const idx = state.manifest.findIndex((c) => c.id === clip.id);
-    const counter = idx !== -1 ? `(${idx + 1}/${state.manifest.length})` : '';
-    clipInfoEl.textContent = [meta, counter].filter(Boolean).join(' ');
+    const proj = projectMap[clip.project];
+    const projectHtml = clip.project
+      ? (proj
+          ? `<span data-bts-project-trigger class="underline-offset-2 hover:underline cursor-pointer">${clip.project}</span>`
+          : clip.project)
+      : "";
+    const yearHtml = clip.year ? String(clip.year) : "";
+    const meta = [projectHtml, yearHtml].filter(Boolean).join(" · ");
+    const counter = idx !== -1 ? `(${idx + 1}/${state.manifest.length})` : "";
+    clipInfoEl.innerHTML = [meta, counter].filter(Boolean).join(" ");
   }
+
+  showClipInfo();
 
   state.renderer?.setSources(incoming);
 
@@ -538,6 +565,39 @@ function createRenderer(canvasEl) {
   };
 }
 
+let infoFadeTimer = null;
+
+function showClipInfo() {
+  clearTimeout(infoFadeTimer);
+  infoGroupEl?.classList.add("opacity-100");
+  infoFadeTimer = setTimeout(() => {
+    infoGroupEl?.classList.remove("opacity-100");
+  }, 4000);
+}
+
+let miniCardTimer = null;
+
+function showMiniCard(proj) {
+  if (!miniCard || !proj) return;
+  miniCardImg.src = proj.coverImage;
+  miniCardImg.alt = proj.title;
+  miniCardTitle.textContent = proj.title;
+  miniCardLink.href = `/projects/${proj.slug}`;
+  miniCard.classList.add("opacity-100");
+  miniCard.style.pointerEvents = "auto";
+  miniCard.setAttribute("aria-hidden", "false");
+  clearTimeout(miniCardTimer);
+  miniCardTimer = setTimeout(hideMiniCard, 4000);
+}
+
+function hideMiniCard() {
+  clearTimeout(miniCardTimer);
+  if (!miniCard) return;
+  miniCard.classList.remove("opacity-100");
+  miniCard.style.pointerEvents = "none";
+  miniCard.setAttribute("aria-hidden", "true");
+}
+
 function applyObjectFit(videoEl) {
   const { videoWidth, videoHeight } = videoEl;
   if (!videoWidth || !videoHeight) return;
@@ -636,6 +696,40 @@ async function init() {
     setStatus("No BTS clips available yet.", true);
     return;
   }
+
+  // Feature 3: start at ?clip=N
+  const startParam = new URLSearchParams(location.search).get("clip");
+  const startIdx = startParam ? parseInt(startParam, 10) - 1 : -1;
+  if (startIdx >= 0 && state.manifest[startIdx]) {
+    state.forcedClipId = state.manifest[startIdx].id;
+  }
+
+  // Feature 10: mini-card click via delegation
+  clipInfoEl?.addEventListener("click", (e) => {
+    const trigger = e.target.closest("[data-bts-project-trigger]");
+    if (!trigger || !state.activeClip) return;
+    const proj = projectMap[state.activeClip.project];
+    if (proj) showMiniCard(proj);
+  });
+
+  // Features 4 & 5: swipe to skip, tap to play rest
+  let touchStartX = 0, touchStartY = 0;
+  root.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
+  }, { passive: true });
+  root.addEventListener("touchend", (e) => {
+    if (!state.hasStarted) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      stopTransitionTimer();
+      playNextWithRetry(false);
+    } else if (Math.abs(dx) < 15 && Math.abs(dy) < 15) {
+      stopTransitionTimer();
+      videos[state.activeKey].addEventListener("ended", () => playNextWithRetry(false), { once: true });
+    }
+  }, { passive: true });
 
   window.addEventListener("resize", () => {
     for (const video of Object.values(videos)) {

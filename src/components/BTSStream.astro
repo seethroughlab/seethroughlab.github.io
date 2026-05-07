@@ -1,13 +1,34 @@
 ---
+import { getCollection } from 'astro:content';
+
 interface Props {
   manifestUrl: string;
 }
 
 const { manifestUrl } = Astro.props;
+
+// BTS folder-derived project name → MDX slug mapping
+const BTS_TO_SLUG: Record<string, string> = {
+  "AABA Lounge":     "aaba-lounge",
+  "Acc ATX":         "accenture-interactive-window",
+  "Baron Samedi":    "baron-samedi",
+  "Canyon":          "fila-explorer-canyon",
+  "Dell Club":       "dell-club-interactive-wall",
+  "Moody Concourse": "dell-club-interactive-wall",
+  "PermaJersey":     "permajersey",
+};
+
+const allProjects = await getCollection('projects');
+const projectLookup: Record<string, { slug: string; title: string; coverImage: string }> = {};
+for (const [btsName, slug] of Object.entries(BTS_TO_SLUG)) {
+  const p = allProjects.find((p) => p.data.slug === slug);
+  if (p) projectLookup[btsName] = { slug, title: p.data.title, coverImage: p.data.coverImage };
+}
 ---
 
 <section
   data-bts-root
+  data-bts-projects={JSON.stringify(projectLookup)}
   class="relative h-dvh w-full overflow-hidden bg-bg text-text-primary"
   aria-label="Behind the scenes stream"
 >
@@ -49,14 +70,37 @@ const { manifestUrl } = Astro.props;
     aria-hidden="true"
   ></div>
 
+  <div
+    data-bts-mini-card
+    class="pointer-events-none absolute bottom-20 left-5 md:left-6 z-50 w-64
+           opacity-0 transition-opacity duration-500
+           bg-black/75 border border-white/15 backdrop-blur-sm"
+    aria-hidden="true"
+  >
+    <img data-bts-mini-card-img src="" alt="" class="w-full aspect-video object-cover" />
+    <div class="p-3">
+      <p data-bts-mini-card-title class="text-xs text-white/80 mb-2"></p>
+      <a
+        data-bts-mini-card-link
+        href="#"
+        class="text-[0.65rem] uppercase tracking-[0.28em] text-white/55 hover:text-white transition-colors duration-200"
+      >
+        View project →
+      </a>
+    </div>
+  </div>
+
   <div class="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-between p-5 md:p-6">
-    <div class="flex flex-col gap-0.5">
+    <div
+      data-bts-info-group
+      class="flex flex-col gap-0.5 opacity-0 transition-opacity duration-700"
+    >
       <p class="max-w-[60vw] text-[0.65rem] uppercase tracking-[0.28em] text-white/35">
         See Through Lab Behind The Scenes
       </p>
       <p
         data-bts-clip-info
-        class="max-w-[60vw] truncate text-[0.65rem] tracking-wide text-white/40"
+        class="max-w-[60vw] truncate text-[0.65rem] tracking-wide text-white/40 cursor-default"
       ></p>
     </div>
   </div>

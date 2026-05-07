@@ -59,6 +59,7 @@ const state = {
   forcedClipId: null,
   playedIds: new Set(),
   renderer: null,
+  rendererFailed: false,
 };
 
 const pendingClears = new WeakMap();
@@ -298,19 +299,34 @@ async function playNext(immediate = false) {
   syncVideoAudio(incomingKey);
   await ensurePlayback(incoming);
 
-  incoming.style.opacity = "1";
-
-  if (state.activeClip && !immediate) {
-    outgoing.style.opacity = "0";
-    fadeAudio(incoming, outgoing);
-    scheduleClear(outgoing);
+  if (state.renderer && !state.rendererFailed) {
+    if (state.activeClip && !immediate) {
+      state.renderer.startCrossfade(incoming, outgoing);
+      fadeAudio(incoming, outgoing);
+      scheduleClear(outgoing);
+    } else {
+      state.renderer.setCurrentOnly(incoming);
+      outgoing.pause();
+      outgoing.removeAttribute("src");
+      outgoing.load();
+      incoming.muted = state.volume === 0;
+      incoming.volume = state.volume;
+    }
   } else {
-    outgoing.style.opacity = "0";
-    outgoing.pause();
-    outgoing.removeAttribute("src");
-    outgoing.load();
-    incoming.muted = state.volume === 0;
-    incoming.volume = state.volume;
+    // CSS fallback when WebGL is unavailable or failed
+    incoming.style.opacity = "1";
+    if (state.activeClip && !immediate) {
+      outgoing.style.opacity = "0";
+      fadeAudio(incoming, outgoing);
+      scheduleClear(outgoing);
+    } else {
+      outgoing.style.opacity = "0";
+      outgoing.pause();
+      outgoing.removeAttribute("src");
+      outgoing.load();
+      incoming.muted = state.volume === 0;
+      incoming.volume = state.volume;
+    }
   }
 
   hideMiniCard();
@@ -336,8 +352,6 @@ async function playNext(immediate = false) {
   }
 
   showClipInfo();
-
-  state.renderer?.setSources(incoming);
 
   setStatus("", false);
   scheduleNext(snippetLen);
@@ -387,52 +401,66 @@ function createRenderer(canvasEl) {
     precision mediump float;
 
     uniform sampler2D uCurrentFrame;
-    uniform float uTime;
-    uniform float uVideoAspect;
+    uniform sampler2D uOutgoingFrame;
+    uniform float uBlendFactor;
+    uniform float uCurrentVideoAspect;
+    uniform int   uCurrentIsContain;
+    uniform float uOutgoingVideoAspect;
+    uniform int   uOutgoingIsContain;
     uniform float uCanvasAspect;
     uniform float uFilmIntensity;
-    uniform int uIsContain;
+    uniform float uTime;
     varying vec2 vUv;
 
     float rand(vec2 co) {
       return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
     }
 
+    vec2 fitUV(vec2 uv, float vAspect, int contain) {
+      if (contain == 1) {
+        vec2 s = uCanvasAspect > vAspect
+          ? vec2(vAspect / uCanvasAspect, 1.0)
+          : vec2(1.0, uCanvasAspect / vAspect);
+        return (uv - 0.5) / s + 0.5;
+      } else {
+        vec2 s = uCanvasAspect > vAspect
+          ? vec2(1.0, vAspect / uCanvasAspect)
+          : vec2(uCanvasAspect / vAspect, 1.0);
+        return (uv - 0.5) * s + 0.5;
+      }
+    }
+
+    bool inArea(vec2 t) {
+      return t.x >= 0.0 && t.x <= 1.0 && t.y >= 0.0 && t.y <= 1.0;
+    }
+
+    vec4 sampleFrame(sampler2D tex, vec2 t) {
+      return inArea(t) ? texture2D(tex, t) : vec4(0.0);
+    }
+
     void main() {
       vec2 uv = vec2(vUv.x, 1.0 - vUv.y);
-
-      vec2 uv_tex;
-      bool inVideoArea;
-
-      if (uIsContain == 1) {
-        vec2 containScale = uCanvasAspect > uVideoAspect
-          ? vec2(uVideoAspect / uCanvasAspect, 1.0)
-          : vec2(1.0, uCanvasAspect / uVideoAspect);
-        uv_tex = (uv - 0.5) / containScale + 0.5;
-        inVideoArea = uv_tex.x >= 0.0 && uv_tex.x <= 1.0
-                   && uv_tex.y >= 0.0 && uv_tex.y <= 1.0;
-      } else {
-        vec2 coverScale = uCanvasAspect > uVideoAspect
-          ? vec2(1.0, uVideoAspect / uCanvasAspect)
-          : vec2(uCanvasAspect / uVideoAspect, 1.0);
-        uv_tex = (uv - 0.5) * coverScale + 0.5;
-        inVideoArea = true;
-      }
-
-      vec4 color = texture2D(uCurrentFrame, uv_tex);
-
       float ca = 0.003 * uFilmIntensity;
-      color.r = texture2D(uCurrentFrame, uv_tex + vec2(ca, 0.0)).r;
-      color.b = texture2D(uCurrentFrame, uv_tex - vec2(ca, 0.0)).b;
+
+      vec2 tC = fitUV(uv, uCurrentVideoAspect,  uCurrentIsContain);
+      vec2 tO = fitUV(uv, uOutgoingVideoAspect, uOutgoingIsContain);
+
+      float r = mix(sampleFrame(uOutgoingFrame, tO + vec2(ca, 0.0)).r,
+                    sampleFrame(uCurrentFrame,  tC + vec2(ca, 0.0)).r, uBlendFactor);
+      float g = mix(sampleFrame(uOutgoingFrame, tO).g,
+                    sampleFrame(uCurrentFrame,  tC).g, uBlendFactor);
+      float b = mix(sampleFrame(uOutgoingFrame, tO - vec2(ca, 0.0)).b,
+                    sampleFrame(uCurrentFrame,  tC - vec2(ca, 0.0)).b, uBlendFactor);
+
+      vec3 color = vec3(r, g, b);
 
       float scan = sin(gl_FragCoord.y * 1.8) * 0.04 * uFilmIntensity;
-      color.rgb -= scan;
+      color -= scan;
 
       float grain = rand(gl_FragCoord.xy + uTime) - 0.5;
-      color.rgb += grain * 0.08 * uFilmIntensity;
+      color += grain * 0.08 * uFilmIntensity;
 
-      float alpha = inVideoArea ? clamp(uFilmIntensity * 0.4, 0.0, 0.85) : 0.0;
-      gl_FragColor = vec4(color.rgb, alpha);
+      gl_FragColor = vec4(color, 1.0);
     }
   `;
 
@@ -465,7 +493,10 @@ function createRenderer(canvasEl) {
     return program;
   }
 
-  let currentVideo = null;
+  let currentVideo  = null;
+  let outgoingVideo = null;
+  let blendFactor   = 1.0;
+  let crossfadeStart = null;
   let filmIntensity = 1.5;
   let failed = false;
 
@@ -478,25 +509,44 @@ function createRenderer(canvasEl) {
     gl.STATIC_DRAW,
   );
 
+  const blackPixel = new Uint8Array([0, 0, 0, 0]);
+
   const currentTexture = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, currentTexture);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 0]));
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, blackPixel);
 
-  const positionLocation = gl.getAttribLocation(program, "aPosition");
-  const currentLocation = gl.getUniformLocation(program, "uCurrentFrame");
-  const timeLocation = gl.getUniformLocation(program, "uTime");
-  const videoAspectLocation = gl.getUniformLocation(program, "uVideoAspect");
-  const canvasAspectLocation = gl.getUniformLocation(program, "uCanvasAspect");
+  const outgoingTexture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, outgoingTexture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, blackPixel);
+
+  const positionLocation      = gl.getAttribLocation(program, "aPosition");
+  const currentLocation       = gl.getUniformLocation(program, "uCurrentFrame");
+  const outgoingLocation      = gl.getUniformLocation(program, "uOutgoingFrame");
+  const blendFactorLocation   = gl.getUniformLocation(program, "uBlendFactor");
+  const timeLocation          = gl.getUniformLocation(program, "uTime");
+  const currentVideoAspectLoc = gl.getUniformLocation(program, "uCurrentVideoAspect");
+  const currentIsContainLoc   = gl.getUniformLocation(program, "uCurrentIsContain");
+  const outgoingVideoAspectLoc = gl.getUniformLocation(program, "uOutgoingVideoAspect");
+  const outgoingIsContainLoc  = gl.getUniformLocation(program, "uOutgoingIsContain");
+  const canvasAspectLocation  = gl.getUniformLocation(program, "uCanvasAspect");
   const filmIntensityLocation = gl.getUniformLocation(program, "uFilmIntensity");
-  const isContainLocation = gl.getUniformLocation(program, "uIsContain");
 
   function disableRenderer(error) {
     failed = true;
+    state.rendererFailed = true;
     canvasEl.classList.add("hidden");
+    for (const v of Object.values(videos)) {
+      v.classList.remove("opacity-0");
+      v.classList.add("transition-opacity", "duration-[1500ms]", "ease-linear");
+    }
     console.warn("Disabling BTS WebGL overlay.", error);
   }
 
@@ -528,10 +578,15 @@ function createRenderer(canvasEl) {
 
     resize();
 
-    try {
-      const hasCurrent = uploadTexture(currentTexture, currentVideo);
+    if (crossfadeStart !== null) {
+      blendFactor = Math.min(1.0, (now - crossfadeStart) / CROSSFADE_DURATION);
+      if (blendFactor >= 1.0) crossfadeStart = null;
+    }
 
-      if (!hasCurrent) {
+    try {
+      const hasCurrent  = uploadTexture(currentTexture,  currentVideo);
+      const hasOutgoing = uploadTexture(outgoingTexture, outgoingVideo);
+      if (!hasCurrent && !hasOutgoing) {
         window.requestAnimationFrame(render);
         return;
       }
@@ -549,18 +604,25 @@ function createRenderer(canvasEl) {
     gl.bindTexture(gl.TEXTURE_2D, currentTexture);
     gl.uniform1i(currentLocation, 0);
 
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, outgoingTexture);
+    gl.uniform1i(outgoingLocation, 1);
+
     gl.uniform1f(timeLocation, now * 0.001);
     gl.uniform1f(filmIntensityLocation, filmIntensity);
-    const isContain = currentVideo != null && currentVideo.style.objectFit === "contain";
-    gl.uniform1i(isContainLocation, isContain ? 1 : 0);
+    gl.uniform1f(blendFactorLocation, blendFactor);
 
-    const videoAspect = (currentVideo && currentVideo.videoWidth && currentVideo.videoHeight)
-      ? currentVideo.videoWidth / currentVideo.videoHeight
-      : 16 / 9;
-    gl.uniform1f(videoAspectLocation, videoAspect);
-    gl.uniform1f(canvasAspectLocation, canvasEl.clientWidth / canvasEl.clientHeight);
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    const curAspect = (currentVideo?.videoWidth && currentVideo?.videoHeight)
+      ? currentVideo.videoWidth / currentVideo.videoHeight : 16 / 9;
+    const outAspect = (outgoingVideo?.videoWidth && outgoingVideo?.videoHeight)
+      ? outgoingVideo.videoWidth / outgoingVideo.videoHeight : 16 / 9;
+
+    gl.uniform1f(currentVideoAspectLoc,  curAspect);
+    gl.uniform1i(currentIsContainLoc,    currentVideo?.style.objectFit === "contain" ? 1 : 0);
+    gl.uniform1f(outgoingVideoAspectLoc, outAspect);
+    gl.uniform1i(outgoingIsContainLoc,   outgoingVideo?.style.objectFit === "contain" ? 1 : 0);
+    gl.uniform1f(canvasAspectLocation,   canvasEl.clientWidth / canvasEl.clientHeight);
+
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
     window.requestAnimationFrame(render);
@@ -571,8 +633,17 @@ function createRenderer(canvasEl) {
   window.requestAnimationFrame(render);
 
   return {
-    setSources(nextCurrent) {
-      currentVideo = nextCurrent;
+    startCrossfade(incoming, outgoing) {
+      currentVideo   = incoming;
+      outgoingVideo  = outgoing;
+      blendFactor    = 0.0;
+      crossfadeStart = performance.now();
+    },
+    setCurrentOnly(video) {
+      currentVideo   = video;
+      outgoingVideo  = null;
+      blendFactor    = 1.0;
+      crossfadeStart = null;
     },
     setFilmIntensity(v) {
       filmIntensity = v;
@@ -700,6 +771,14 @@ async function init() {
   });
 
   state.renderer = createRenderer(canvas);
+
+  if (!state.renderer) {
+    // WebGL unavailable — restore CSS transitions so video elements can cross-fade
+    for (const v of Object.values(videos)) {
+      v.classList.remove("opacity-0");
+      v.classList.add("opacity-0", "transition-opacity", "duration-[1500ms]", "ease-linear");
+    }
+  }
 
   const response = await fetch(manifestUrl, { cache: "no-cache" });
   if (!response.ok) {

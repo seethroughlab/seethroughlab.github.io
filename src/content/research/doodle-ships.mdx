@@ -1,0 +1,13 @@
+---
+title: Doodle Ships
+slug: doodle-ships
+subtitle: Draw a spaceship; the game reads the drawing and makes it fight
+status: experiment
+labUrl: https://doodleships.com
+---
+
+Doodle Ships is a browser game where you draw a spaceship and then watch it fight. The drawing is the design. Where you draw the flames is where the ship pushes, and a barrel is a gun. Mass, turning, thrust, and weapons all come from the shape on the page, not from a menu. It grew out of childhood drawings of space battles that went on for weeks, with new ships added as they came, so the picture was always a story still unfolding.
+
+An analyzer turns raw strokes into a ship. It rasterizes the drawing, finds connected parts, and computes skeleton, symmetry, silhouette, and moments to work out what is a hull, an engine, or a weapon and where each one points. Special abilities also come from shape, like a tractor beam that pulls targets into the line of fire. The analyzer is checked against a corpus of hand-drawn ships so changes don't quietly break how existing drawings are read.
+
+Battles are fully simulated, with a deterministic physics model, AI pilots, a commander that sets objectives, and per-ship tactics. A director cuts the camera between the action, with slow motion on kills or a follow-the-fleet mode. Every ship also gets its own sound kit, synthesized from its geometry. You can pit your drawings against other players' ships, machine-drawn ships, or pre-made fleets.

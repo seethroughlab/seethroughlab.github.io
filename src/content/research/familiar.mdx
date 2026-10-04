@@ -1,16 +1,16 @@
 ---
 title: Familiar
 slug: familiar
-subtitle: AI-powered local music player that understands sound, not just metadata
+subtitle: Self-hosted music streaming that understands how your library sounds
 status: active
 githubUrl: https://github.com/seethroughlab/familiar
 labUrl: https://familiar.seethroughlab.com
 appStoreUrl: https://apps.apple.com/us/app/familiar-player/id6759879772
-coverImage: /images/research/familiar/cover.png
+coverImage: /images/research/familiar/cover.jpg
 ---
 
-Familiar is a self-hosted music player that uses AI to understand what music actually sounds like, not just what it's tagged as. It builds a semantic map of every track in a library using CLAP (Contrastive Language-Audio Pretraining) embeddings, enabling natural language search. Asking for "something that sounds like driving at night" returns results based on sonic similarity, not genre metadata.
+Familiar is a self-hosted music streaming service for the library you already own. It analyses every track for what it actually sounds like, not just what it's tagged as, so you can find music by its sound. You can start a playlist from a single track, album, or artist and get music that sounds like it, not just music filed under the same genre.
 
-The player includes three spatial visualizations: a Mood Grid that plots tracks on energy and valence axes, a Music Map that projects CLAP embeddings into 2D clusters using UMAP, and a 3D Explorer for navigating the library in WebGL. A chat interface exposes 30 AI-powered tools for playlist generation, music discovery, and library analysis.
+Each track gets audio features (BPM, key, energy, danceability) plus CLAP (Contrastive Language-Audio Pretraining) embeddings that support natural-language search over sound. Smart playlists filter on those features with rules. A community analysis cache speeds up processing for common tracks. Artwork fetching, artist and album deduplication, and a feed of new releases from artists already in the library keep a large collection tidy and moving.
 
-The backend is Python with FastAPI and PostgreSQL (with pgvector for embedding similarity), using librosa for audio feature extraction and the CLAP model for embeddings. The frontend is a React + TypeScript progressive web app. Spotify playlists can be imported, Last.fm scrobbling is built in, and a Subsonic-compatible API enables playback from mobile music apps and CarPlay. Everything runs in Docker.
+Listening happens in real apps: native Familiar Player clients for Mac and iPhone, with offline downloads, CarPlay, and lock-screen controls. The library is also exposed over MCP (Model Context Protocol), so you can point Claude or another AI assistant at your own music and ask it questions or have it build playlists. The server runs on a Mac (Apple Silicon) or anywhere Docker runs: Synology and other NAS boxes, OpenMediaVault, Linux, and Windows. It's free and MIT-licensed.

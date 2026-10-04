@@ -1,0 +1,15 @@
+---
+title: Longwave
+slug: longwave
+subtitle: Generative ambient audio, synthesized live and never the same twice
+status: active
+labUrl: https://longwave.seethroughlab.com
+appStoreUrl: https://apps.apple.com/us/app/longwave-ambience/id6771959226
+coverImage: /images/research/longwave/cover.jpg
+---
+
+Longwave is a generative ambient radio. Instead of looping recordings, it synthesizes a continuous, slowly evolving soundscape live on the device, note by note, so it never plays the same way twice. Dial in a mood, set it down, and let it fill the room. Its defining preset, Next Room, is music heard muffled through a wall, the way a concert sounds from down the hall as you drift off to sleep.
+
+Six presets anchor the sound space, and 15 macros shape texture versus melody, distance, room size, echo, and natural environment. The Drift preset works as a director, moving slowly through ambient and melodic regions over the course of a night. Narrative episodes pair long-form spoken-word stories with matching ambient beds, which makes Longwave a medium and not just a sound machine. It grew out of two earlier lab experiments, the [Ambient Generator](/research/ambient-generator) and [Interactive Frank 2](/research/interactive-frank-2).
+
+Underneath is a custom C++ DSP engine built from scratch. It combines algorithmic composition with subtractive, FM, and Karplus-Strong voices, multi-tap Schroeder reverb, and a real-time-safe mixing path at 48 kHz, with no sample libraries. One core compiles natively for iPhone, iPad, Apple TV, and Fire TV, and to WebAssembly for a live demo in the browser. Longwave is on the App Store for iPhone and iPad, with Apple TV and Fire TV in beta.

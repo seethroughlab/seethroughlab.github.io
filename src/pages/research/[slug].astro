@@ -13,7 +13,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { title, subtitle, status, coverImage, githubUrl, labUrl, appStoreUrl, instagramPosts, videos } = entry.data;
+const { title, subtitle, status, coverImage, githubUrl, labUrl, appStoreUrl, betaUrl, instagramPosts, videos } = entry.data;
 const { Content } = await render(entry);
 
 const statusStyles: Record<string, string> = {
@@ -49,7 +49,7 @@ const statusStyles: Record<string, string> = {
       )}
 
       {/* Action links */}
-      {(githubUrl || labUrl || appStoreUrl) && (
+      {(githubUrl || labUrl || appStoreUrl || betaUrl) && (
         <div class="flex flex-wrap items-center gap-3 mb-12">
           {githubUrl && (
             <a
@@ -67,6 +67,16 @@ const statusStyles: Record<string, string> = {
               class="inline-flex items-center gap-2 text-sm uppercase tracking-widest text-text-muted border border-border px-4 py-2 rounded-full hover:text-text-primary hover:border-text-muted transition-colors duration-200"
             >
               Launch
+            </a>
+          )}
+          {betaUrl && (
+            <a
+              href={betaUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 text-sm uppercase tracking-widest text-text-muted border border-border px-4 py-2 rounded-full hover:text-text-primary hover:border-text-muted transition-colors duration-200"
+            >
+              Join the Beta
             </a>
           )}
           {appStoreUrl && (
@@ -89,7 +99,7 @@ const statusStyles: Record<string, string> = {
       )}
 
       {/* Spacing when no action links */}
-      {!githubUrl && !labUrl && !appStoreUrl && <div class="mb-12" />}
+      {!githubUrl && !labUrl && !appStoreUrl && !betaUrl && <div class="mb-12" />}
 
       {/* MDX body */}
       <div class="prose">

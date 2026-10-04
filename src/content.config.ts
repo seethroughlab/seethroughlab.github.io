@@ -37,6 +37,7 @@ const research = defineCollection({
     coverImage: z.string().default(''),
     labUrl: z.string().default(''),
     appStoreUrl: z.string().default(''),
+    betaUrl: z.string().default(''),
     instagramPosts: z.array(z.string()).default([]),
     videos: z.array(z.string()).default([]),
   }),

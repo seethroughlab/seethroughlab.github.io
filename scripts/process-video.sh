@@ -33,13 +33,13 @@ fi
 echo "Input: ${WIDTH}x${HEIGHT}"
 
 # Determine scaling direction based on orientation
-# Landscape (width > height): scale by height → -2:TARGET
+# Landscape (width > height): fit within 16:9 box (1920x1080 etc.), never wider than that
 # Square/portrait (height >= width): scale by width → TARGET:-2
 if [ "$WIDTH" -gt "$HEIGHT" ]; then
   ORIENTATION="landscape"
-  SCALE_1080="-2:1080"
-  SCALE_720="-2:720"
-  SCALE_480="-2:480"
+  SCALE_1080="1920:1080:force_original_aspect_ratio=decrease:force_divisible_by=2"
+  SCALE_720="1280:720:force_original_aspect_ratio=decrease:force_divisible_by=2"
+  SCALE_480="854:480:force_original_aspect_ratio=decrease:force_divisible_by=2"
 else
   ORIENTATION="square/portrait"
   SCALE_1080="1080:-2"
@@ -61,9 +61,9 @@ ffmpeg -y -ss 2 -i "$INPUT" -frames:v 1 -q:v 2 "${OUTDIR}/poster.jpg" 2>/dev/nul
 echo "Encoding HLS renditions (1080p, 720p, 480p)..."
 ffmpeg -y -i "$INPUT" \
   -filter_complex "[0:v]split=3[v1][v2][v3]; \
-    [v1]scale=${SCALE_1080}[v1out]; \
-    [v2]scale=${SCALE_720}[v2out]; \
-    [v3]scale=${SCALE_480}[v3out]" \
+    [v1]scale=${SCALE_1080}:out_range=tv,format=yuv420p[v1out]; \
+    [v2]scale=${SCALE_720}:out_range=tv,format=yuv420p[v2out]; \
+    [v3]scale=${SCALE_480}:out_range=tv,format=yuv420p[v3out]" \
   -map "[v1out]" -map 0:a? \
   -c:v:0 libx264 -b:v:0 4M -maxrate:v:0 4.4M -bufsize:v:0 8M \
   -preset slow -profile:v high -level 4.1 \
@@ -87,9 +87,9 @@ ffmpeg -y -i "$INPUT" \
   "${OUTDIR}/480p/index.m3u8"
 
 # Compute actual output resolutions from the encoded files
-RES_1080=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 "${OUTDIR}/1080p/seg_000.ts" | head -1 | tr ',' 'x')
-RES_720=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 "${OUTDIR}/720p/seg_000.ts" | head -1 | tr ',' 'x')
-RES_480=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 "${OUTDIR}/480p/seg_000.ts" | head -1 | tr ',' 'x')
+RES_1080=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 "${OUTDIR}/1080p/seg_000.ts" | grep -m1 . | tr ',' 'x')
+RES_720=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 "${OUTDIR}/720p/seg_000.ts" | grep -m1 . | tr ',' 'x')
+RES_480=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 "${OUTDIR}/480p/seg_000.ts" | grep -m1 . | tr ',' 'x')
 
 echo "Actual resolutions: 1080p=${RES_1080}, 720p=${RES_720}, 480p=${RES_480}"
 

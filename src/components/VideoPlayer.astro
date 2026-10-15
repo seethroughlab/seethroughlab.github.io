@@ -2,13 +2,14 @@
 interface Props {
   src: string;
   poster?: string;
+  aspectRatio?: string; // CSS aspect-ratio, e.g. "1920 / 888"; defaults to 16:9
 }
 
-const { src, poster } = Astro.props;
+const { src, poster, aspectRatio } = Astro.props;
 const isHLS = src.endsWith(".m3u8");
 ---
 
-<div class="aspect-video overflow-hidden bg-black">
+<div class:list={["overflow-hidden bg-black", !aspectRatio && "aspect-video"]} style={aspectRatio ? `aspect-ratio: ${aspectRatio}` : undefined}>
   <video
     class="w-full h-full object-cover"
     controls

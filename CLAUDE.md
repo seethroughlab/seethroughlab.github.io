@@ -81,6 +81,8 @@ Schemas defined in `src/content.config.ts`.
 | githubUrl | `string` | defaults `''` |
 | coverImage | `string` | defaults `''` |
 | labUrl | `string` | defaults `''` |
+| videoSrc | `string` | CloudFront HLS URL; replaces the cover image as hero; defaults `''` |
+| videoAspect | `string` | CSS aspect-ratio for the hero video (e.g. `1920 / 888`); defaults to 16:9 |
 | instagramPosts | `string[]` | defaults `[]` |
 
 ### Hero priority on project pages
@@ -142,8 +144,10 @@ videos/<slug>/
 | light-echoes | 134693404 |
 | acer-predator | 130166758 |
 
+Research: `tidewalker` (sizzle reel, from the Tidewalker repo's `Builds/Reel/post/Tidewalker.mp4`).
+
 ### Scripts
-- **`scripts/process-video.sh <input.mp4> <slug>`** — Encodes HLS in 3 renditions (1080p@4Mbps, 720p@2Mbps, 480p@800kbps) + poster. Output: `processed/videos/<slug>/`.
+- **`scripts/process-video.sh <input.mp4> <slug>`** — Encodes HLS in 3 renditions (1080p@4Mbps, 720p@2Mbps, 480p@800kbps; landscape fits within 1920x1080 etc., output always 4:2:0 limited range) + poster. Output: `processed/videos/<slug>/`.
 - **`scripts/upload-video.js <slug>`** — Uploads processed video to S3 with correct MIME types and cache headers. Set `CF_DOMAIN` env var to override CloudFront domain.
 
 ### Re-encoding a video

@@ -1,11 +1,11 @@
 # See Through Lab
 
 Portfolio site for See Through Lab, an experimental art & technology studio.
-Built with Astro 5, deployed to GitHub Pages. Live at `https://seethroughlab.com`.
+Built with Astro 7, deployed to GitHub Pages. Live at `https://seethroughlab.com`.
 
 ## Tech Stack
 
-- **Astro 5.17** — static output (`astro.config.mjs`)
+- **Astro 7** — static output, `compressHTML: true` (`astro.config.mjs`)
 - **Tailwind CSS 4** — via `@tailwindcss/vite` plugin (no `tailwind.config`; theme in `src/styles/global.css`)
 - **MDX** — content authoring (`@astrojs/mdx`)
 - **TypeScript** (strict)

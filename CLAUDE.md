@@ -44,7 +44,7 @@ public/
   lab/                     # interactive experiments (ambient-generator, interactive-frank-2)
 
 scripts/
-  process-video.sh         # HLS encoding (ffmpeg)
+  process-video.sh         # HLS encoding (ffmpeg): [--grain] <input> <slug>; quality-based, capped per rendition
   upload-video.js          # S3 upload
   scrape-squarespace.js    # original site scraper (migration)
   enrich-frontmatter.js    # MDX frontmatter enrichment (migration)
@@ -160,7 +160,7 @@ Research: `tidewalker` (sizzle reel, from the Tidewalker repo's `Builds/Reel/pos
 To replace a published video, upload to a new path (e.g. `videos/antiphon/v2/` via `process-video.sh <in> antiphon/v2` + `upload-video.js antiphon/v2`) rather than overwriting: segments are cached as immutable for a year. Then delete the old files.
 
 ### Scripts
-- **`scripts/process-video.sh <input.mp4> <slug>`** — Encodes HLS in 3 renditions (1080p@4Mbps, 720p@2Mbps, 480p@800kbps; landscape fits within 1920x1080 etc., output always 4:2:0 limited range) + poster. Output: `processed/videos/<slug>/`.
+- **`scripts/process-video.sh [--grain] <input.mp4> <slug>`** — Encodes HLS in 3 renditions, quality-based with a ceiling (1080p CRF 18 ≤ 12 Mbps, 720p CRF 19 ≤ 6 Mbps, 480p CRF 20 ≤ 2.5 Mbps; keyframes every 2 s, aligned across renditions; landscape fits within 1920x1080 etc., output always 4:2:0 limited range) + poster; the master playlist states each rendition's measured peak and average bitrate. `--grain` adds x264 grain tuning for grainy, noisy or shader-textured footage. Output: `processed/videos/<slug>/`.
 - **`scripts/upload-video.js <slug>`** — Uploads processed video to S3 with correct MIME types and cache headers. Set `CF_DOMAIN` env var to override CloudFront domain.
 
 ### Re-encoding a video

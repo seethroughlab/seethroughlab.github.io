@@ -44,7 +44,7 @@ public/
   lab/                     # interactive experiments (ambient-generator, interactive-frank-2)
 
 scripts/
-  process-video.sh         # HLS encoding (ffmpeg)
+  process-video.sh         # HLS encoding (ffmpeg): [--grain] <input> <slug>; quality-based, capped per rendition
   upload-video.js          # S3 upload
   scrape-squarespace.js    # original site scraper (migration)
   enrich-frontmatter.js    # MDX frontmatter enrichment (migration)

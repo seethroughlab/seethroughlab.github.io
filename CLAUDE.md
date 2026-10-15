@@ -85,6 +85,17 @@ Schemas defined in `src/content.config.ts`.
 | videoAspect | `string` | CSS aspect-ratio for the hero video (e.g. `1920 / 888`); defaults to 16:9 |
 | instagramPosts | `string[]` | defaults `[]` |
 
+### Private (password-protected) projects
+
+The repo is public and GitHub Pages has no auth, so a project with `private: true` is never pushed in plain form:
+- its `.mdx` and `public/images/projects/<slug>/` are listed in `.gitignore`;
+- it is excluded from the homepage, tag pages, BTS and the normal build;
+- `node scripts/build-private.mjs` renders it locally, inlines CSS and images, encrypts the content (AES-GCM / PBKDF2) and writes `public/projects/<slug>/index.html`, the only file committed. Rerun it after editing the project.
+- Password: `.private-password` (gitignored) or `PRIVATE_PAGE_PASSWORD`.
+- To publish normally: remove `private: true`, its `.gitignore` lines and `public/projects/<slug>/`, then commit the `.mdx` and images.
+
+Currently private: `musical-bodies`.
+
 ### Hero priority on project pages
 
 Video → Image carousel → Cover image (first available wins).

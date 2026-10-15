@@ -28,3 +28,9 @@ migration-report.json
 /*.mp4
 /*.webm
 /*.mp4.part
+
+# Private projects (scripts/build-private.mjs): source never pushed, only the encrypted page
+.private-password
+.private-aside-*
+src/content/projects/musical-bodies.mdx
+public/images/projects/musical-bodies/

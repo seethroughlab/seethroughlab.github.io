@@ -4,7 +4,7 @@ import ProjectCard from '../../../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects');
+  const projects = await getCollection('projects', (p) => !p.data.private);
 
   const tagToSlug = (t: string) =>
     t.toLowerCase().replace(/ \/ /g, '-').replace(/ /g, '-');

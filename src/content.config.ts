@@ -13,6 +13,7 @@ const projects = defineCollection({
     videoSrc: z.string().default(''),
     videoStartTime: z.number().default(0),
     featured: z.boolean().default(false),
+    private: z.boolean().default(false), // see scripts/build-private.mjs
     order: z.number().default(99),
     role: z.string().default(''),
     tech: z.array(z.string()).default([]),

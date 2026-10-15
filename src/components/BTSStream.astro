@@ -18,7 +18,7 @@ const BTS_TO_SLUG: Record<string, string> = {
   "PermaJersey":     "permajersey",
 };
 
-const allProjects = await getCollection('projects');
+const allProjects = await getCollection('projects', (p) => !p.data.private);
 const projectLookup: Record<string, { slug: string; title: string; coverImage: string }> = {};
 for (const [btsName, slug] of Object.entries(BTS_TO_SLUG)) {
   const p = allProjects.find((p) => p.data.slug === slug);

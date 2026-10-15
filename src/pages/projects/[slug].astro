@@ -8,7 +8,8 @@ import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const MEDIA_RE = /\.(jpe?g|png|gif|webp|avif|mp4)$/i;
-  const projects = await getCollection('projects');
+  // Private projects are only built by scripts/build-private.mjs, which encrypts them
+  const projects = await getCollection('projects', (p) => !p.data.private || !!process.env.INCLUDE_PRIVATE);
   const paths = await Promise.all(
     projects.map(async (project) => {
       const slug = project.data.slug;

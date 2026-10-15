@@ -146,6 +146,8 @@ videos/<slug>/
 
 Research: `tidewalker` (sizzle reel, from the Tidewalker repo's `Builds/Reel/post/Tidewalker.mp4`), `antiphon` (sizzle reel 16x9, from `~/Music/Antiphon/common-tone/videos/`).
 
+To replace a published video, upload to a new path (e.g. `videos/antiphon/v2/` via `process-video.sh <in> antiphon/v2` + `upload-video.js antiphon/v2`) rather than overwriting: segments are cached as immutable for a year. Then delete the old files.
+
 ### Scripts
 - **`scripts/process-video.sh <input.mp4> <slug>`** — Encodes HLS in 3 renditions (1080p@4Mbps, 720p@2Mbps, 480p@800kbps; landscape fits within 1920x1080 etc., output always 4:2:0 limited range) + poster. Output: `processed/videos/<slug>/`.
 - **`scripts/upload-video.js <slug>`** — Uploads processed video to S3 with correct MIME types and cache headers. Set `CF_DOMAIN` env var to override CloudFront domain.

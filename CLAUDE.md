@@ -9,7 +9,7 @@ Built with Astro 7, deployed to GitHub Pages. Live at `https://seethroughlab.com
 - **Tailwind CSS 4** — via `@tailwindcss/vite` plugin (no `tailwind.config`; theme in `src/styles/global.css`)
 - **MDX** — content authoring (`@astrojs/mdx`)
 - **TypeScript** (strict)
-- **Node 20** (`.nvmrc`)
+- **Node 22** (`.nvmrc`)
 
 ## Commands
 

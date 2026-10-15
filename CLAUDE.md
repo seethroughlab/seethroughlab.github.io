@@ -144,7 +144,7 @@ videos/<slug>/
 | light-echoes | 134693404 |
 | acer-predator | 130166758 |
 
-Research: `tidewalker` (sizzle reel, from the Tidewalker repo's `Builds/Reel/post/Tidewalker.mp4`).
+Research: `tidewalker` (sizzle reel, from the Tidewalker repo's `Builds/Reel/post/Tidewalker.mp4`), `antiphon` (sizzle reel 16x9, from `~/Music/Antiphon/common-tone/videos/`).
 
 ### Scripts
 - **`scripts/process-video.sh <input.mp4> <slug>`** — Encodes HLS in 3 renditions (1080p@4Mbps, 720p@2Mbps, 480p@800kbps; landscape fits within 1920x1080 etc., output always 4:2:0 limited range) + poster. Output: `processed/videos/<slug>/`.

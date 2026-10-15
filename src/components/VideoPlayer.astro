@@ -23,32 +23,32 @@ const isHLS = src.endsWith(".m3u8");
 
 {isHLS && (
   <script>
+    // hls.js wherever it runs, starting at the sharpest rendition: a browser's own HLS (Safari, and now Chrome)
+    // starts low and climbs, which made grainy footage (Antiphon's Show) look poorly encoded for most of a short
+    // video. ABR still steps down on a slow connection or a small player. The browser's own HLS is the fallback.
+    const HLS_JS = "https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js";
+
     function initHLS() {
       document.querySelectorAll("video[data-src]").forEach((video) => {
         const src = video.dataset.src;
         if (!src || video.dataset.hlsInit) return;
         video.dataset.hlsInit = "true";
 
-        if (video.canPlayType("application/vnd.apple.mpegurl")) {
-          // Safari: native HLS
-          video.src = src;
-        } else if (window.Hls && window.Hls.isSupported()) {
-          const hls = new window.Hls();
+        if (window.Hls && window.Hls.isSupported()) {
+          const hls = new window.Hls({ capLevelToPlayerSize: true });
+          hls.on(window.Hls.Events.MANIFEST_PARSED, () => { hls.startLevel = hls.levels.length - 1; });
           hls.loadSource(src);
           hls.attachMedia(video);
+        } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+          video.src = src;
         }
       });
     }
 
-    // Load hls.js for non-Safari browsers
-    const testVideo = document.createElement("video");
-    if (!testVideo.canPlayType("application/vnd.apple.mpegurl")) {
-      const script = document.createElement("script");
-      script.src = "https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js";
-      script.onload = initHLS;
-      document.head.appendChild(script);
-    } else {
-      initHLS();
-    }
+    const script = document.createElement("script");
+    script.src = HLS_JS;
+    script.onload = initHLS;
+    script.onerror = initHLS;   // no hls.js: the browser's own HLS
+    document.head.appendChild(script);
   </script>
 )}

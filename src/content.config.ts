@@ -43,6 +43,9 @@ const research = defineCollection({
     betaUrl: z.string().default(''),
     instagramPosts: z.array(z.string()).default([]),
     videos: z.array(z.string()).default([]),
+    credits: z.array(
+      z.object({ role: z.string(), name: z.string(), url: z.string().optional() })
+    ).default([]),
   }),
 });
 

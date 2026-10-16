@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { title, subtitle, status, coverImage, githubUrl, labUrl, videoSrc, videoAspect, appStoreUrl, betaUrl, instagramPosts, videos } = entry.data;
+const { title, subtitle, status, coverImage, githubUrl, labUrl, videoSrc, videoAspect, appStoreUrl, betaUrl, instagramPosts, videos, credits } = entry.data;
 const { Content } = await render(entry);
 
 const statusStyles: Record<string, string> = {
@@ -110,6 +110,27 @@ const statusStyles: Record<string, string> = {
       <div class="prose">
         <Content />
       </div>
+
+      {credits.length > 0 && (
+        <dl class="mt-12 border-t border-border pt-8 text-sm grid grid-cols-[7rem_1fr] gap-2">
+          <dt class="text-[0.65rem] uppercase tracking-widest text-text-muted pt-0.5">Team</dt>
+          <dd>
+            <dl class="space-y-1">
+              {credits.map(({ role: r, name, url }) => (
+                <div class="grid grid-cols-[10rem_1fr] gap-2">
+                  <dt class="text-text-muted">{r}</dt>
+                  <dd>
+                    {url
+                      ? <a href={url} target="_blank" rel="noopener noreferrer" class="text-text-primary hover:underline">{name}</a>
+                      : <span class="text-text-primary">{name}</span>
+                    }
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </dd>
+        </dl>
+      )}
     </div>
 
     {/* Videos */}

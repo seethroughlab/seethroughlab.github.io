@@ -84,6 +84,7 @@ Schemas defined in `src/content.config.ts`.
 | videoSrc | `string` | CloudFront HLS URL; replaces the cover image as hero; defaults `''` |
 | videoAspect | `string` | CSS aspect-ratio for the hero video (e.g. `1920 / 888`); defaults to 16:9 |
 | instagramPosts | `string[]` | defaults `[]` |
+| credits | `{ role, name, url? }[]` | shown as "Team" below the body; defaults `[]` |
 
 ### Private (password-protected) projects
 

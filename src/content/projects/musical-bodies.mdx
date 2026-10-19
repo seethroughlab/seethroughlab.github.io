@@ -1,0 +1,55 @@
+---
+title: "Musical Bodies"
+slug: "musical-bodies"
+client: "The Metropolitan Museum of Art"
+year: 2026
+tags:
+  - "Installation"
+coverImage: "/images/projects/musical-bodies/cover.jpg"
+videoSrc: "https://d13tobysqmg65w.cloudfront.net/videos/musical-bodies/index.m3u8"
+featured: true
+order: 0
+role: "Technologist"
+tech:
+  - "TouchDesigner"
+  - "Python"
+  - "pyo"
+  - "People Tracking"
+  - "Spatial Audio"
+  - "WebSocket"
+credits:
+  - role: "Curator"
+    name: "Bradley Strauchen-Scherer, The Metropolitan Museum of Art"
+    url: "https://www.metmuseum.org/exhibitions/musical-bodies"
+  - role: "Creative Lead"
+    name: "Brett Renfer"
+  - role: "Technologist"
+    name: "Jeffrey Crouse"
+  - role: "Composer"
+    name: "David Van Tieghem"
+  - role: "Dancer"
+    name: "Lauren Lovette"
+  - role: "Dancer"
+    name: "Anabel Alpert"
+  - role: "Video"
+    name: "Melissa Bell, The Met"
+  - role: "Video Production"
+    name: "SandenWolff"
+links:
+  - label: "Musical Bodies at The Met"
+    url: "https://www.metmuseum.org/exhibitions/musical-bodies"
+  - label: "The Met to Open First Major Exhibition Exploring Musical Instruments and the Body (press release)"
+    url: "https://www.metmuseum.org/press-releases/musical-bodies"
+  - label: "Music and art meld in 'Musical Bodies' exhibition at The Met (NY1)"
+    url: "https://ny1.com/nyc/all-boroughs/news/2026/06/01/music--art--met-museum-"
+---
+
+*Musical Bodies* was The Metropolitan Museum of Art's first major exhibition exploring the relationship between musical instruments and the human body. On view at The Met Fifth Avenue from June 7 through September 27, 2026, it gathered some 130 instruments, paintings, sculptures, and drawings across 4,000 years; from ancient rattles to one of Prince's guitars; to illuminate how the instruments we build and play express who we are, what we value, and what we believe.
+
+The exhibition's interactive centerpiece is the first full-body interactive piece ever shown at The Met. Rather than a touchscreen or a single trigger, the work reads the whole body. People-tracking sensors follow each visitor as they move through the gallery, and that movement becomes music. Walk across the space and you play melodic notes; gather and linger and you shift the ambient harmony underneath. With several people in the room at once it turns into a collaborative, generative composition that no one is fully in control of.
+
+The piece grew out of concept, design, and prototyping by Brett Renfer, working with the curator from the earliest "I have a crazy idea" stage. I came on as the technologist to build the production system. I chose the sensors, built the TouchDesigner application that handles the people tracking and the synchronized light and color, and wrote the audio engine from scratch in Python. The space is divided into 60 sections mapped to that engine, running 16 voices of polyphony over 6-channel spatial sound, with lead instruments and crossfading ambient layers drawn from music composed by David Van Tieghem. TouchDesigner and the audio engine talk to each other over a WebSocket link, with the audio engine acting as timing master so that visuals and sound stay locked together, quantized to a shared musical clock.
+
+When the room empties the installation drops into an idle mode, a slow wave of light and sound moving across the gallery until the next person arrives to wake it up.
+
+*Project commissioned by The Metropolitan Museum of Art, 2026. Video by The Metropolitan Museum of Art and SandenWolff, Inc., 2026.*

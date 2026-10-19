@@ -95,7 +95,7 @@ The repo is public and GitHub Pages has no auth, so a project with `private: tru
 - Password: `.private-password` (gitignored) or `PRIVATE_PAGE_PASSWORD`.
 - To publish normally: remove `private: true`, its `.gitignore` lines and `public/projects/<slug>/`, then commit the `.mdx` and images.
 
-Currently private: `musical-bodies`.
+Currently private: none.
 
 ### Hero priority on project pages
 

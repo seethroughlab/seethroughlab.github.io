@@ -54,7 +54,7 @@
   const BARREL_FRONT = -BODY_L / 2 - 21.1;                   // 25 x 2 window disc in a 2.1 mm pocket here
   const RING_SCREW_R = 14.85, RING_T = 1.5;
   const TRIPOD = { x: (-18 + 14) / 2 + 6 + 1.5, z: -92 };    // grip cap's underside
-  const LOGO_DOT = { x: -31 + 11 + 3 + 6.3 * 6.5 + 2.2, z: (14 - 0.27 * 6.5) + 0.42 * 6.5 }; // red paint, left side
+  const LOGO_DOT = { x: 7.21, z: 19.62, r: 1.53 };          // the mark's REC dot (pxl_case.logo_dot()), red paint
 
   // ---- scene -----------------------------------------------------------------------------------------------
 
@@ -277,8 +277,8 @@
       put('front_shell', new THREE.BoxGeometry(0.4, 2.8, 0.25), M.blackSteel, P(SWITCH.x - 2.3 + i * 0.9, SIDE + 0.45, SWITCH.z));
     }
 
-    // --- The logo's REC dot, filled with red paint.
-    put('front_shell', new THREE.CircleGeometry(1.0, 24), M.paint, P(LOGO_DOT.x, -SIDE + 0.55, LOGO_DOT.z), m => { m.receiveShadow = false; });
+    // --- The mark's REC dot, filled with red paint.
+    put('front_shell', new THREE.CircleGeometry(LOGO_DOT.r, 32), M.paint, P(LOGO_DOT.x, -SIDE + 0.55, LOGO_DOT.z), m => { m.receiveShadow = false; });
 
     // --- Grip cap: the ¼-20 heat-set insert.
     const insert = new THREE.Shape(); insert.absarc(0, 0, 4.0, 0, Math.PI * 2);

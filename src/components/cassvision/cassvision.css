@@ -91,3 +91,11 @@
 .cv .lbl-part { fill: var(--cv-part); font: 6px var(--cv-mono); }
 .cv .ghost { opacity: .55; }
 .cv .view { fill: var(--cv-muted); font: 600 6px system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.cv .mark { fill: none; stroke: var(--cv-ink); stroke-width: .6; }
+.cv .active { fill: #142028; }
+.cv .lbl-scr { fill: var(--cv-muted); font: 5px var(--cv-mono); }
+[data-cassvision-form] .cv-drawing svg { min-width: 0; }
+[data-cassvision-form] table { min-width: 0; }
+[data-cassvision-form] .cv-sheet { padding: 14px; }
+.cv-facts-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+@media (min-width: 700px) { .cv-facts-2 { grid-template-columns: 1fr 1fr; } }

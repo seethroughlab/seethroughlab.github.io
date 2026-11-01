@@ -1,0 +1,80 @@
+---
+// The form of the camera: what it is, why it is that shape, and its final dimensions. The drawing is
+// generated from the Cassvision repo's enclosure/pxl_case.py (1 unit = 1 mm) by
+// scripts/cassvision-form-drawing.py: rerun it if the CAD's outline changes.
+import './cassvision.css';
+---
+
+<div class="cv" data-cassvision-form>
+  <section class="cv-sheet" aria-label="Side and rear views">
+    <div class="cv-drawing">
+      <svg viewBox="0 0 364 205" role="img" aria-label="The final case, side and rear, in millimetres: body 82 long, 61 tall, 76 wide; 106 long with the lens barrel and screen, 153 tall with the grip; 2.4 inch screen on the rear, REC light below it on the right, trigger REC at the top front of the grip, the mark on the left side.">
+        <text x="22.4" y="12" class="view">Left side</text>
+        <polygon points="68,83 100,83 106,173 74,173" class="shell"/>
+        <rect x="79" y="173" width="25" height="2" rx="0.8" class="shell"/>
+        <rect x="67.03" y="89.2" width="2.5" height="18.6" rx="1.2" class="recf"/>
+        <rect x="45" y="22" width="82" height="61" rx="3.5" class="shell"/>
+        <line x1="120" y1="23" x2="120" y2="82" class="dim"/>
+        <rect x="127" y="27.5" width="1.5" height="44" class="scr"/>
+        <rect x="23.9" y="35.5" width="21.1" height="34" rx="1" class="shell"/>
+        <rect x="22.4" y="35.5" width="1.5" height="34" class="door"/>
+        <rect x="21.8" y="41.5" width="0.6" height="22" class="glass"/>
+        <rect x="69.5" y="40.06" width="26" height="19.88" rx="3.82" class="mark"/>
+        <circle cx="86.71" cy="46.94" r="2.49" class="mark"/>
+        <circle cx="93.21" cy="63.38" r="1.53" class="recf"/>
+        <text x="65.03" y="100.5" class="lbl" text-anchor="end">REC trigger</text>
+        <text x="70" y="174" class="lbl" text-anchor="end">¼-20 tripod insert</text>
+        <line x1="22.4" y1="189" x2="128.5" y2="189" class="dim"/>
+        <line x1="22.4" y1="185" x2="22.4" y2="193" class="dim"/>
+        <line x1="128.5" y1="185" x2="128.5" y2="193" class="dim"/>
+        <text x="75.45" y="199" class="lbl-ink" text-anchor="middle">106 long</text>
+        <line x1="140.5" y1="22" x2="140.5" y2="175" class="dim"/>
+        <line x1="136.5" y1="22" x2="144.5" y2="22" class="dim"/>
+        <line x1="136.5" y1="175" x2="144.5" y2="175" class="dim"/>
+        <text x="144.5" y="100.5" class="lbl-ink" text-anchor="start">153</text>
+        <text x="248" y="12" class="view">Rear</text>
+        <rect x="271" y="83" width="30" height="90" rx="2" class="shell"/>
+        <rect x="273.5" y="173" width="25" height="2" rx="0.8" class="shell"/>
+        <rect x="248" y="22" width="76" height="61" rx="6" class="shell"/>
+        <rect x="255.4" y="27.5" width="61.2" height="44" rx="0.6" class="scr"/>
+        <rect x="261.52" y="31.14" width="48.96" height="36.72" class="active"/>
+        <circle cx="253.25" cy="68.75" r="1.9" class="knob"/>
+        <circle cx="253.25" cy="31.25" r="1.9" class="knob"/>
+        <circle cx="318.75" cy="68.75" r="1.9" class="knob"/>
+        <circle cx="318.75" cy="31.25" r="1.9" class="knob"/>
+        <circle cx="313" cy="77.8" r="2.5" class="recf"/>
+        <text x="327" y="79.8" class="lbl">REC light</text>
+        <text x="286" y="51.5" class="lbl-scr" text-anchor="middle">2.4" 320×240</text>
+        <line x1="248" y1="189" x2="324" y2="189" class="dim"/>
+        <line x1="248" y1="185" x2="248" y2="193" class="dim"/>
+        <line x1="324" y1="185" x2="324" y2="193" class="dim"/>
+        <text x="286" y="199" class="lbl-ink" text-anchor="middle">76 wide</text>
+        <line x1="238" y1="22" x2="238" y2="83" class="dim"/>
+        <line x1="234" y1="22" x2="242" y2="22" class="dim"/>
+        <line x1="234" y1="83" x2="242" y2="83" class="dim"/>
+        <text x="234" y="54.5" class="lbl-ink" text-anchor="end">61</text>
+      </svg>
+    </div>
+  </section>
+
+  <div class="cv-facts cv-facts-2">
+    <div><h4>How you shoot</h4><p>Hold it out at chest or face height, like a Super 8 camera, and watch the screen on the back. Your index finger pulls the trigger to record. It is the most obvious way to use a camera you look at instead of through, so someone who has never seen it can pick it up and shoot.</p></div>
+    <div><h4>What sets the size</h4><p>The parts, and nothing more: the 2.4-inch screen and its board set the rear face, the P4-NANO and the carrier lie flat in the floor with the camera standing at the front, and the grip is shaped around one 18650 cell. Print cost follows size, so it is as small as they allow.</p></div>
+    <div><h4>Grip</h4><p>90 mm, raked back like a Super 8 handle (the Canon 514XL kept its batteries in the grip too). The REC trigger sits at its top front; the cap closes the battery bay and carries a ¼-20 tripod insert.</p></div>
+    <div><h4>Controls</h4><p>The REC trigger, and a power slide switch on the right side beside the USB-C port (charging, and the drive the clips come off). The look is automatic, so there are no knobs and no menus.</p></div>
+  </div>
+
+  <div class="cv-table">
+    <table>
+      <tbody>
+        <tr><th>Body (L × H × W)</th><td class="cv-num">82 × 61 × 76 mm</td></tr>
+        <tr><th>With lens and grip</th><td class="cv-num">106 × 153 mm</td></tr>
+        <tr><th>Screen</th><td>2.4" 320×240 IPS, exactly twice the 160×120 image, glass standing 1.5 mm proud of the bezel</td></tr>
+        <tr><th>Lens window</th><td>25 × 2 mm fused silica in the barrel, under a ring with two M2 screws</td></tr>
+        <tr><th>Printed parts</th><td>Front shell, rear bezel, grip, grip cap, trigger, window ring: about 120 cm³ of MJF nylon</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="cv-note">Reference cameras: the <a target="_blank" rel="noopener noreferrer" href="https://thisoldtoy.com/L_FP_Set/toy-pages/3000s/3300-pxl2000camcorder.html">Fisher-Price PXL-2000</a> and the <a target="_blank" rel="noopener noreferrer" href="https://www.filmkorn.org/super8data/database/cameras_list/cameras_canon/canon_514xl_s.htm">Canon 514XL-S</a>.</p>
+</div>

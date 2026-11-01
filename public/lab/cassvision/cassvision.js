@@ -417,7 +417,7 @@
     const stage = q(root, 'stage');
     const canvas = q(root, 'canvas');
     const video = q(root, 'video');
-    video.src = BASE + 'raw/market.mp4';
+    video.src = BASE + 'clips/market.mp4';
     let c;
     const studio = getComputedStyle(root).getPropertyValue('--cv-studio').trim() || '#0e0e0e';
     try { c = buildCase(canvas, video, { background: studio }); } catch (e) { failed(root); return; }

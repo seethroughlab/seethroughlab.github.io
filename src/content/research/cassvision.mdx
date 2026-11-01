@@ -1,0 +1,41 @@
+---
+title: Cassvision
+slug: cassvision
+subtitle: A handheld lo-fi video camera in the spirit of Pixelvision
+status: active
+coverImage: /images/research/cassvision/cover.jpg
+heroViewer: cassvision-case
+---
+
+import FormStudies from '../../components/cassvision/FormStudies.astro';
+
+Cassvision is a handheld digital video camera made for Cass' 50th birthday weekend on Fire Island in April 2027. It takes its cue from the Fisher-Price PXL-2000 (Pixelvision): it isn't a modern camera with a filter applied afterward, but a purpose-built lo-fi appliance. Pick it up, pull the trigger, and it records.
+
+The image is 160x120 at 15 fps, processed live and shown on a rear screen. It is never shown as square pixels: an analog-style reconstruction stage, standing in for the original's tape, composite video and CRT, smooths each line horizontally and keeps the lines distinct vertically, with soft scanlines. The look is automatic: poster banding, split tone, colour lag, sound-driven slitscan and glitch bursts, with an occasional Rutt-Etra SCAN that comes and goes on its own. Clips are written straight to microSD as power-loss-safe MP4s that import into iPhone Photos, and come off the camera over USB-C as a plain drive. No app and no WiFi.
+
+## The case
+
+The 3D model at the top is the printable enclosure: five parts shown exactly as exported from the CAD script. Drag to turn it (or switch off **Turntable**), drag the explode slider to see how the parts go together, pick a part to see it alone, and turn on **X-ray** to see the electronics inside. The screen runs the camera's own C image pipeline, compiled to JavaScript, on each frame of a raw clip. Turn on **Sound** to hear the clip and let it drive the look; **Scan now** shows a Rutt-Etra visit; **Colour** switches to black and white like the original.
+
+## Electronics
+
+The brain is a [Waveshare ESP32-P4-NANO](https://www.waveshare.com/esp32-p4-nano.htm): an ESP32-P4 with 32 MB of PSRAM, a MIPI camera interface, a hardware ISP and H.264 encoder, and a microSD slot, on a 50 mm square board. It takes an OV5647 camera and a 2.4-inch 320x240 screen, exactly twice the image in each direction.
+
+The NANO plugs into a custom four-layer carrier board that turns a dev board into a camera: USB-C charging with power path (it keeps running while it charges), a 5 V boost from the 18650 cell in the grip, soft power with a latch so switching off closes the clip cleanly, a battery gauge, and plugs for the screen, the REC trigger and the LED. The notch at the rear clears the NANO's Ethernet jack and USB-A port.
+
+<div class="cv-pair">
+  <figure class="cv-figure">
+    <img src="/images/research/cassvision/carrier-iso.jpg" alt="3D render of the Cassvision carrier board from above at an angle, showing the battery, REC, SCAN, LED, power switch and USB link connectors around the NANO's header sockets" loading="lazy" />
+    <figcaption>Carrier board, routed in KiCad</figcaption>
+  </figure>
+  <figure class="cv-figure">
+    <img src="/images/research/cassvision/carrier-top.jpg" alt="Top view render of the Cassvision carrier board with the USB-C socket, charger and boost converter on the right and the screen connector at the front" loading="lazy" />
+    <figcaption>Top view: USB-C, charger and boost on the right, screen connector at the front</figcaption>
+  </figure>
+</div>
+
+## Form studies
+
+Three ways to hold a camera you look at instead of through, and why the rear-screen body won. Rear screen it was, made as small as practical, because 3D printing cost goes up with size.
+
+<FormStudies />

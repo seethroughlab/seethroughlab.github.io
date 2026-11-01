@@ -39,6 +39,7 @@ const research = defineCollection({
     labUrl: z.string().default(''),
     videoSrc: z.string().default(''),
     videoAspect: z.string().default(''),
+    heroViewer: z.enum(['', 'cassvision-case']).default(''), // interactive hero in place of video/cover
     appStoreUrl: z.string().default(''),
     betaUrl: z.string().default(''),
     instagramPosts: z.array(z.string()).default([]),

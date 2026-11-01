@@ -1,0 +1,86 @@
+---
+// The printed enclosure in 3D, its screen running the camera's own image pipeline (compiled to JS).
+// Scene and controls: public/lab/cassvision/cassvision.js.
+import './cassvision.css';
+
+interface Props {
+  hero?: boolean; // page hero: full hero width, turntable on
+}
+const { hero = false } = Astro.props;
+---
+
+<div class:list={['cv', hero ? 'cv-hero' : 'cv-wide']} data-cassvision="case" data-autospin={hero ? '' : undefined}>
+  <div class="cv-stage" data-role="stage">
+    <canvas data-role="canvas" aria-label="Interactive 3D model of the Cassvision case"></canvas>
+    <div class="cv-hint" data-role="hint">drag to rotate · scroll to zoom</div>
+    <div class="cv-fallback" data-role="fallback" hidden>The 3D view needs WebGL, which this browser didn't provide.</div>
+  </div>
+
+  <div class="cv-controls">
+    <div class="cv-group" role="group" aria-label="View">
+      <span class="cv-label">View</span>
+      <button data-view="front" aria-pressed="true">¾ front</button>
+      <button data-view="rear" aria-pressed="false">¾ rear</button>
+      <button data-view="side" aria-pressed="false">Side</button>
+      <button data-view="top" aria-pressed="false">Top</button>
+      <button data-view="ports" aria-pressed="false">Ports</button>
+      <button data-view="under" aria-pressed="false">Underside</button>
+    </div>
+    <div class="cv-group" role="group" aria-label="Part">
+      <span class="cv-label">Part</span>
+      <button data-part="all" aria-pressed="true">Assembly</button>
+      <button data-part="front_shell" aria-pressed="false">Front shell</button>
+      <button data-part="rear_bezel" aria-pressed="false">Rear bezel</button>
+      <button data-part="grip" aria-pressed="false">Grip</button>
+      <button data-part="grip_cap" aria-pressed="false">Grip cap</button>
+      <button data-part="trigger" aria-pressed="false">Trigger</button>
+    </div>
+    <div class="cv-group">
+      <label class="cv-label" for="cv-explode">Explode</label>
+      <input id="cv-explode" data-role="explode" type="range" min="0" max="1" step="0.01" value="0">
+    </div>
+    <div class="cv-group" role="group" aria-label="Screen">
+      <span class="cv-label">Screen</span>
+      <button data-clip="raw/market.mp4" aria-pressed="true">Lotte</button>
+      <button data-clip="raw/smiles.mp4" aria-pressed="false">Smiles</button>
+      <button data-clip="raw/yotel.mp4" aria-pressed="false">Yotel</button>
+      <button data-clip="raw/fireside.mp4" aria-pressed="false">Fireside</button>
+      <button data-role="play" aria-pressed="true">Pause</button>
+    </div>
+    <div class="cv-group" role="group" aria-label="Camera">
+      <button data-role="scannow" title="SCAN comes and goes by itself on the camera; this shows a visit now">Scan now</button>
+      <button data-role="colour" aria-pressed="true" title="Colour, or black and white like the original PXL-2000">Colour</button>
+      <button data-role="sound" aria-pressed="false" title="Play the clip's sound: it drives the slitscan and sudden loud sounds glitch">Sound</button>
+    </div>
+    <div class="cv-group">
+      <button data-role="xray" aria-pressed="false">X-ray</button>
+      <button data-role="spin" aria-pressed={hero ? 'true' : 'false'}>Turntable</button>
+      <button data-role="cards" aria-pressed="true">Deck of cards</button>
+    </div>
+  </div>
+
+  <p class="cv-note" data-role="part-info" aria-live="polite"></p>
+  <div class="cv-legend" data-role="legend" hidden>
+    <span style="--c:#3c8d5a">P4-NANO 50×50</span>
+    <span style="--c:#9aa3ad">its connectors, Ethernet, USB-A, headers</span>
+    <span style="--c:#8a5cd6">carrier board (routed, from KiCad)</span>
+    <span style="--c:#e6e1d3">carrier parts, plugs and sockets</span>
+    <span style="--c:#e08a2c">USB-A link plug</span>
+    <span style="--c:#c9a227">Camera (B) 32×32, lens holder</span>
+    <span style="--c:#4d7fc4">2.4" screen module 71×47</span>
+    <span style="--c:#b04a3a">18650 cell</span>
+  </div>
+
+  <dl class="cv-specs">
+    <div><dt>Front shell</dt><dd class="cv-num">56.6 cm³ · 97 × 76 × 61</dd></div>
+    <div><dt>Rear bezel</dt><dd class="cv-num">10.3 cm³ · 10 × 76 × 61</dd></div>
+    <div><dt>Grip</dt><dd class="cv-num">46.8 cm³ · 37 × 30 × 90</dd></div>
+    <div><dt>Grip cap + trigger</dt><dd class="cv-num">4.3 cm³</dd></div>
+    <div><dt>Total plastic</dt><dd class="cv-num">≈ 118 cm³ · ≈ $33 MJF nylon · ≈ 146 g PLA</dd></div>
+    <div><dt>Hardware</dt><dd>M2 screws (camera; bezel and screen into shell posts), M3 (grip, NANO), Ø2 mm trigger pin, ¼-20 heat-set insert</dd></div>
+  </dl>
+
+  <video data-role="video" class="cv-offscreen" muted loop playsinline preload="auto" aria-hidden="true"></video>
+</div>
+
+<script is:inline src="/lab/cassvision/cassvision.js" defer></script>

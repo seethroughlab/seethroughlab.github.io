@@ -83,6 +83,7 @@ Schemas defined in `src/content.config.ts`.
 | labUrl | `string` | defaults `''` |
 | videoSrc | `string` | CloudFront HLS URL; replaces the cover image as hero; defaults `''` |
 | videoAspect | `string` | CSS aspect-ratio for the hero video (e.g. `1920 / 888`); defaults to 16:9 |
+| heroViewer | `'' \| 'cassvision-case'` | interactive hero in place of the video/cover (Cassvision's 3D case: `src/components/cassvision/`, scene in `public/lab/cassvision/cassvision.js`); defaults `''` |
 | instagramPosts | `string[]` | defaults `[]` |
 | credits | `{ role, name, url? }[]` | shown as "Team" below the body; defaults `[]` |
 

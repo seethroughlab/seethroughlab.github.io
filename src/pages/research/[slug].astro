@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import VideoPlayer from '../../components/VideoPlayer.astro';
 import InstagramEmbed from '../../components/InstagramEmbed.astro';
 import VideoGrid from '../../components/VideoGrid.astro';
+import CaseViewer from '../../components/cassvision/CaseViewer.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -14,7 +15,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { title, subtitle, status, coverImage, githubUrl, labUrl, videoSrc, videoAspect, appStoreUrl, betaUrl, instagramPosts, videos, credits } = entry.data;
+const { title, subtitle, status, coverImage, githubUrl, labUrl, videoSrc, videoAspect, heroViewer, appStoreUrl, betaUrl, instagramPosts, videos, credits } = entry.data;
 const { Content } = await render(entry);
 
 const statusStyles: Record<string, string> = {
@@ -26,8 +27,12 @@ const statusStyles: Record<string, string> = {
 
 <Base title={`${title} | See Through Lab`}>
   <article class="py-12">
-    {/* Hero: video, else cover image */}
-    {videoSrc ? (
+    {/* Hero: interactive viewer, else video, else cover image */}
+    {heroViewer === 'cassvision-case' ? (
+      <div class="max-w-5xl mx-auto mb-12">
+        <CaseViewer hero />
+      </div>
+    ) : videoSrc ? (
       <div class="max-w-5xl mx-auto mb-12">
         <VideoPlayer src={videoSrc} poster={videoSrc.replace('index.m3u8', 'poster.jpg')} aspectRatio={videoAspect || undefined} />
       </div>

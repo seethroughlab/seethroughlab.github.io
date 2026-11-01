@@ -41,11 +41,13 @@ src/
 public/
   images/projects/<slug>/  # project images
   home/                    # WebGPU homepage animation (JS + WGSL shaders)
-  lab/                     # interactive experiments (ambient-generator, interactive-frank-2)
+  lab/                     # interactive experiments (ambient-generator, interactive-frank-2, shaderlm);
+                           #   cassvision/ holds the Cassvision viewer's assets (synced, see below)
 
 scripts/
   process-video.sh         # HLS encoding (ffmpeg): [--grain] <input> <slug>; quality-based, capped per rendition
   upload-video.js          # S3 upload
+  sync-cassvision.sh       # copy Cassvision's STLs, pipeline JS, clips, carrier renders from ~/Developer/cassvision [--rebuild]
   scrape-squarespace.js    # original site scraper (migration)
   enrich-frontmatter.js    # MDX frontmatter enrichment (migration)
 ```
@@ -86,6 +88,15 @@ Schemas defined in `src/content.config.ts`.
 | heroViewer | `'' \| 'cassvision-case'` | interactive hero in place of the video/cover (Cassvision's 3D case: `src/components/cassvision/`, scene in `public/lab/cassvision/cassvision.js`); defaults `''` |
 | instagramPosts | `string[]` | defaults `[]` |
 | credits | `{ role, name, url? }[]` | shown as "Team" below the body; defaults `[]` |
+
+### Cassvision assets
+
+The Cassvision page's model comes from the Cassvision repo (`~/Developer/cassvision`, CAD in `enclosure/pxl_case.py`).
+After a CAD, pipeline or clip change there, run `scripts/sync-cassvision.sh` (add `--rebuild` to regenerate
+there first), check the page locally, and commit. A part added or renamed in the CAD also needs its name in
+the script's `PARTS`, in `cassvision.js` (`CASE_PARTS` or `CASE_INTERNALS`) and, for a printed part, a button in
+`CaseViewer.astro`. Details the CAD only cuts holes for (screen glass, lens, USB-C, switch, screws, LED,
+window disc) are drawn in `cassvision.js` from the CAD's numbers: update them there if those numbers change.
 
 ### Private (password-protected) projects
 

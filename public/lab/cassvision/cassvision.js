@@ -51,7 +51,8 @@
   const USBC = { x: -4.2 + 25 - 6.2, z: 22.9 };              // slot 9.4 x 3.6 in the right wall
   const SWITCH = { x: 8, z: 38 };                            // slot 10.5 x 5.2 in the right wall
   const SIDE = BODY_W / 2;
-  const BARREL_FRONT = -BODY_L / 2 - 19;                     // the window disc (25 x 2) rests on it
+  const BARREL_FRONT = -BODY_L / 2 - 21.1;                   // 25 x 2 window disc in a 2.1 mm pocket here
+  const RING_SCREW_R = 14.85, RING_T = 1.5;
   const TRIPOD = { x: (-18 + 14) / 2 + 6 + 1.5, z: -92 };    // grip cap's underside
   const LOGO_DOT = { x: -31 + 11 + 3 + 6.3 * 6.5 + 2.2, z: (14 - 0.27 * 6.5) + 0.42 * 6.5 }; // red paint, left side
 
@@ -146,7 +147,7 @@
     { name: 'grip', color: 0x2f3337, explode: [0, 0, -28] },
     { name: 'grip_cap', color: 0x24272a, explode: [0, 0, -52] },
     { name: 'trigger', color: 0xc8372a, explode: [-22, 0, -28] },
-    { name: 'lens_cap', color: 0x2a2e32, explode: [-26, 0, 0] }
+    { name: 'window_ring', color: 0x2a2e32, explode: [-20, 0, 0] }
   ];
   // Electronics inside (pxl_internals.py; the carrier is the routed KiCad board). Loaded the first time the
   // inside can be seen: explode, a single part, or X-ray. `real` colours normally, `xray` the legend's colours.
@@ -193,7 +194,7 @@
     };
 
     // Each detail moves and hides with the printed part it belongs to.
-    const details = { front_shell: new THREE.Group(), rear_bezel: new THREE.Group(), grip: new THREE.Group(), grip_cap: new THREE.Group(), lens_cap: new THREE.Group() };
+    const details = { front_shell: new THREE.Group(), rear_bezel: new THREE.Group(), grip: new THREE.Group(), grip_cap: new THREE.Group(), window_ring: new THREE.Group() };
     Object.values(details).forEach(g => model.add(g));
     function put(part, geo, mat, pos, setup) {
       const m = new THREE.Mesh(geo, mat);
@@ -248,9 +249,15 @@
     put('front_shell', new THREE.SphereGeometry(20, 40, 8, 0, Math.PI * 2, 0, 0.28), M.lens, P(lensX + 20 * Math.cos(0.28) - 0.1, 0, CAM_Z),
       m => { m.rotation.z = Math.PI / 2; });
 
-    // --- Lens window: a 25 x 2 mm fused silica disc, held on the barrel's front face by the lens cap.
-    put('lens_cap', new THREE.CylinderGeometry(12.5, 12.5, 2, 48), M.window, P(BARREL_FRONT - 1, 0, CAM_Z),
+    // --- Lens window: a 25 x 2 mm fused silica disc in the barrel's pocket, under the window ring and its
+    // two M2 pan-head screws (camera-right and camera-left).
+    put('front_shell', new THREE.CylinderGeometry(12.5, 12.5, 2, 48), M.window, P(BARREL_FRONT + 1.1, 0, CAM_Z),
       m => { m.rotation.z = Math.PI / 2; m.castShadow = false; m.renderOrder = 2; });
+    [-1, 1].forEach(side => {
+      put('window_ring', new THREE.CylinderGeometry(1.9, 1.9, 1.3, 24), M.blackSteel, P(BARREL_FRONT - RING_T - 0.65, side * RING_SCREW_R, CAM_Z),
+        m => { m.rotation.z = Math.PI / 2; });
+      put('window_ring', new THREE.BoxGeometry(0.3, 0.5, 3.0), M.darkPlastic, P(BARREL_FRONT - RING_T - 1.3, side * RING_SCREW_R, CAM_Z));
+    });
 
     // --- Right wall: the carrier's USB-C receptacle and the power slide switch, seen through their slots.
     const usb = new THREE.Shape(roundedRect(8.94, 3.26, 1.55).getPoints(24));
@@ -413,12 +420,12 @@
   }
 
   const PART_INFO = {
-    front_shell: 'Front shell · 97 × 76 × 61 mm · 56.6 cm³ · camera standoffs, 19 mm lens barrel, screen posts, NANO posts, logo (left), ports (right)',
+    front_shell: 'Front shell · 100 × 76 × 61 mm · 57.4 cm³ · camera standoffs, 21 mm lens barrel with the window pocket, screen posts, NANO posts, logo (left), ports (right)',
     rear_bezel: 'Rear bezel · 10 × 76 × 61 mm · 10.3 cm³ · glass window and screen pocket, REC LED under the screen, 4 × M2 through the screen into the shell',
     grip: 'Grip · 37 × 30 × 90 mm · 46.8 cm³ · 18650 bay, trigger slot, switch pocket, pivot pin, 2 × M3 into the body',
     grip_cap: 'Grip cap · 25 × 25 × 8 mm · 2.2 cm³ · closes the battery bay, ¼-20 tripod insert',
     trigger: 'Trigger · 10 × 12 × 19 mm · 2.1 cm³ · REC lever on a Ø2 mm pin',
-    lens_cap: 'Lens cap · 9 × 37 × 37 mm · 3.1 cm³ · slides over the barrel and holds a 25 × 2 mm fused silica window 1 mm in front of the lens; pull it off to refocus'
+    window_ring: 'Window ring · 34 × 34 × 1.5 mm · 0.8 cm³ · holds the 25 × 2 mm fused silica window in the barrel pocket, 1 mm in front of the lens; 2 × M2 into the barrel'
   };
 
   function initCase(root) {
